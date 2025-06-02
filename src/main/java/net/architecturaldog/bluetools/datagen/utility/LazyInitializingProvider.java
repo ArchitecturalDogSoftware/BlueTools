@@ -17,7 +17,7 @@ public final class LazyInitializingProvider<T extends DataProvider> {
 
     }
 
-    public void set(final FabricDataGenerator.Pack pack, final DataProvider.Factory<T> factory) {
+    public void set(final FabricDataGenerator.Pack pack, final FabricDataGenerator.Pack.Factory<T> factory) {
         if (Objects.nonNull(this.supplier)) {
             throw new IllegalStateException("The provider has already been set");
         }
