@@ -1,5 +1,7 @@
 package net.architecturaldog.bluetools.content.material;
 
+import com.google.common.collect.ImmutableMap;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.item.Item;
 import net.minecraft.item.equipment.EquipmentType;
@@ -7,13 +9,16 @@ import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
 import java.util.Optional;
 
 public abstract class Material {
 
-    public abstract int maxDurability();
+    public static Material.Builder builder() {
+        return new Builder();
+    }
 
     public abstract Map<Item, Value> items();
 
@@ -37,18 +42,18 @@ public abstract class Material {
 
     }
 
-    public record WeaponProperties(int damage, float speed, float disableShieldSeconds) {
+    public record WeaponProperties(int durability, int damage, float speed, float disableShieldSeconds) {
 
-        public WeaponProperties(int damage, float speed) {
-            this(damage, speed, 0.0F);
+        public WeaponProperties(int durability, int damage, float speed) {
+            this(durability, damage, speed, 0.0F);
         }
 
     }
 
-    public record ToolProperties(Tier tier, float speed, int damagePerBlock) {
+    public record ToolProperties(int durability, Tier tier, float speed, int damagePerBlock) {
 
-        public ToolProperties(Tier tier, float speed) {
-            this(tier, speed, 1);
+        public ToolProperties(int durability, Tier tier, float speed) {
+            this(durability, tier, speed, 1);
         }
 
         public enum Tier {
@@ -80,6 +85,81 @@ public abstract class Material {
         )
         {
             this(durability, toughness, knockbackResistance, defense, SoundEvents.ITEM_ARMOR_EQUIP_GENERIC);
+        }
+
+    }
+
+    public static final class Builder {
+
+        private final Map<Item, Value> items = new Object2ObjectOpenHashMap<>();
+        private @Nullable MeltingProperties meltingProperties;
+        private @Nullable WeaponProperties weaponProperties;
+        private @Nullable ToolProperties toolProperties;
+        private @Nullable ArmorProperties armorProperties;
+
+        private Builder() {
+
+        }
+
+        public Builder item(final Item item, final long fluidValue) {
+            this.items.put(item, new Value(fluidValue));
+
+            return this;
+        }
+
+        public Builder melting(final MeltingProperties properties) {
+            this.meltingProperties = properties;
+
+            return this;
+        }
+
+        public Builder weapon(final WeaponProperties properties) {
+            this.weaponProperties = properties;
+
+            return this;
+        }
+
+        public Builder tool(final ToolProperties properties) {
+            this.toolProperties = properties;
+
+            return this;
+        }
+
+        public Builder armor(final ArmorProperties properties) {
+            this.armorProperties = properties;
+
+            return this;
+        }
+
+        public Material build() {
+            return new Material() {
+
+                @Override
+                public Map<Item, Value> items() {
+                    return ImmutableMap.copyOf(Builder.this.items);
+                }
+
+                @Override
+                public Optional<MeltingProperties> meltingProperties() {
+                    return Optional.ofNullable(Builder.this.meltingProperties);
+                }
+
+                @Override
+                public Optional<WeaponProperties> weaponProperties() {
+                    return Optional.ofNullable(Builder.this.weaponProperties);
+                }
+
+                @Override
+                public Optional<ToolProperties> toolProperties() {
+                    return Optional.ofNullable(Builder.this.toolProperties);
+                }
+
+                @Override
+                public Optional<ArmorProperties> armorProperties() {
+                    return Optional.ofNullable(Builder.this.armorProperties);
+                }
+
+            };
         }
 
     }
