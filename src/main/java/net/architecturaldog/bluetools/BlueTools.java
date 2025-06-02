@@ -7,9 +7,7 @@ import net.minecraft.util.Identifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class BlueTools
-    implements ModInitializer
-{
+public final class BlueTools implements ModInitializer {
 
     public static final String MOD_ID = "bluetools";
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
@@ -20,7 +18,7 @@ public class BlueTools
 
     @Override
     public void onInitialize() {
-        Lodestone.load(CommonLoaded.class, MOD_ID);
+        Lodestone.load(CommonLoaded.class, BlueTools.MOD_ID);
     }
 
 }

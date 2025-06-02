@@ -4,31 +4,33 @@
     "version": "${version}",
     "name": "BlueTools",
     "description": "This is an example description! Tell everyone what your mod is about!",
-    "authors": [
-        "Me!"
-    ],
-    "contact": {
-        "homepage": "https://fabricmc.net/",
-        "sources": "https://github.com/FabricMC/fabric-example-mod"
-    },
-    "license": "AGPL-3.0-or-later",
     "icon": "assets/bluetools/icon.png",
+    "authors": [ "Jaxydog", "IcePenguin" ],
+    "contributors": [ ],
+    "license": "AGPL-3.0-or-later",
+    "contact": {
+        "sources": "https://github.com/ArchitecturalDogSoftware/BlueTools",
+        "issues": "https://github.com/ArchitecturalDogSoftware/BlueTools/issues"
+    },
+
     "environment": "*",
+    "mixins": [ "bluetools.mixins.json" ],
+    "accessWidener": "bluetools.accesswidener",
     "entrypoints": {
         "main": [ "net.architecturaldog.bluetools.BlueTools" ],
-        "client": [ ],
-        "server": [ ],
-        "fabric-datagen": [ ]
+        "client": [ "net.architecturaldog.bluetools.BlueToolsClient" ],
+        "server": [ "net.architecturaldog.bluetools.BlueToolsServer" ],
+        "fabric-datagen": [ "net.architecturaldog.bluetools.datagen.BlueToolsDataGenerator" ]
     },
-    "mixins": [ "bluetools.mixins.json" ],
+    "custom": {
+        "loom:injected_interfaces": { }
+    },
+
     "depends": {
         "fabricloader": ">=0.16.14",
         "minecraft": "~1.21.5",
         "java": ">=21",
         "fabric-api": "*",
         "lodestone": "*"
-    },
-    "suggests": {
-        "another-mod": "*"
     }
 }
