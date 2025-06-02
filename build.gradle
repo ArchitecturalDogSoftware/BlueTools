@@ -29,6 +29,10 @@ dependencies {
     modImplementation "com.github.Jaxydog:Lodestone:${project.lodestone_version}"
 }
 
+loom {
+    accessWidenerPath = file("src/main/resources/bluetools.accesswidener")
+}
+
 processResources {
     inputs.property 'version', project.version
 
