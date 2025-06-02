@@ -4,7 +4,7 @@ import dev.jaxydog.lodestone.api.AutoLoader;
 import net.architecturaldog.bluetools.BlueTools;
 import net.minecraft.util.Identifier;
 
-public class BlueToolsItems extends AutoLoader {
+public final class BlueToolsItems extends AutoLoader {
 
     @Override
     public Identifier getLoaderId() {
