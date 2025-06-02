@@ -16,9 +16,9 @@
     "environment": "*",
     "entrypoints": {
         "main": [ "net.architecturaldog.bluetools.BlueTools" ],
-        "client": [ ],
-        "server": [ ],
-        "fabric-datagen": [ ]
+        "client": [ "net.architecturaldog.bluetools.BlueToolsClient" ],
+        "server": [ "net.architecturaldog.bluetools.BlueToolsServer" ],
+        "fabric-datagen": [ "net.architecturaldog.bluetools.datagen.BlueToolsDataGenerator" ]
     },
     "mixins": [ "bluetools.mixins.json" ],
     "depends": {
