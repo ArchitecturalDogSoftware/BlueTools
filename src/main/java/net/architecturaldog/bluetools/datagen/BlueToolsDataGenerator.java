@@ -3,6 +3,7 @@ package net.architecturaldog.bluetools.datagen;
 import dev.jaxydog.lodestone.Lodestone;
 import dev.jaxydog.lodestone.api.DataGenerating;
 import net.architecturaldog.bluetools.BlueTools;
+import net.architecturaldog.bluetools.content.BlueToolsContent;
 import net.architecturaldog.bluetools.datagen.provider.AdvancementProvider;
 import net.architecturaldog.bluetools.datagen.provider.ModelProvider;
 import net.architecturaldog.bluetools.datagen.utility.LazyInitializingProvider;
@@ -20,6 +21,8 @@ public final class BlueToolsDataGenerator implements DataGeneratorEntrypoint {
 
         BlueToolsDataGenerator.ADVANCEMENT.set(pack, AdvancementProvider::new);
         BlueToolsDataGenerator.MODEL.set(pack, ModelProvider::new);
+
+        BlueToolsContent.INSTANCE.register(DataGenerating.class);
 
         Lodestone.load(DataGenerating.class, BlueTools.MOD_ID);
     }
