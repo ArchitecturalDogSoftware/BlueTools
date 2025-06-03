@@ -11,7 +11,7 @@ import net.minecraft.util.Identifier;
 public final class BlueToolsRegistries extends AutoLoader {
 
     public static final Registry<Material> MATERIAL = FabricRegistryBuilder
-        .createDefaulted(BlueToolsRegistries.Keys.MATERIAL, BlueTools.id("iron"))
+        .createDefaulted(BlueToolsRegistries.Keys.MATERIAL, BlueTools.id("empty"))
         .buildAndRegister();
 
     @Override

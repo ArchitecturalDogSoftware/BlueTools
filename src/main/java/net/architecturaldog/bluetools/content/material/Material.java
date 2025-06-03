@@ -1,6 +1,5 @@
 package net.architecturaldog.bluetools.content.material;
 
-import com.google.common.collect.ImmutableMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.item.Item;
@@ -15,10 +14,6 @@ import java.util.Map;
 import java.util.Optional;
 
 public abstract class Material {
-
-    public static Material.Builder builder() {
-        return new Builder();
-    }
 
     public abstract Map<Item, Value> items();
 
@@ -89,77 +84,70 @@ public abstract class Material {
 
     }
 
-    public static final class Builder {
+    @FunctionalInterface
+    public interface Factory<T extends Material> {
 
+        T create(
+            final Map<Item, Value> items,
+            final @Nullable MeltingProperties meltingProperties,
+            final @Nullable WeaponProperties weaponProperties,
+            final @Nullable ToolProperties toolProperties,
+            final @Nullable ArmorProperties armorProperties
+        );
+
+    }
+
+    public static class Builder<T extends Material> {
+
+        private final Factory<T> factory;
         private final Map<Item, Value> items = new Object2ObjectOpenHashMap<>();
         private @Nullable MeltingProperties meltingProperties;
         private @Nullable WeaponProperties weaponProperties;
         private @Nullable ToolProperties toolProperties;
         private @Nullable ArmorProperties armorProperties;
 
-        private Builder() {
-
+        public Builder(final Factory<T> factory) {
+            this.factory = factory;
         }
 
-        public Builder item(final Item item, final long fluidValue) {
+        public Builder<T> item(final Item item, final long fluidValue) {
             this.items.put(item, new Value(fluidValue));
 
             return this;
         }
 
-        public Builder melting(final MeltingProperties properties) {
+        public Builder<T> melting(final MeltingProperties properties) {
             this.meltingProperties = properties;
 
             return this;
         }
 
-        public Builder weapon(final WeaponProperties properties) {
+        public Builder<T> weapon(final WeaponProperties properties) {
             this.weaponProperties = properties;
 
             return this;
         }
 
-        public Builder tool(final ToolProperties properties) {
+        public Builder<T> tool(final ToolProperties properties) {
             this.toolProperties = properties;
 
             return this;
         }
 
-        public Builder armor(final ArmorProperties properties) {
+        public Builder<T> armor(final ArmorProperties properties) {
             this.armorProperties = properties;
 
             return this;
         }
 
-        public Material build() {
-            return new Material() {
-
-                @Override
-                public Map<Item, Value> items() {
-                    return ImmutableMap.copyOf(Builder.this.items);
-                }
-
-                @Override
-                public Optional<MeltingProperties> meltingProperties() {
-                    return Optional.ofNullable(Builder.this.meltingProperties);
-                }
-
-                @Override
-                public Optional<WeaponProperties> weaponProperties() {
-                    return Optional.ofNullable(Builder.this.weaponProperties);
-                }
-
-                @Override
-                public Optional<ToolProperties> toolProperties() {
-                    return Optional.ofNullable(Builder.this.toolProperties);
-                }
-
-                @Override
-                public Optional<ArmorProperties> armorProperties() {
-                    return Optional.ofNullable(Builder.this.armorProperties);
-                }
-
-            };
+        public T build() {
+            return this.factory.create(
+                this.items,
+                this.meltingProperties,
+                this.weaponProperties,
+                this.toolProperties,
+                this.armorProperties
+            );
         }
 
     }
