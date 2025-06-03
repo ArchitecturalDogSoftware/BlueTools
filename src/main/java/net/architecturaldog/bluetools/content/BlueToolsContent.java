@@ -6,9 +6,9 @@ import dev.jaxydog.lodestone.api.LoadingPriority;
 import net.architecturaldog.bluetools.BlueTools;
 import net.architecturaldog.bluetools.content.block.BlueToolsBlockEntityTypes;
 import net.architecturaldog.bluetools.content.block.BlueToolsBlocks;
-import net.architecturaldog.bluetools.content.data.BlueToolsResourceReloadListeners;
 import net.architecturaldog.bluetools.content.item.BlueToolsItems;
 import net.architecturaldog.bluetools.content.material.BlueToolsMaterials;
+import net.architecturaldog.bluetools.content.resource.BlueToolsResourceReloadListeners;
 import net.minecraft.util.Identifier;
 
 public final class BlueToolsContent extends AutoLoader {

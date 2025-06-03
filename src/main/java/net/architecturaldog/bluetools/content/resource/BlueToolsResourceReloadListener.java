@@ -1,4 +1,4 @@
-package net.architecturaldog.bluetools.content.data;
+package net.architecturaldog.bluetools.content.resource;
 
 import dev.jaxydog.lodestone.api.CommonLoaded;
 import net.architecturaldog.bluetools.BlueTools;
