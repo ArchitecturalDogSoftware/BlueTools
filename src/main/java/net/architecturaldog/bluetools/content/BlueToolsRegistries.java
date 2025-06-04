@@ -12,14 +12,6 @@ import net.minecraft.util.Identifier;
 
 public final class BlueToolsRegistries extends AutoLoader {
 
-    public static final Registry<Material> MATERIAL = FabricRegistryBuilder
-        .createDefaulted(BlueToolsRegistries.Keys.MATERIAL, BlueTools.id("empty"))
-        .buildAndRegister();
-
-    public static final Registry<MaterialMiningLevel> MATERIAL_MINING_LEVEL = FabricRegistryBuilder
-        .createSimple(BlueToolsRegistries.Keys.MATERIAL_MINING_LEVEL)
-        .buildAndRegister();
-
     public static final Registry<MaterialPropertyType<?>> MATERIAL_PROPERTY_TYPE = FabricRegistryBuilder
         .createSimple(BlueToolsRegistries.Keys.MATERIAL_PROPERTY_TYPE)
         .buildAndRegister();

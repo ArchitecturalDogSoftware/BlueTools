@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 public final class BlueTools implements ModInitializer {
 
     public static final String MOD_ID = "bluetools";
-    public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
+    public static final Logger LOGGER = LoggerFactory.getLogger(BlueTools.class);
 
     public static Identifier id(String path) {
         return Identifier.of(MOD_ID, path);

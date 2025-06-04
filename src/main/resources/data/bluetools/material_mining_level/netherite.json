@@ -1,0 +1,33 @@
+[
+    {
+        "tag": "#minecraft:incorrect_for_wooden_tool",
+        "drop_items": true
+    },
+
+    {
+        "tag": "#minecraft:incorrect_for_stone_tool",
+        "drop_items": true
+    },
+
+    {
+        "tag": "#minecraft:incorrect_for_iron_tool",
+        "drop_items": true
+    },
+
+    {
+        "tag": "#minecraft:incorrect_for_diamond_tool",
+        "drop_items": true
+    },
+
+    {
+        "tag": "#minecraft:incorrect_for_gold_tool",
+        "speed_multiplier": 0.5,
+        "drop_items": false
+    },
+
+    {
+        "tag": "#minecraft:incorrect_for_netherite_tool",
+        "speed_multiplier": 0.5,
+        "drop_items": false
+    }
+]
