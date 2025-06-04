@@ -1,0 +1,11 @@
+{
+    "parent": "minecraft:block/cube",
+    "textures": {
+        "north": "bluetools:block/forge_active_front",
+        "south": "bluetools:block/forge_active",
+        "east": "bluetools:block/forge_active",
+        "west": "bluetools:block/forge_active",
+        "up": "bluetools:block/forge_active",
+        "down": "bluetools:block/forge_active"
+    }
+}
