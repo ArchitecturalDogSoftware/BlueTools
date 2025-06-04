@@ -14,7 +14,10 @@ public record ToolDataProperty(MaterialMiningLevel miningLevel, float speed, Opt
 {
 
     public static final MapCodec<ToolDataProperty> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-        BlueToolsResources.MINING_LEVEL.getCodec().fieldOf("mining_level").forGetter(ToolDataProperty::miningLevel),
+        BlueToolsResources.MATERIAL_MINING_LEVEL
+            .getCodec()
+            .fieldOf("mining_level")
+            .forGetter(ToolDataProperty::miningLevel),
         Codec.floatRange(0.0F, Float.MAX_VALUE).fieldOf("speed").forGetter(ToolDataProperty::speed),
         Codec.intRange(0, Integer.MAX_VALUE).optionalFieldOf("damage_per_use").forGetter(ToolDataProperty::damagePerUse)
     ).apply(instance, ToolDataProperty::new));

@@ -13,7 +13,7 @@ import java.util.Optional;
 
 public class Material {
 
-    private static final Codec<Material> CODEC = BlueToolsRegistries.MATERIAL_PROPERTY_TYPE
+    public static final Codec<Material> CODEC = BlueToolsRegistries.MATERIAL_PROPERTY_TYPE
         .getCodec()
         .<MaterialProperty>dispatch(MaterialProperty::getType, MaterialPropertyType::getCodec)
         .listOf()
