@@ -3,6 +3,7 @@ package net.architecturaldog.bluetools.content;
 import dev.jaxydog.lodestone.api.AutoLoader;
 import net.architecturaldog.bluetools.BlueTools;
 import net.architecturaldog.bluetools.content.material.Material;
+import net.architecturaldog.bluetools.content.material.MaterialAlloyingRecipe;
 import net.architecturaldog.bluetools.content.material.MaterialMiningLevel;
 import net.architecturaldog.bluetools.content.material.property.MaterialPropertyType;
 import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder;
@@ -25,6 +26,9 @@ public final class BlueToolsRegistries extends AutoLoader {
 
         public static final RegistryKey<Registry<Material>> MATERIAL =
             RegistryKey.ofRegistry(BlueTools.id("material"));
+
+        public static final RegistryKey<Registry<MaterialAlloyingRecipe>> MATERIAL_ALLOYING_RECIPE =
+            RegistryKey.ofRegistry(BlueTools.id("material_alloying_recipe"));
 
         public static final RegistryKey<Registry<MaterialMiningLevel>> MATERIAL_MINING_LEVEL =
             RegistryKey.ofRegistry(BlueTools.id("material_mining_level"));

@@ -11,6 +11,7 @@ import dev.jaxydog.lodestone.api.IgnoreLoading;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.architecturaldog.bluetools.BlueTools;
 import net.architecturaldog.bluetools.content.material.Material;
+import net.architecturaldog.bluetools.content.material.MaterialAlloyingRecipe;
 import net.architecturaldog.bluetools.content.material.MaterialMiningLevel;
 import net.fabricmc.fabric.api.resource.IdentifiableResourceReloadListener;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
@@ -46,6 +47,12 @@ public final class BlueToolsResources extends AutoLoader {
         BlueToolsRegistries.Keys.MATERIAL,
         Material.CODEC.codec(),
         List.of(MATERIAL_MINING_LEVEL.getFabricId())
+    );
+
+    public static final JsonManager<MaterialAlloyingRecipe> MATERIAL_ALLOYING_RECIPE = new JsonManager<>(
+        BlueToolsRegistries.Keys.MATERIAL_ALLOYING_RECIPE,
+        MaterialAlloyingRecipe.CODEC.codec(),
+        List.of(MATERIAL.getFabricId())
     );
 
     @Override
