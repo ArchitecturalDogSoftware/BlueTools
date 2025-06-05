@@ -5,12 +5,22 @@ import net.architecturaldog.bluetools.BlueTools;
 import net.architecturaldog.bluetools.utility.RegistryLoaded;
 import net.minecraft.item.Item;
 import net.minecraft.registry.Registries;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.RegistryKeys;
 import net.minecraft.util.Identifier;
+
+import java.util.function.Function;
 
 public final class BlueToolsItems extends AutoLoader {
 
-    private static <T extends Item> RegistryLoaded<T> create(final String path, final T value) {
-        return new RegistryLoaded<>(path, Registries.ITEM, value);
+    private static <T extends Item> RegistryLoaded<T> create(final String path, Function<Item.Settings, T> function) {
+        final RegistryKey<Item> registryKey = RegistryKey.of(RegistryKeys.ITEM, BlueTools.id(path));
+
+        return new RegistryLoaded<>(
+            path,
+            Registries.ITEM,
+            function.apply(new Item.Settings().registryKey(registryKey))
+        );
     }
 
     @Override
