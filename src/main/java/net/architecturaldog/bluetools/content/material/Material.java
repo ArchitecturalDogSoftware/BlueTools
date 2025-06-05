@@ -17,7 +17,9 @@ public class Material {
         .getCodec()
         .<MaterialProperty>dispatch(MaterialProperty::getType, MaterialPropertyType::getCodec)
         .listOf()
-        .xmap(Material::new, Material::getProperties);
+        .fieldOf("properties")
+        .xmap(Material::new, Material::getProperties)
+        .codec();
 
     private final Map<MaterialPropertyType<?>, MaterialProperty> properties;
 

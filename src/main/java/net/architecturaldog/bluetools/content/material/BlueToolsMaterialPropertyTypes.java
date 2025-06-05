@@ -12,6 +12,9 @@ public final class BlueToolsMaterialPropertyTypes extends AutoLoader {
     public static final RegistryLoaded<MaterialPropertyType<ArmorDataProperty>> ARMOR_DATA =
         create("armor_data", MaterialPropertyType.simple(ArmorDataProperty.CODEC));
 
+    public static final RegistryLoaded<MaterialPropertyType<ColorProperty>> COLOR =
+        create("color", MaterialPropertyType.simple(ColorProperty.CODEC));
+
     public static final RegistryLoaded<MaterialPropertyType<DurabilityProperty>> DURABILITY =
         create("durability", MaterialPropertyType.simple(DurabilityProperty.CODEC));
 
