@@ -1,29 +1,29 @@
 package net.architecturaldog.bluetools.content.material;
 
-import com.google.common.collect.ImmutableList;
 import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.architecturaldog.bluetools.utility.Color;
 import net.minecraft.block.Block;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.registry.tag.TagKey;
+import net.minecraft.util.Colors;
 
 import java.util.List;
 import java.util.Optional;
 
-public record MaterialMiningLevel(List<Rule> rules) {
+public record MaterialMiningLevel(Color textColor, List<Rule> rules) {
 
-    public static final Codec<MaterialMiningLevel> CODEC = Rule.CODEC
-        .codec()
-        .listOf()
-        .xmap(MaterialMiningLevel::new, MaterialMiningLevel::rules);
-
-    public MaterialMiningLevel(final List<Rule> rules) {
-        this.rules = ImmutableList.copyOf(rules);
-    }
+    public static final MapCodec<MaterialMiningLevel> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+        Color.RGB_CODEC
+            .codec()
+            .optionalFieldOf("text_color", new Color(Colors.WHITE))
+            .forGetter(MaterialMiningLevel::textColor),
+        Codec.list(Rule.CODEC.codec()).fieldOf("rules").forGetter(MaterialMiningLevel::rules)
+    ).apply(instance, MaterialMiningLevel::new));
 
     public List<Rule> getRulesFor(final Block block) {
         final RegistryEntry<Block> entry = Registries.BLOCK.getEntry(block);

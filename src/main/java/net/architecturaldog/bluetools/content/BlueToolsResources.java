@@ -39,12 +39,12 @@ public final class BlueToolsResources extends AutoLoader {
 
     public static final JsonManager<MaterialMiningLevel> MATERIAL_MINING_LEVEL = new JsonManager<>(
         BlueToolsRegistries.Keys.MATERIAL_MINING_LEVEL,
-        MaterialMiningLevel.CODEC
+        MaterialMiningLevel.CODEC.codec()
     );
 
     public static final JsonManager<Material> MATERIAL = new JsonManager<>(
         BlueToolsRegistries.Keys.MATERIAL,
-        Material.CODEC,
+        Material.CODEC.codec(),
         List.of(MATERIAL_MINING_LEVEL.getFabricId())
     );
 
