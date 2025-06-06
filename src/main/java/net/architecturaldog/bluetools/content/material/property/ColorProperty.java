@@ -6,7 +6,8 @@ import net.architecturaldog.bluetools.utility.Color;
 
 public record ColorProperty(Color color) implements MaterialProperty {
 
-    public static final MapCodec<ColorProperty> CODEC = Color.RGB_CODEC.xmap(ColorProperty::new, ColorProperty::color);
+    public static final MapCodec<ColorProperty> CODEC =
+        Color.CODEC.xmap(ColorProperty::new, ColorProperty::color).fieldOf("color");
 
     @Override
     public MaterialPropertyType<? extends MaterialProperty> getType() {

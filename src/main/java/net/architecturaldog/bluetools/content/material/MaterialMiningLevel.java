@@ -18,7 +18,7 @@ import java.util.Optional;
 public record MaterialMiningLevel(Color textColor, List<Rule> rules) {
 
     public static final MapCodec<MaterialMiningLevel> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-        Color.RGB_CODEC
+        Color.MAP_CODEC
             .codec()
             .optionalFieldOf("text_color", new Color(Colors.WHITE))
             .forGetter(MaterialMiningLevel::textColor),
