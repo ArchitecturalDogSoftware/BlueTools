@@ -30,7 +30,7 @@ public record MaterialAlloyingRecipe(
 
         public static final MapCodec<Ingredient> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             BlueToolsResources.MATERIAL.getCodec().fieldOf("material").forGetter(Ingredient::material),
-            MaterialValue.CODEC.fieldOf("value").forGetter(Ingredient::value)
+            MaterialValue.CODEC.codec().fieldOf("value").forGetter(Ingredient::value)
         ).apply(instance, Ingredient::new));
 
     }

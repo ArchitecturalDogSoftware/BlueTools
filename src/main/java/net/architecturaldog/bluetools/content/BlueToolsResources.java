@@ -88,6 +88,11 @@ public final class BlueToolsResources extends AutoLoader {
             final Executor executor
         )
         {
+            // Assume that vanilla loaders do not synchronize properly.
+            if (identifier.getNamespace().equals(Identifier.DEFAULT_NAMESPACE)) {
+                return CompletableFuture.completedFuture(null);
+            }
+
             return CompletableFuture.runAsync(
                 () -> {
                     while (!this.getState(identifier).equals(state)) Thread.onSpinWait();
