@@ -2,6 +2,7 @@ package net.architecturaldog.bluetools.content.material;
 
 import com.google.common.collect.ImmutableList;
 import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.architecturaldog.bluetools.content.BlueToolsRegistries;
 import net.architecturaldog.bluetools.content.material.property.MaterialProperty;
@@ -15,12 +16,9 @@ import java.util.Optional;
 
 public class Material {
 
-    public static final MapCodec<Material> CODEC = BlueToolsRegistries.MATERIAL_PROPERTY_TYPE
-        .getCodec()
-        .<MaterialProperty>dispatch(MaterialProperty::getType, MaterialPropertyType::getCodec)
-        .listOf()
-        .fieldOf("properties")
-        .xmap(Material::new, Material::getProperties);
+    public static final MapCodec<Material> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+        MaterialProperty.CODEC.listOf().fieldOf("properties").forGetter(Material::getProperties)
+    ).apply(instance, Material::new));
 
     private final Map<MaterialPropertyType<?>, MaterialProperty> properties;
 
