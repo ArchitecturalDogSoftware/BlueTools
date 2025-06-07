@@ -3,7 +3,9 @@ package net.architecturaldog.bluetools.content.material;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.architecturaldog.bluetools.content.BlueToolsResources;
+import net.architecturaldog.bluetools.content.BlueToolsRegistries;
+import net.architecturaldog.bluetools.content.resource.BlueToolsResources;
+import net.architecturaldog.bluetools.content.resource.JsonResourceManager;
 
 import java.util.List;
 
@@ -32,6 +34,23 @@ public record MaterialAlloyingRecipe(
             BlueToolsResources.MATERIAL.getCodec().fieldOf("material").forGetter(Ingredient::material),
             MaterialValue.CODEC.codec().fieldOf("value").forGetter(Ingredient::value)
         ).apply(instance, Ingredient::new));
+
+    }
+
+    public static final class Manager extends JsonResourceManager<MaterialAlloyingRecipe> {
+
+        public Manager() {
+            super(
+                BlueToolsRegistries.Keys.MATERIAL_ALLOYING_RECIPE,
+                MaterialAlloyingRecipe.CODEC.codec(),
+                List.of(BlueToolsResources.MATERIAL.getFabricId())
+            );
+        }
+
+        @Override
+        public String getName() {
+            return "Material alloying recipes";
+        }
 
     }
 

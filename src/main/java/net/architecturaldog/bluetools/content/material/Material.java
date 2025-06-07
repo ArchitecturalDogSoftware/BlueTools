@@ -6,6 +6,8 @@ import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.architecturaldog.bluetools.content.BlueToolsRegistries;
 import net.architecturaldog.bluetools.content.material.property.MaterialProperty;
 import net.architecturaldog.bluetools.content.material.property.MaterialPropertyType;
+import net.architecturaldog.bluetools.content.resource.BlueToolsResources;
+import net.architecturaldog.bluetools.content.resource.JsonResourceManager;
 
 import java.util.List;
 import java.util.Map;
@@ -39,6 +41,23 @@ public class Material {
     @SuppressWarnings("unchecked")
     public final <P extends MaterialProperty> Optional<P> getProperty(final MaterialPropertyType<P> type) {
         return Optional.ofNullable((P) this.properties.get(type));
+    }
+
+    public static final class Manager extends JsonResourceManager<Material> {
+
+        public Manager() {
+            super(
+                BlueToolsRegistries.Keys.MATERIAL,
+                Material.CODEC.codec(),
+                List.of(BlueToolsResources.MATERIAL_MINING_LEVEL.getFabricId())
+            );
+        }
+
+        @Override
+        public String getName() {
+            return "Materials";
+        }
+
     }
 
 }

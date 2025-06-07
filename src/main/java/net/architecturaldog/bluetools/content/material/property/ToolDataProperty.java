@@ -3,9 +3,9 @@ package net.architecturaldog.bluetools.content.material.property;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.architecturaldog.bluetools.content.BlueToolsResources;
 import net.architecturaldog.bluetools.content.material.BlueToolsMaterialPropertyTypes;
 import net.architecturaldog.bluetools.content.material.MaterialMiningLevel;
+import net.architecturaldog.bluetools.content.resource.BlueToolsResources;
 
 import java.util.Optional;
 

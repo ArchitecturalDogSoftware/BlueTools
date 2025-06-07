@@ -9,6 +9,7 @@ import net.architecturaldog.bluetools.content.block.BlueToolsBlocks;
 import net.architecturaldog.bluetools.content.component.BlueToolsComponentTypes;
 import net.architecturaldog.bluetools.content.item.BlueToolsItems;
 import net.architecturaldog.bluetools.content.material.BlueToolsMaterialPropertyTypes;
+import net.architecturaldog.bluetools.content.resource.BlueToolsResources;
 import net.minecraft.util.Identifier;
 
 public final class BlueToolsContent extends AutoLoader {

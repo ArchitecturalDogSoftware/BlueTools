@@ -4,6 +4,8 @@ import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.architecturaldog.bluetools.content.BlueToolsRegistries;
+import net.architecturaldog.bluetools.content.resource.JsonResourceManager;
 import net.architecturaldog.bluetools.utility.Color;
 import net.minecraft.block.Block;
 import net.minecraft.registry.Registries;
@@ -53,6 +55,19 @@ public record MaterialMiningLevel(Color textColor, List<Rule> rules) {
                 Codec.BOOL.optionalFieldOf("drop_items").forGetter(Rule::dropItems)
             )
             .apply(instance, Rule::new));
+
+    }
+
+    public static final class Manager extends JsonResourceManager<MaterialMiningLevel> {
+
+        public Manager() {
+            super(BlueToolsRegistries.Keys.MATERIAL_MINING_LEVEL, MaterialMiningLevel.CODEC.codec());
+        }
+
+        @Override
+        public String getName() {
+            return "Material mining levels";
+        }
 
     }
 
