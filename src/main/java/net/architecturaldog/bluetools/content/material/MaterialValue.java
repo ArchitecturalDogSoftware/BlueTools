@@ -7,6 +7,8 @@ import net.architecturaldog.bluetools.utility.BlueToolsCodecs;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 
 import java.util.Map;
+import java.util.function.BinaryOperator;
+import java.util.function.UnaryOperator;
 
 public record MaterialValue(long value) {
 
@@ -17,9 +19,6 @@ public record MaterialValue(long value) {
     public static final MaterialValue ONE_INGOT = new MaterialValue(FluidConstants.INGOT);
     public static final MaterialValue ONE_NUGGET = new MaterialValue(FluidConstants.NUGGET);
     public static final MaterialValue ONE_DROPLET = new MaterialValue(FluidConstants.DROPLET);
-
-    private static final Codec<Long> NON_NEGATIVE_LONG =
-        Codec.LONG.flatXmap(Codec.checkRange(0L, Long.MAX_VALUE), Codec.checkRange(0L, Long.MAX_VALUE));
 
     public static final MapCodec<MaterialValue> CODEC = BlueToolsCodecs
         .oneOf(
@@ -43,16 +42,72 @@ public record MaterialValue(long value) {
         )
         .xmap(MaterialValue::new, MaterialValue::value);
 
-    public MaterialValue {
-        assert this.value() >= 0 : "Material value must be non-negative";
+    public static MaterialValue droplets(final long value) {
+        return new MaterialValue(value * MaterialValue.ONE_DROPLET.value());
+    }
+
+    public static MaterialValue nuggets(final long value) {
+        return new MaterialValue(value * MaterialValue.ONE_NUGGET.value());
+    }
+
+    public static MaterialValue ingots(final long value) {
+        return new MaterialValue(value * MaterialValue.ONE_INGOT.value());
+    }
+
+    public static MaterialValue blocks(final long value) {
+        return new MaterialValue(value * MaterialValue.ONE_BLOCK.value());
+    }
+
+    public static MaterialValue bowls(final long value) {
+        return new MaterialValue(value * MaterialValue.ONE_BOWL.value());
+    }
+
+    public static MaterialValue bottles(final long value) {
+        return new MaterialValue(value * MaterialValue.ONE_BOTTLE.value());
+    }
+
+    public static MaterialValue buckets(final long value) {
+        return new MaterialValue(value * MaterialValue.ONE_BUCKET.value());
     }
 
     public static Codec<Long> getLongCodec(long baseValue) {
-        return MaterialValue.NON_NEGATIVE_LONG.xmap(v -> v * baseValue, v -> v / baseValue);
+        return BlueToolsCodecs.NON_NEGATIVE_LONG.xmap(v -> v * baseValue, v -> v / baseValue);
     }
 
     public static Codec<MaterialValue> getCodec(long baseValue) {
         return MaterialValue.getLongCodec(baseValue).xmap(MaterialValue::new, MaterialValue::value);
+    }
+
+    public MaterialValue apply(final UnaryOperator<Long> operator) {
+        return new MaterialValue(operator.apply(this.value()));
+    }
+
+    public MaterialValue neg() {
+        return this.apply(value -> -value);
+    }
+
+    public MaterialValue combine(final MaterialValue other, final BinaryOperator<Long> operator) {
+        return new MaterialValue(operator.apply(this.value(), other.value()));
+    }
+
+    public MaterialValue add(final MaterialValue other) {
+        return this.combine(other, Long::sum);
+    }
+
+    public MaterialValue sub(final MaterialValue other) {
+        return this.combine(other, (a, b) -> a - b);
+    }
+
+    public MaterialValue mul(final MaterialValue other) {
+        return this.combine(other, (a, b) -> a * b);
+    }
+
+    public MaterialValue div(final MaterialValue other) {
+        return this.combine(other, (a, b) -> a / b);
+    }
+
+    public MaterialValue rem(final MaterialValue other) {
+        return this.combine(other, (a, b) -> a % b);
     }
 
     public Counts counts() {
@@ -67,18 +122,17 @@ public record MaterialValue(long value) {
     public record Counts(long blocks, long ingots, long nuggets, long droplets) {
 
         public static final MapCodec<Counts> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-            MaterialValue.NON_NEGATIVE_LONG.fieldOf("blocks").forGetter(Counts::blocks),
-            MaterialValue.NON_NEGATIVE_LONG.fieldOf("ingots").forGetter(Counts::ingots),
-            MaterialValue.NON_NEGATIVE_LONG.fieldOf("nuggets").forGetter(Counts::nuggets),
-            MaterialValue.NON_NEGATIVE_LONG.fieldOf("droplets").forGetter(Counts::droplets)
+            BlueToolsCodecs.NON_NEGATIVE_LONG.fieldOf("blocks").forGetter(Counts::blocks),
+            BlueToolsCodecs.NON_NEGATIVE_LONG.fieldOf("ingots").forGetter(Counts::ingots),
+            BlueToolsCodecs.NON_NEGATIVE_LONG.fieldOf("nuggets").forGetter(Counts::nuggets),
+            BlueToolsCodecs.NON_NEGATIVE_LONG.fieldOf("droplets").forGetter(Counts::droplets)
         ).apply(instance, Counts::new));
 
         public MaterialValue materialValue() {
-            return new MaterialValue(
-                (this.blocks() * FluidConstants.BLOCK)
-                    + (this.ingots() * FluidConstants.INGOT)
-                    + (this.nuggets() * FluidConstants.NUGGET)
-                    + this.droplets());
+            return MaterialValue.blocks(this.blocks())
+                .add(MaterialValue.ingots(this.ingots()))
+                .add(MaterialValue.nuggets(this.nuggets()))
+                .add(MaterialValue.droplets(this.droplets()));
         }
 
     }
