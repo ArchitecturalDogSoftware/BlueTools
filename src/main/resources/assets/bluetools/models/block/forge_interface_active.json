@@ -6,6 +6,7 @@
         "east": "bluetools:block/forge_active",
         "west": "bluetools:block/forge_active",
         "up": "bluetools:block/forge_active",
-        "down": "bluetools:block/forge_active"
+        "down": "bluetools:block/forge_active",
+        "particle": "bluetools:block/forge_active_front"
     }
 }
