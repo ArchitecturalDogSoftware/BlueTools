@@ -10,6 +10,7 @@ import net.architecturaldog.bluetools.content.component.BlueToolsComponentTypes;
 import net.architecturaldog.bluetools.content.item.BlueToolsItems;
 import net.architecturaldog.bluetools.content.material.BlueToolsMaterialPropertyTypes;
 import net.architecturaldog.bluetools.content.resource.BlueToolsResources;
+import net.architecturaldog.bluetools.content.screen.BlueToolsScreenHandlerTypes;
 import net.minecraft.util.Identifier;
 
 public final class BlueToolsContent extends AutoLoader {
@@ -25,6 +26,7 @@ public final class BlueToolsContent extends AutoLoader {
     @LoadingPriority(Integer.MAX_VALUE)
     public static final BlueToolsRegistries REGISTRIES = new BlueToolsRegistries();
     public static final BlueToolsResources RESOURCES = new BlueToolsResources();
+    public static final BlueToolsScreenHandlerTypes SCREEN_HANDLER_TYPES = new BlueToolsScreenHandlerTypes();
 
     @Override
     public Identifier getLoaderId() {
