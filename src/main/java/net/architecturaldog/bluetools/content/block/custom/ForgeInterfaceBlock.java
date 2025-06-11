@@ -11,13 +11,18 @@ import net.minecraft.block.HorizontalFacingBlock;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.state.property.EnumProperty;
+import net.minecraft.state.property.IntProperty;
+import net.minecraft.util.ActionResult;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
@@ -30,6 +35,11 @@ public class ForgeInterfaceBlock extends BlockWithEntity implements CustomBlock 
     private final String path;
     public static final EnumProperty<Direction> FACING = HorizontalFacingBlock.FACING;
     public static final BooleanProperty ACTIVE = BooleanProperty.of("active");
+    public static final IntProperty VOLUME = IntProperty.of(
+        "volume",
+        0,
+        (int) Math.pow(ForgeInterfaceBlockEntity.WIDTH_MAX_VALUE, 2) * ForgeInterfaceBlockEntity.HEIGHT_MAX_VALUE
+    );
 
     private final MapCodec<ForgeInterfaceBlock> codec = createCodec(settings -> new ForgeInterfaceBlock(
         this
@@ -44,7 +54,12 @@ public class ForgeInterfaceBlock extends BlockWithEntity implements CustomBlock 
 
         this.path = path;
 
-        this.setDefaultState(this.getDefaultState().with(ACTIVE, false).with(FACING, Direction.NORTH));
+        this.setDefaultState(this.getDefaultState().with(ACTIVE, false).with(FACING, Direction.NORTH).with(VOLUME, 0));
+    }
+
+    @Override
+    public @Nullable BlockState getPlacementState(final ItemPlacementContext ctx) {
+        return this.getDefaultState().with(FACING, ctx.getHorizontalPlayerFacing().getOpposite());
     }
 
     @Override
@@ -70,8 +85,28 @@ public class ForgeInterfaceBlock extends BlockWithEntity implements CustomBlock 
     }
 
     @Override
+    protected ActionResult onUse(
+        final BlockState state,
+        final World world,
+        final BlockPos pos,
+        final PlayerEntity player,
+        final BlockHitResult hit
+    )
+    {
+        if (!state.get(ACTIVE)) {
+            return ActionResult.PASS;
+        }
+        if (!world.isClient) {
+            if (world.getBlockEntity(pos) instanceof ForgeInterfaceBlockEntity block) {
+                player.openHandledScreen(block);
+            }
+        }
+        return ActionResult.SUCCESS;
+    }
+
+    @Override
     protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
-        builder.add(ACTIVE, FACING);
+        builder.add(ACTIVE, FACING, VOLUME);
     }
 
     @Override

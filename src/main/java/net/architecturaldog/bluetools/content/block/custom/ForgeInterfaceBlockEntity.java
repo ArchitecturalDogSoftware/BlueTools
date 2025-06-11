@@ -2,22 +2,61 @@ package net.architecturaldog.bluetools.content.block.custom;
 
 import net.architecturaldog.bluetools.BlueTools;
 import net.architecturaldog.bluetools.content.block.BlueToolsBlockEntityTypes;
+import net.architecturaldog.bluetools.content.screen.custom.ForgeInterfaceScreenHandler;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
-import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.block.entity.LockableContainerBlockEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.player.PlayerInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.screen.PropertyDelegate;
+import net.minecraft.screen.ScreenHandler;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.text.Text;
+import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.BlockView;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
+import java.util.Optional;
 
-public class ForgeInterfaceBlockEntity extends BlockEntity {
+public class ForgeInterfaceBlockEntity extends LockableContainerBlockEntity {
 
+    public static final int MAX_SIDE_VALUE = 10;
+    public static final int WIDTH_MAX_VALUE = MAX_SIDE_VALUE * 2 + 1;
+    public static final int HEIGHT_MAX_VALUE = 10;
     private static final AbstractBlock.ContextPredicate IS_FORGE_BLOCK =
         (state, world, pos) -> state.isOf(Blocks.BRICKS);
+
     private int maxVolume;
+    private int currentVolume;
+    private final PropertyDelegate propertyDelegate = new PropertyDelegate() {
+
+        @Override
+        public int get(final int index) {
+            return switch (index) {
+                case 0 -> ForgeInterfaceBlockEntity.this.maxVolume;
+                case 1 -> ForgeInterfaceBlockEntity.this.currentVolume;
+                default -> 0;
+            };
+        }
+
+        @Override
+        public void set(final int index, final int value) {
+            switch (index) {
+                case 0 -> ForgeInterfaceBlockEntity.this.maxVolume = value;
+                case 1 -> ForgeInterfaceBlockEntity.this.currentVolume = value;
+            }
+        }
+
+        @Override
+        public int size() {
+            return 2;
+        }
+    };
 
     public ForgeInterfaceBlockEntity(final BlockPos pos, final BlockState state)
     {
@@ -25,22 +64,28 @@ public class ForgeInterfaceBlockEntity extends BlockEntity {
     }
 
     public void tick(ServerWorld world, BlockView blockWorld, BlockPos pos, BlockState state) {
-        int config = checkValidConfiguration(blockWorld, pos);
-        world.setBlockState(
-            pos,
-            state.with(ForgeInterfaceBlock.ACTIVE, config > 0)
+        Optional<Integer> config = checkValidConfiguration(blockWorld, pos);
+        config.ifPresentOrElse(
+            volume -> {
+                world.setBlockState(
+                    pos,
+                    state.with(ForgeInterfaceBlock.VOLUME, volume).with(ForgeInterfaceBlock.ACTIVE, true)
+                );
+                this.maxVolume = volume;
+            }, () -> world.setBlockState(
+                pos,
+                state.with(ForgeInterfaceBlock.VOLUME, 0).with(ForgeInterfaceBlock.ACTIVE, false)
+            )
         );
-
-        this.maxVolume = config;
     }
 
-    private static int checkValidConfiguration(BlockView world, BlockPos pos) {
+    private static Optional<Integer> checkValidConfiguration(BlockView world, BlockPos pos) {
         BlockPos.Mutable checkPos = new BlockPos.Mutable();
         checkPos.set(pos);
         int[] check = checkValidStageOne(world, pos, checkPos);
         if (Arrays.equals(check, new int[] { 0, 0 }) || Arrays.stream(check).anyMatch(i -> i < 0)) {
             BlueTools.LOGGER.info("stage 1 failed");
-            return 0;
+            return Optional.empty();
         }
         int endPointOne = check[0];
         int endPointTwo = check[1];
@@ -49,7 +94,7 @@ public class ForgeInterfaceBlockEntity extends BlockEntity {
         check = checkValidStageTwo(world, pos, checkPos, endPointOne, endPointTwo);
         if (Arrays.equals(check, new int[] { 0, 0 }) || Arrays.stream(check).anyMatch(i -> i < 0)) {
             BlueTools.LOGGER.info("stage 2 failed");
-            return 0;
+            return Optional.empty();
         }
         endPointOne = check[0];
         endPointTwo = check[1];
@@ -57,23 +102,23 @@ public class ForgeInterfaceBlockEntity extends BlockEntity {
 
         if (!checkValidStageThree(world, pos, checkPos, length, endPointOne)) {
             BlueTools.LOGGER.info("stage 3 failed");
-            return 0;
+            return Optional.empty();
         }
         int height = checkValidStageFour(world, pos, checkPos, endPointOne, endPointTwo);
         BlueTools.LOGGER.info("Stage 4 {}", height);
         if (height < 2) {
             BlueTools.LOGGER.info("stage 4 failed");
-            return 0;
+            return Optional.empty();
         }
         if (!checkValidStageFive(world, pos, checkPos, endPointTwo, height, length)) {
             BlueTools.LOGGER.info("stage 5 failed");
-            return 0;
+            return Optional.empty();
         }
 
         if (!checkValidStageSix(world, pos, checkPos, endPointTwo, length)) {
-            return 0;
+            return Optional.empty();
         }
-        return length * length * height;
+        return Optional.of(length * length * height);
     }
 
     private static int[] checkValidStageOne(
@@ -88,7 +133,7 @@ public class ForgeInterfaceBlockEntity extends BlockEntity {
 
         int d1 = 0;
         int d2 = 0;
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < MAX_SIDE_VALUE; i++) {
             checkPos.move(direction1);
             if (IS_FORGE_BLOCK.test(world.getBlockState(checkPos), world, checkPos)) {
                 d1++;
@@ -97,7 +142,7 @@ public class ForgeInterfaceBlockEntity extends BlockEntity {
             }
         }
         checkPos.set(pos);
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < MAX_SIDE_VALUE; i++) {
             checkPos.move(direction2);
             if (IS_FORGE_BLOCK.test(world.getBlockState(checkPos), world, checkPos)) {
                 d2++;
@@ -188,7 +233,7 @@ public class ForgeInterfaceBlockEntity extends BlockEntity {
         Direction forward = directions[2];
         int height = 1;
         checkPos.set(pos);
-        for (int y = 1; y < 10; y++) {
+        for (int y = 1; y < HEIGHT_MAX_VALUE; y++) {
             checkPos.move(Direction.UP);
             if (!checkForgeSide(
                 world,
@@ -368,6 +413,41 @@ public class ForgeInterfaceBlockEntity extends BlockEntity {
         }
 
         return new Direction[] { direction1, direction2, direction, back };
+    }
+
+    @Override
+    protected Text getContainerName() {
+        return Text.translatable(BlueToolsBlockEntityTypes.FORGE_INTERFACE.getLoaderId().toTranslationKey("container"));
+    }
+
+    @Override
+    protected DefaultedList<ItemStack> getHeldStacks() {
+        return DefaultedList.ofSize(0, ItemStack.EMPTY);
+    }
+
+    @Override
+    protected void setHeldStacks(final DefaultedList<ItemStack> inventory) {
+
+    }
+
+    @Override
+    public @Nullable ScreenHandler createMenu(
+        final int syncId,
+        final PlayerInventory playerInventory,
+        final PlayerEntity playerEntity
+    )
+    {
+        return new ForgeInterfaceScreenHandler(syncId, playerInventory, this.propertyDelegate);
+    }
+
+    @Override
+    protected ScreenHandler createScreenHandler(final int syncId, final PlayerInventory playerInventory) {
+        return new ForgeInterfaceScreenHandler(syncId, playerInventory, this.propertyDelegate);
+    }
+
+    @Override
+    public int size() {
+        return 0;
     }
 
 }
