@@ -1,0 +1,6 @@
+{
+    "model": {
+        "type": "minecraft:model",
+        "model": "bluetools:item/forge_interface"
+    }
+}
