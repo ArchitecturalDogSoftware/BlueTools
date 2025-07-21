@@ -3,7 +3,7 @@ package net.architecturaldog.bluetools.content.item;
 import dev.jaxydog.lodestone.api.AutoLoader;
 import net.architecturaldog.bluetools.BlueTools;
 import net.architecturaldog.bluetools.content.block.BlueToolsBlocks;
-import net.architecturaldog.bluetools.utility.RegistryLoaded;
+import net.architecturaldog.bluetools.utility.RegistryLoad;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.registry.Registries;
@@ -15,16 +15,16 @@ import java.util.function.Function;
 
 public final class BlueToolsItems extends AutoLoader {
 
-    public static final RegistryLoaded<BlockItem> FORGE_INTERFACE = create(
+    public static final RegistryLoad<BlockItem> FORGE_INTERFACE = create(
         "forge_interface",
         settings -> new BlockItem(BlueToolsBlocks.FORGE_INTERFACE, settings.useBlockPrefixedTranslationKey())
     );
 
-    private static <T extends Item> RegistryLoaded<T> create(final String path, Function<Item.Settings, T> function) {
+    private static <T extends Item> RegistryLoad<T> create(final String path, Function<Item.Settings, T> function) {
         final RegistryKey<Item> registryKey = RegistryKey.of(RegistryKeys.ITEM, BlueTools.id(path));
         final T item = function.apply(new Item.Settings().registryKey(registryKey));
 
-        return new RegistryLoaded<>(path, Registries.ITEM, item);
+        return new RegistryLoad<>(path, Registries.ITEM, item);
     }
 
     @Override
