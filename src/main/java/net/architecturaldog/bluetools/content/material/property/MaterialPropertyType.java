@@ -6,8 +6,4 @@ public interface MaterialPropertyType<P extends MaterialProperty> {
 
     MapCodec<P> getCodec();
 
-    static <P extends MaterialProperty> MaterialPropertyType<P> simple(final MapCodec<P> codec) {
-        return new SimpleMaterialPropertyType<>(codec);
-    }
-
 }

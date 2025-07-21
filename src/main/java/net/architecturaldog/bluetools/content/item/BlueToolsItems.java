@@ -22,12 +22,9 @@ public final class BlueToolsItems extends AutoLoader {
 
     private static <T extends Item> RegistryLoaded<T> create(final String path, Function<Item.Settings, T> function) {
         final RegistryKey<Item> registryKey = RegistryKey.of(RegistryKeys.ITEM, BlueTools.id(path));
+        final T item = function.apply(new Item.Settings().registryKey(registryKey));
 
-        return new RegistryLoaded<>(
-            path,
-            Registries.ITEM,
-            function.apply(new Item.Settings().registryKey(registryKey))
-        );
+        return new RegistryLoaded<>(path, Registries.ITEM, item);
     }
 
     @Override
