@@ -1,0 +1,9 @@
+{
+    "color": "#805030",
+    "rules": [
+        {
+            "tag": "#minecraft:incorrect_for_wooden_tool",
+            "inverted": true
+        }
+    ]
+}

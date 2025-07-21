@@ -1,0 +1,9 @@
+{
+    "color": "#808080",
+    "rules": [
+        {
+            "tag": "#minecraft:incorrect_for_stone_tool",
+            "inverted": true
+        }
+    ]
+}

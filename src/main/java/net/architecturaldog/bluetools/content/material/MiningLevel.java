@@ -37,33 +37,49 @@ public record MiningLevel(Color color, List<Rule> rules) {
 
     public sealed interface Rule permits BlockRule, TagRule {
 
-        MapCodec<Rule> CODEC = Codec.mapEither(BlockRule.CODEC.fieldOf("block"), TagRule.CODEC.fieldOf("tag")).xmap(
+        MapCodec<Rule> CODEC = Codec.mapEither(BlockRule.CODEC, TagRule.CODEC).xmap(
             either -> either.map(Function.identity(), Function.identity()),
             rule -> rule instanceof BlockRule ? Either.left((BlockRule) rule) : Either.right((TagRule) rule)
         );
 
         boolean stateMatches(final BlockState state);
 
+        boolean inverted();
+
     }
 
-    public record BlockRule(Block block) implements Rule {
+    public record BlockRule(Block block, boolean inverted) implements Rule {
 
-        public static final Codec<BlockRule> CODEC = Registries.BLOCK.getCodec().xmap(BlockRule::new, BlockRule::block);
+        public static final MapCodec<BlockRule> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+            Registries.BLOCK.getCodec().fieldOf("block").forGetter(BlockRule::block),
+            Codec.BOOL.fieldOf("inverted").forGetter(BlockRule::inverted)
+        ).apply(instance, BlockRule::new));
 
         @Override
         public boolean stateMatches(final BlockState state) {
-            return state.isOf(this.block());
+            if (this.inverted()) {
+                return !state.isOf(this.block());
+            } else {
+                return state.isOf(this.block());
+            }
         }
 
     }
 
-    public record TagRule(TagKey<Block> tagKey) implements Rule {
+    public record TagRule(TagKey<Block> tagKey, boolean inverted) implements Rule {
 
-        public static final Codec<TagRule> CODEC = TagKey.codec(RegistryKeys.BLOCK).xmap(TagRule::new, TagRule::tagKey);
+        public static final MapCodec<TagRule> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+            TagKey.codec(RegistryKeys.BLOCK).fieldOf("tag").forGetter(TagRule::tagKey),
+            Codec.BOOL.fieldOf("inverted").forGetter(TagRule::inverted)
+        ).apply(instance, TagRule::new));
 
         @Override
         public boolean stateMatches(final BlockState state) {
-            return state.isIn(this.tagKey());
+            if (this.inverted()) {
+                return !state.isIn(this.tagKey());
+            } else {
+                return state.isIn(this.tagKey());
+            }
         }
 
     }

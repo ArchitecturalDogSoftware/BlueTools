@@ -1,0 +1,9 @@
+{
+    "color": "#F0A030",
+    "rules": [
+        {
+            "tag": "#minecraft:incorrect_for_gold_tool",
+            "inverted": true
+        }
+    ]
+}

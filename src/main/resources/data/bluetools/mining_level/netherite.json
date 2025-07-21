@@ -1,0 +1,9 @@
+{
+    "color": "#907080",
+    "rules": [
+        {
+            "tag": "#minecraft:incorrect_for_netherite_tool",
+            "inverted": true
+        }
+    ]
+}

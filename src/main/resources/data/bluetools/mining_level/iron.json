@@ -1,0 +1,9 @@
+{
+    "color": "#E0E0F0",
+    "rules": [
+        {
+            "tag": "#minecraft:incorrect_for_iron_tool",
+            "inverted": true
+        }
+    ]
+}

@@ -1,0 +1,9 @@
+{
+    "color": "#60F0F0",
+    "rules": [
+        {
+            "tag": "#minecraft:incorrect_for_diamond_tool",
+            "inverted": true
+        }
+    ]
+}
