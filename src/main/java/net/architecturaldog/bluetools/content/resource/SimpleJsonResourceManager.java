@@ -4,18 +4,19 @@ import com.mojang.serialization.Codec;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.util.Identifier;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
 public class SimpleJsonResourceManager<T> extends JsonResourceManager<T> {
 
-    private final String name;
+    private final @NotNull String name;
 
     public SimpleJsonResourceManager(
-        final String name,
-        final RegistryKey<Registry<T>> registryKey,
-        final Codec<T> codec,
-        final List<Identifier> fabricDependencies
+        final @NotNull String name,
+        final @NotNull RegistryKey<Registry<T>> registryKey,
+        final @NotNull Codec<T> codec,
+        final @NotNull List<Identifier> fabricDependencies
     )
     {
         super(registryKey, codec, fabricDependencies);
@@ -24,16 +25,16 @@ public class SimpleJsonResourceManager<T> extends JsonResourceManager<T> {
     }
 
     public SimpleJsonResourceManager(
-        final String name,
-        final RegistryKey<Registry<T>> registryKey,
-        final Codec<T> codec
+        final @NotNull String name,
+        final @NotNull RegistryKey<Registry<T>> registryKey,
+        final @NotNull Codec<T> codec
     )
     {
         this(name, registryKey, codec, List.of());
     }
 
     @Override
-    public String getName() {
+    public @NotNull String getName() {
         return this.name;
     }
 

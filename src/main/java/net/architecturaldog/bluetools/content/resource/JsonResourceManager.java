@@ -17,6 +17,7 @@ import net.minecraft.resource.*;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.profiler.Profiler;
 import net.minecraft.util.profiler.Profilers;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -32,21 +33,21 @@ public abstract class JsonResourceManager<T> extends SinglePreparationResourceRe
     implements CommonLoaded, IdentifiableResourceReloadListener
 {
 
-    private final RegistryKey<Registry<T>> registryKey;
-    private final Codec<T> codec;
-    private final List<Identifier> fabricDependencies;
-    private final ResourceFinder resourceFinder;
+    private final @NotNull RegistryKey<Registry<T>> registryKey;
+    private final @NotNull Codec<T> codec;
+    private final @NotNull List<Identifier> fabricDependencies;
+    private final @NotNull ResourceFinder resourceFinder;
 
-    private Map<RegistryKey<T>, Entry<T>> loadedEntries = Map.of();
+    private @NotNull Map<RegistryKey<T>, Entry<T>> loadedEntries = Map.of();
 
-    public JsonResourceManager(final RegistryKey<Registry<T>> registryKey, final Codec<T> codec) {
+    public JsonResourceManager(final @NotNull RegistryKey<Registry<T>> registryKey, final @NotNull Codec<T> codec) {
         this(registryKey, codec, List.of());
     }
 
     public JsonResourceManager(
-        final RegistryKey<Registry<T>> registryKey,
-        final Codec<T> codec,
-        final List<Identifier> fabricDependencies
+        final @NotNull RegistryKey<Registry<T>> registryKey,
+        final @NotNull Codec<T> codec,
+        final @NotNull List<Identifier> fabricDependencies
     )
     {
         this.registryKey = registryKey;
@@ -59,21 +60,21 @@ public abstract class JsonResourceManager<T> extends SinglePreparationResourceRe
         }
     }
 
-    public abstract String getName();
+    public abstract @NotNull String getName();
 
-    public Optional<Entry<T>> getEntry(final Identifier identifier) {
+    public @NotNull Optional<Entry<T>> getEntry(final @NotNull Identifier identifier) {
         return this.getEntry(RegistryKey.of(this.registryKey, identifier));
     }
 
-    public Optional<Entry<T>> getEntry(final RegistryKey<T> registryKey) {
+    public @NotNull Optional<Entry<T>> getEntry(final @NotNull RegistryKey<T> registryKey) {
         return Optional.ofNullable(this.loadedEntries.get(registryKey));
     }
 
-    public Optional<Entry<T>> getEntry(final T value) {
+    public @NotNull Optional<Entry<T>> getEntry(final @NotNull T value) {
         return this.loadedEntries.values().stream().filter(entry -> entry.value().equals(value)).findFirst();
     }
 
-    public Codec<T> getCodec() {
+    public @NotNull Codec<T> getCodec() {
         return this.getEntryCodec().flatComapMap(
             Entry::value,
             value -> this.getEntry(value).map(DataResult::success).orElseGet(
@@ -82,7 +83,7 @@ public abstract class JsonResourceManager<T> extends SinglePreparationResourceRe
         );
     }
 
-    public Codec<Entry<T>> getEntryCodec() {
+    public @NotNull Codec<Entry<T>> getEntryCodec() {
         return Identifier.CODEC.comapFlatMap(
             identifier -> this.getEntry(identifier).map(DataResult::success).orElseGet(
                 () -> DataResult.error(() -> "Unknown registry key in %s: %s".formatted(this.registryKey, identifier))
@@ -92,17 +93,17 @@ public abstract class JsonResourceManager<T> extends SinglePreparationResourceRe
     }
 
     @Override
-    public Identifier getLoaderId() {
+    public @NotNull Identifier getLoaderId() {
         return this.registryKey.getValue();
     }
 
     @Override
-    public Identifier getFabricId() {
+    public @NotNull Identifier getFabricId() {
         return this.getLoaderId();
     }
 
     @Override
-    public List<Identifier> getFabricDependencies() {
+    public @NotNull List<Identifier> getFabricDependencies() {
         return List.copyOf(this.fabricDependencies);
     }
 
@@ -113,8 +114,8 @@ public abstract class JsonResourceManager<T> extends SinglePreparationResourceRe
         ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(this);
     }
 
-    protected CompletableFuture<Void> waitForFabricDependencies(final Executor executor) {
-        final Stream<CompletableFuture<Void>> futures = this.getFabricDependencies().stream().map(
+    protected @NotNull CompletableFuture<Void> waitForFabricDependencies(final @NotNull Executor executor) {
+        final @NotNull Stream<CompletableFuture<Void>> futures = this.getFabricDependencies().stream().map(
             id -> ResourceManagerSynchronizer.INSTANCE.waitForLoader(id, ManagerState.FINISHED, executor)
         );
 
@@ -122,11 +123,11 @@ public abstract class JsonResourceManager<T> extends SinglePreparationResourceRe
     }
 
     @Override
-    public CompletableFuture<Void> reload(
-        final Synchronizer synchronizer,
-        final ResourceManager manager,
-        final Executor prepareExecutor,
-        final Executor applyExecutor
+    public @NotNull CompletableFuture<Void> reload(
+        final @NotNull Synchronizer synchronizer,
+        final @NotNull ResourceManager manager,
+        final @NotNull Executor prepareExecutor,
+        final @NotNull Executor applyExecutor
     )
     {
         return CompletableFuture.supplyAsync(() -> this.prepare(manager, Profilers.get()), prepareExecutor)
@@ -136,7 +137,11 @@ public abstract class JsonResourceManager<T> extends SinglePreparationResourceRe
     }
 
     @Override
-    protected Map<Identifier, Resource> prepare(final ResourceManager manager, final Profiler profiler) {
+    protected @NotNull Map<Identifier, Resource> prepare(
+        final @NotNull ResourceManager manager,
+        final @NotNull Profiler profiler
+    )
+    {
         ResourceManagerSynchronizer.INSTANCE.setCurrentState(this, ManagerState.PREPARING);
 
         return this.resourceFinder.findResources(manager);
@@ -144,33 +149,36 @@ public abstract class JsonResourceManager<T> extends SinglePreparationResourceRe
 
     @Override
     protected void apply(
-        final Map<Identifier, Resource> prepared,
-        final ResourceManager manager,
-        final Profiler profiler
+        final @NotNull Map<Identifier, Resource> prepared,
+        final @NotNull ResourceManager manager,
+        final @NotNull Profiler profiler
     )
     {
         ResourceManagerSynchronizer.INSTANCE.setCurrentState(this, ManagerState.APPLYING);
 
-        final Map<RegistryKey<T>, Entry<T>> loadedEntries = new Object2ObjectOpenHashMap<>(prepared.size());
+        final @NotNull Map<RegistryKey<T>, Entry<T>> loadedEntries = new Object2ObjectOpenHashMap<>(prepared.size());
 
-        for (final Map.Entry<Identifier, Resource> resourceEntry : prepared.entrySet()) {
-            final Identifier entryId = resourceEntry.getKey();
-            final Identifier resourceId = this.resourceFinder.toResourceId(entryId);
-            final Reader reader;
+        for (final @NotNull Map.Entry<Identifier, Resource> resourceEntry : prepared.entrySet()) {
+            final @NotNull Identifier entryId = resourceEntry.getKey();
+            final @NotNull Identifier resourceId = this.resourceFinder.toResourceId(entryId);
+            final @NotNull Reader reader;
 
             try {
                 reader = resourceEntry.getValue().getReader();
-            } catch (final IOException exception) {
+            } catch (final @NotNull IOException exception) {
                 BlueTools.LOGGER.error("Couldn't open file '{}' from '{}'", resourceEntry, entryId);
 
                 continue;
             }
 
             try {
-                final DataResult<T> dataResult = this.codec.parse(JsonOps.INSTANCE, JsonParser.parseReader(reader));
+                final @NotNull DataResult<T> dataResult = this.codec.parse(
+                    JsonOps.INSTANCE,
+                    JsonParser.parseReader(reader)
+                );
 
                 dataResult.ifSuccess(value -> {
-                    final RegistryKey<T> registryKey = RegistryKey.of(this.registryKey, resourceId);
+                    final @NotNull RegistryKey<T> registryKey = RegistryKey.of(this.registryKey, resourceId);
 
                     if (Objects.nonNull(loadedEntries.putIfAbsent(registryKey, new Entry<>(registryKey, value)))) {
                         throw new IllegalStateException("Duplicate file ignored with ID " + resourceId);
@@ -178,10 +186,10 @@ public abstract class JsonResourceManager<T> extends SinglePreparationResourceRe
                 }).ifError(error -> {
                     BlueTools.LOGGER.error("Couldn't parse file '{}' from '{}': {}", resourceId, entryId, error);
                 });
-            } catch (final IllegalArgumentException | JsonParseException exception) {
+            } catch (final @NotNull IllegalArgumentException | JsonParseException exception) {
                 try {
                     reader.close();
-                } catch (final IOException closeException) {
+                } catch (final @NotNull IOException closeException) {
                     exception.addSuppressed(closeException);
                 }
 

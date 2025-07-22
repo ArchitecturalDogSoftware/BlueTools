@@ -11,6 +11,7 @@ import net.minecraft.screen.PropertyDelegate;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.text.Text;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.NotNull;
 
 public class ForgeInterfaceScreenHandler extends ScreenHandler {
 
@@ -62,10 +63,10 @@ public class ForgeInterfaceScreenHandler extends ScreenHandler {
 
         @Environment(EnvType.CLIENT)
         @Override
-        public ForgeInterfaceScreen<ForgeInterfaceScreenHandler> createScreen(
-            final ForgeInterfaceScreenHandler handler,
-            final PlayerInventory playerInventory,
-            final Text title
+        public @NotNull ForgeInterfaceScreen<ForgeInterfaceScreenHandler> createScreen(
+            final @NotNull ForgeInterfaceScreenHandler handler,
+            final @NotNull PlayerInventory playerInventory,
+            final @NotNull Text title
         )
         {
             return new ForgeInterfaceScreen<>(handler, playerInventory, title);

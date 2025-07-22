@@ -22,15 +22,15 @@ import org.jetbrains.annotations.NotNull;
 
 public final class BlueToolsScreenHandlerTypes extends AutoLoader {
 
-    public static final RegistryLoad<ScreenHandlerType<ForgeInterfaceScreenHandler>> FORGE_INTERFACE =
+    public static final @NotNull RegistryLoad<ScreenHandlerType<ForgeInterfaceScreenHandler>> FORGE_INTERFACE =
         BlueToolsScreenHandlerTypes.create("forge_interface", new ForgeInterfaceScreenHandler.Factory());
 
     @Override
-    public Identifier getLoaderId() {
+    public @NotNull Identifier getLoaderId() {
         return BlueTools.id("screen_handler_types");
     }
 
-    private static <T extends ScreenHandler, U extends Screen & ScreenHandlerProvider<T>> RegistryLoad<ScreenHandlerType<T>> create(
+    private static <T extends ScreenHandler, U extends Screen & ScreenHandlerProvider<T>> @NotNull RegistryLoad<ScreenHandlerType<T>> create(
         final @NotNull String path,
         final @NotNull BlueToolsScreenHandlerTypes.Factory<T, U> factory
     )
@@ -38,7 +38,7 @@ public final class BlueToolsScreenHandlerTypes extends AutoLoader {
         return BlueToolsScreenHandlerTypes.create(path, factory, FeatureFlags.VANILLA_FEATURES);
     }
 
-    private static <T extends ScreenHandler, U extends Screen & ScreenHandlerProvider<T>> RegistryLoad<ScreenHandlerType<T>> create(
+    private static <T extends ScreenHandler, U extends Screen & ScreenHandlerProvider<T>> @NotNull RegistryLoad<ScreenHandlerType<T>> create(
         final @NotNull Identifier identifier,
         final @NotNull BlueToolsScreenHandlerTypes.Factory<T, U> factory
     )
@@ -46,7 +46,7 @@ public final class BlueToolsScreenHandlerTypes extends AutoLoader {
         return BlueToolsScreenHandlerTypes.create(identifier, factory, FeatureFlags.VANILLA_FEATURES);
     }
 
-    private static <T extends ScreenHandler, U extends Screen & ScreenHandlerProvider<T>> RegistryLoad<ScreenHandlerType<T>> create(
+    private static <T extends ScreenHandler, U extends Screen & ScreenHandlerProvider<T>> @NotNull RegistryLoad<ScreenHandlerType<T>> create(
         final @NotNull String path,
         final @NotNull BlueToolsScreenHandlerTypes.Factory<T, U> factory,
         final @NotNull FeatureSet featureSet
@@ -55,7 +55,7 @@ public final class BlueToolsScreenHandlerTypes extends AutoLoader {
         return BlueToolsScreenHandlerTypes.create(BlueTools.id(path), factory, featureSet);
     }
 
-    private static <T extends ScreenHandler, U extends Screen & ScreenHandlerProvider<T>> RegistryLoad<ScreenHandlerType<T>> create(
+    private static <T extends ScreenHandler, U extends Screen & ScreenHandlerProvider<T>> @NotNull RegistryLoad<ScreenHandlerType<T>> create(
         final @NotNull Identifier identifier,
         final @NotNull BlueToolsScreenHandlerTypes.Factory<T, U> factory,
         final @NotNull FeatureSet featureSet
@@ -71,7 +71,11 @@ public final class BlueToolsScreenHandlerTypes extends AutoLoader {
     {
 
         @Environment(EnvType.CLIENT)
-        U createScreen(T handler, PlayerInventory playerInventory, Text title);
+        @NotNull U createScreen(
+            final @NotNull T handler,
+            final @NotNull PlayerInventory playerInventory,
+            final @NotNull Text title
+        );
 
     }
 

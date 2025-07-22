@@ -8,24 +8,25 @@ import net.minecraft.network.RegistryByteBuf;
 import net.minecraft.network.codec.PacketCodec;
 import net.minecraft.network.codec.PacketCodecs;
 import net.minecraft.util.dynamic.Codecs;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
 public record Color(int integer) {
 
-    public static final Codec<Color> INT_CODEC = Codec.INT.xmap(Color::new, Color::integer);
-    public static final Codec<Color> TUPLE_CODEC = Codec
+    public static final @NotNull Codec<Color> INT_CODEC = Codec.INT.xmap(Color::new, Color::integer);
+    public static final @NotNull Codec<Color> TUPLE_CODEC = Codec
         .list(Codecs.UNSIGNED_BYTE, 3, 3)
         .xmap(
             list -> new Color(list.getFirst(), list.get(1), list.get(2)),
             color -> List.of(color.r(), color.g(), color.b())
         );
-    public static final MapCodec<Color> MAP_CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+    public static final @NotNull MapCodec<Color> MAP_CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
         Codecs.UNSIGNED_BYTE.fieldOf("r").forGetter(Color::r),
         Codecs.UNSIGNED_BYTE.fieldOf("g").forGetter(Color::g),
         Codecs.UNSIGNED_BYTE.fieldOf("b").forGetter(Color::b)
     ).apply(instance, Color::new));
-    public static final Codec<Color> HEX_CODEC = Codec
+    public static final @NotNull Codec<Color> HEX_CODEC = Codec
         .string(7, 7)
         .comapFlatMap(
             string -> {
@@ -46,12 +47,12 @@ public record Color(int integer) {
             color -> "#%02X%02X%02X".formatted(color.r(), color.g(), color.b())
         );
 
-    public static final Codec<Color> CODEC = Codec.withAlternative(
+    public static final @NotNull Codec<Color> CODEC = Codec.withAlternative(
         Codec.withAlternative(Color.INT_CODEC, Color.MAP_CODEC.codec()),
         Codec.withAlternative(Color.TUPLE_CODEC, Color.HEX_CODEC)
     );
 
-    public static final PacketCodec<? super RegistryByteBuf, Color> PACKET_CODEC =
+    public static final @NotNull PacketCodec<? super RegistryByteBuf, Color> PACKET_CODEC =
         PacketCodecs.INTEGER.xmap(Color::new, Color::integer);
 
     public Color(int r, int g, int b) {

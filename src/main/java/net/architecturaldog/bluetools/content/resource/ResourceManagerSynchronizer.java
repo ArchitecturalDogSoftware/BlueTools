@@ -4,6 +4,8 @@ import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.architecturaldog.bluetools.BlueTools;
 import net.fabricmc.fabric.api.resource.IdentifiableResourceReloadListener;
 import net.minecraft.util.Identifier;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
@@ -12,25 +14,29 @@ import java.util.concurrent.TimeUnit;
 
 public final class ResourceManagerSynchronizer {
 
-    public static final ResourceManagerSynchronizer INSTANCE = new ResourceManagerSynchronizer();
+    public static final @NotNull ResourceManagerSynchronizer INSTANCE = new ResourceManagerSynchronizer();
 
-    private final Map<Identifier, ManagerState> states = new Object2ObjectOpenHashMap<>();
+    private final @NotNull Map<Identifier, ManagerState> states = new Object2ObjectOpenHashMap<>();
 
-    public ManagerState getCurrentState(final IdentifiableResourceReloadListener listener) {
+    public @Nullable ManagerState getCurrentState(final @NotNull IdentifiableResourceReloadListener listener) {
         return this.getCurrentState(listener.getFabricId());
     }
 
-    public ManagerState getCurrentState(final Identifier identifier) {
+    public @Nullable ManagerState getCurrentState(final @NotNull Identifier identifier) {
         synchronized (this.states) {
             return this.states.putIfAbsent(identifier, ManagerState.UNSPECIFIED);
         }
     }
 
-    public void setCurrentState(final IdentifiableResourceReloadListener listener, final ManagerState state) {
+    public void setCurrentState(
+        final @NotNull IdentifiableResourceReloadListener listener,
+        final @NotNull ManagerState state
+    )
+    {
         this.setCurrentState(listener.getFabricId(), state);
     }
 
-    public void setCurrentState(final Identifier identifier, final ManagerState state) {
+    public void setCurrentState(final @NotNull Identifier identifier, final @NotNull ManagerState state) {
         synchronized (this.states) {
             this.states.put(identifier, state);
         }
@@ -38,28 +44,32 @@ public final class ResourceManagerSynchronizer {
         BlueTools.LOGGER.debug("Resource manager '{}' is now {}", identifier, state.name().toLowerCase());
     }
 
-    public CompletableFuture<Void> waitForLoader(
-        final IdentifiableResourceReloadListener listener,
-        final ManagerState state,
-        final Executor executor
+    public @NotNull CompletableFuture<Void> waitForLoader(
+        final @NotNull IdentifiableResourceReloadListener listener,
+        final @NotNull ManagerState state,
+        final @NotNull Executor executor
     )
     {
         return this.waitForLoader(listener.getFabricId(), state, executor);
     }
 
-    public CompletableFuture<Void> waitForLoader(
-        final Identifier identifier,
-        final ManagerState state,
-        final Executor executor
+    public @NotNull CompletableFuture<Void> waitForLoader(
+        final @NotNull Identifier identifier,
+        final @NotNull ManagerState state,
+        final @NotNull Executor executor
     )
     {
         if (!this.states.containsKey(identifier)) {
             return CompletableFuture.completedFuture(null);
         }
 
-        final CompletableFuture<Void> future = CompletableFuture.runAsync(
+        final @NotNull CompletableFuture<Void> future = CompletableFuture.runAsync(
             () -> {
-                while (!this.getCurrentState(identifier).equals(state)) Thread.onSpinWait();
+                @Nullable ManagerState current;
+
+                while ((current = this.getCurrentState(identifier)) != null && current.equals(state)) {
+                    Thread.onSpinWait();
+                }
             }, executor
         );
 

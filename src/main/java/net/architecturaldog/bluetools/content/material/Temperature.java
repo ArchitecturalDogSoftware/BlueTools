@@ -2,12 +2,13 @@ package net.architecturaldog.bluetools.content.material;
 
 import com.mojang.serialization.MapCodec;
 import net.architecturaldog.bluetools.utility.BlueToolsCodecs;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 
 public sealed interface Temperature permits Temperature.Kelvin, Temperature.Celsius, Temperature.Fahrenheit {
 
-    MapCodec<Temperature> CODEC = BlueToolsCodecs.oneOf(
+    @NotNull MapCodec<Temperature> CODEC = BlueToolsCodecs.oneOf(
         Map.of(
             "kelvin", BlueToolsCodecs.NON_NEGATIVE_DOUBLE.xmap(Kelvin::new, Temperature::degreesKelvin),
             "celsius", BlueToolsCodecs.NON_NEGATIVE_DOUBLE.xmap(Celsius::new, Temperature::degreesCelsius),

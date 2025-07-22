@@ -13,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
 
 public final class BlueToolsItems extends AutoLoader {
 
-    public static final RegistryLoad<BlockItem> FORGE_INTERFACE =
+    public static final @NotNull RegistryLoad<BlockItem> FORGE_INTERFACE =
         BlueToolsItems.create(BlockItem.class, "forge_interface", BlockItem::new, BlueToolsBlocks.FORGE_INTERFACE);
 
     private static <T extends BlockItem> @NotNull RegistryLoad<T> create(
@@ -101,7 +101,7 @@ public final class BlueToolsItems extends AutoLoader {
     }
 
     @Override
-    public Identifier getLoaderId() {
+    public @NotNull Identifier getLoaderId() {
         return BlueTools.id("items");
     }
 

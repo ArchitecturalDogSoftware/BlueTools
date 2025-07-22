@@ -105,7 +105,7 @@ public final class BlueToolsBlocks extends AutoLoader {
     }
 
     @Override
-    public Identifier getLoaderId() {
+    public @NotNull Identifier getLoaderId() {
         return BlueTools.id("blocks");
     }
 

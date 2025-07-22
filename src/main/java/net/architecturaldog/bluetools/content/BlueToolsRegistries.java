@@ -10,32 +10,33 @@ import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.util.Identifier;
+import org.jetbrains.annotations.NotNull;
 
 public final class BlueToolsRegistries extends AutoLoader {
 
-    public static final Registry<MaterialPropertyType<?>> MATERIAL_PROPERTY_TYPE =
+    public static final @NotNull Registry<MaterialPropertyType<?>> MATERIAL_PROPERTY_TYPE =
         FabricRegistryBuilder.createSimple(Keys.MATERIAL_PROPERTY_TYPE).buildAndRegister();
 
-    public static final Registry<MaterialType<?>> MATERIAL_TYPE =
+    public static final @NotNull Registry<MaterialType<?>> MATERIAL_TYPE =
         FabricRegistryBuilder.createSimple(Keys.MATERIAL_TYPE).buildAndRegister();
 
     @Override
-    public Identifier getLoaderId() {
+    public @NotNull Identifier getLoaderId() {
         return BlueTools.id("registries");
     }
 
     public static final class Keys {
 
-        public static final RegistryKey<Registry<MaterialPropertyType<?>>> MATERIAL_PROPERTY_TYPE =
+        public static final @NotNull RegistryKey<Registry<MaterialPropertyType<?>>> MATERIAL_PROPERTY_TYPE =
             RegistryKey.ofRegistry(BlueTools.id("material_property_type"));
 
-        public static final RegistryKey<Registry<MaterialType<?>>> MATERIAL_TYPE =
+        public static final @NotNull RegistryKey<Registry<MaterialType<?>>> MATERIAL_TYPE =
             RegistryKey.ofRegistry(BlueTools.id("material_type"));
 
-        public static final RegistryKey<Registry<Material>> MATERIAL =
+        public static final @NotNull RegistryKey<Registry<Material>> MATERIAL =
             RegistryKey.ofRegistry(BlueTools.id("material"));
 
-        public static final RegistryKey<Registry<MiningLevel>> MINING_LEVEL =
+        public static final @NotNull RegistryKey<Registry<MiningLevel>> MINING_LEVEL =
             RegistryKey.ofRegistry(BlueTools.id("mining_level"));
 
     }

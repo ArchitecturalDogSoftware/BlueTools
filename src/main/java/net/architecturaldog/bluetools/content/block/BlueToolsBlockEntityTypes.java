@@ -15,7 +15,7 @@ import java.util.Set;
 
 public final class BlueToolsBlockEntityTypes extends AutoLoader {
 
-    public static final RegistryLoad<BlockEntityType<ForgeInterfaceBlockEntity>> FORGE_INTERFACE =
+    public static final @NotNull RegistryLoad<BlockEntityType<ForgeInterfaceBlockEntity>> FORGE_INTERFACE =
         BlueToolsBlockEntityTypes.create(
             "forge_interface",
             ForgeInterfaceBlockEntity::new,
@@ -41,7 +41,7 @@ public final class BlueToolsBlockEntityTypes extends AutoLoader {
     }
 
     @Override
-    public Identifier getLoaderId() {
+    public @NotNull Identifier getLoaderId() {
         return BlueTools.id("block_entity_types");
     }
 

@@ -9,23 +9,24 @@ import net.fabricmc.api.Environment;
 import net.minecraft.client.render.item.tint.TintSource;
 import net.minecraft.client.render.item.tint.TintSourceTypes;
 import net.minecraft.util.Identifier;
+import org.jetbrains.annotations.NotNull;
 
 @Environment(EnvType.CLIENT)
 public final class BlueToolsTintSources extends AutoLoader {
 
-    public static final TintSourceLoader<MaterialTintSource> MATERIAL =
+    public static final @NotNull TintSourceLoader<MaterialTintSource> MATERIAL =
         new TintSourceLoader<>("material", MaterialTintSource.CODEC);
 
     @Override
-    public Identifier getLoaderId() {
+    public @NotNull Identifier getLoaderId() {
         return BlueTools.id("tint_sources");
     }
 
     @Environment(EnvType.CLIENT)
     public static final class TintSourceLoader<T extends TintSource> implements ClientLoaded {
 
-        private final String path;
-        private final MapCodec<T> codec;
+        private final @NotNull String path;
+        private final @NotNull MapCodec<T> codec;
 
         public TintSourceLoader(final String path, final MapCodec<T> codec) {
             this.path = path;
@@ -33,7 +34,7 @@ public final class BlueToolsTintSources extends AutoLoader {
         }
 
         @Override
-        public Identifier getLoaderId() {
+        public @NotNull Identifier getLoaderId() {
             return BlueTools.id(this.path);
         }
 

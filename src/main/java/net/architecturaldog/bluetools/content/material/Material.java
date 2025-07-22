@@ -4,22 +4,23 @@ import com.mojang.serialization.Codec;
 import net.architecturaldog.bluetools.content.BlueToolsRegistries;
 import net.architecturaldog.bluetools.content.material.property.MaterialProperty;
 import net.architecturaldog.bluetools.content.material.property.MaterialPropertyType;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface Material {
 
-    Codec<Material> CODEC = BlueToolsRegistries.MATERIAL_TYPE
+    @NotNull Codec<Material> CODEC = BlueToolsRegistries.MATERIAL_TYPE
         .getCodec()
         .dispatch(Material::getType, MaterialType::getCodec);
 
-    MaterialType<? extends Material> getType();
+    @NotNull MaterialType<? extends Material> getType();
 
-    boolean hasProperty(final MaterialPropertyType<?> type);
+    boolean hasProperty(final @NotNull MaterialPropertyType<?> type);
 
-    <P extends MaterialProperty> Optional<P> getProperty(final MaterialPropertyType<P> type);
+    <P extends MaterialProperty> @NotNull Optional<P> getProperty(final @NotNull MaterialPropertyType<P> type);
 
-    List<MaterialProperty> getProperties();
+    @NotNull List<MaterialProperty> getProperties();
 
 }

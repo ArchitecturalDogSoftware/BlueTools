@@ -1,9 +1,10 @@
 package net.architecturaldog.bluetools.content.material;
 
 import com.mojang.serialization.MapCodec;
+import org.jetbrains.annotations.NotNull;
 
 public interface MaterialType<M extends Material> {
 
-    MapCodec<M> getCodec();
+    @NotNull MapCodec<M> getCodec();
 
 }

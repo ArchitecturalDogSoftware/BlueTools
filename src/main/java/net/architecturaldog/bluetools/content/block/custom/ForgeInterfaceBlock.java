@@ -26,6 +26,7 @@ import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
@@ -120,7 +121,7 @@ public class ForgeInterfaceBlock extends BlockWithEntity implements CustomBlock 
     }
 
     @Override
-    public Block asBlock() {
+    public @NotNull Block asBlock() {
         return this;
     }
 
