@@ -58,9 +58,8 @@ public class ForgeInterfaceBlockEntity extends LockableContainerBlockEntity {
         }
     };
 
-    public ForgeInterfaceBlockEntity(final BlockPos pos, final BlockState state)
-    {
-        super(BlueToolsBlockEntityTypes.FORGE_INTERFACE, pos, state);
+    public ForgeInterfaceBlockEntity(final BlockPos pos, final BlockState state) {
+        super(BlueToolsBlockEntityTypes.FORGE_INTERFACE.getValue(), pos, state);
     }
 
     public void tick(ServerWorld world, BlockView blockWorld, BlockPos pos, BlockState state) {

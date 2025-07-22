@@ -9,14 +9,23 @@ import net.minecraft.util.Identifier;
 
 public final class BlueToolsMaterialTypes extends AutoLoader {
 
-    public static final RegistryLoad<MaterialType<SimpleMaterial>> SIMPLE = create("simple", SimpleMaterial.CODEC);
+    public static final RegistryLoad<MaterialType<SimpleMaterial>> SIMPLE =
+        BlueToolsMaterialTypes.create("simple", SimpleMaterial.CODEC);
 
     private static <M extends Material> RegistryLoad<MaterialType<M>> create(
         final String path,
         final MapCodec<M> codec
     )
     {
-        return new RegistryLoad<>(path, BlueToolsRegistries.MATERIAL_TYPE, () -> codec);
+        return BlueToolsMaterialTypes.create(BlueTools.id(path), codec);
+    }
+
+    private static <M extends Material> RegistryLoad<MaterialType<M>> create(
+        final Identifier identifier,
+        final MapCodec<M> codec
+    )
+    {
+        return new RegistryLoad<>(identifier, BlueToolsRegistries.MATERIAL_TYPE, () -> codec);
     }
 
     @Override

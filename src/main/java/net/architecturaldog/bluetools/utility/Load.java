@@ -5,16 +5,18 @@ import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.architecturaldog.bluetools.BlueTools;
 import net.minecraft.util.Identifier;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 
 public class Load<T> implements CommonLoaded, ClientLoaded, ServerLoaded, DataGenerating {
 
     private final Identifier identifier;
     private final T value;
 
-    private final Map<Class<? extends Loaded>, List<Runnable>> runnables = new Object2ObjectOpenHashMap<>(4);
+    private final Map<Class<? extends Loaded>, List<Consumer<Load<T>>>> consumers = new Object2ObjectOpenHashMap<>(4);
 
     public Load(final Identifier identifier, final T value) {
         this.identifier = identifier;
@@ -29,26 +31,26 @@ public class Load<T> implements CommonLoaded, ClientLoaded, ServerLoaded, DataGe
         return this.value;
     }
 
-    public Load<T> onCommonLoad(final Runnable runnable) {
-        this.runnables.computeIfAbsent(CommonLoaded.class, (key) -> new ObjectArrayList<>()).add(runnable);
+    public Load<T> thenCommon(final Consumer<Load<T>> consumer) {
+        this.consumers.computeIfAbsent(CommonLoaded.class, (key) -> new ObjectArrayList<>()).add(consumer);
 
         return this;
     }
 
-    public Load<T> onClientLoad(final Runnable runnable) {
-        this.runnables.computeIfAbsent(ClientLoaded.class, (key) -> new ObjectArrayList<>()).add(runnable);
+    public Load<T> thenClient(final Consumer<Load<T>> consumer) {
+        this.consumers.computeIfAbsent(ClientLoaded.class, (key) -> new ObjectArrayList<>()).add(consumer);
 
         return this;
     }
 
-    public Load<T> onServerLoad(final Runnable runnable) {
-        this.runnables.computeIfAbsent(ServerLoaded.class, (key) -> new ObjectArrayList<>()).add(runnable);
+    public Load<T> thenServer(final Consumer<Load<T>> consumer) {
+        this.consumers.computeIfAbsent(ServerLoaded.class, (key) -> new ObjectArrayList<>()).add(consumer);
 
         return this;
     }
 
-    public Load<T> onDataGenerate(final Runnable runnable) {
-        this.runnables.computeIfAbsent(DataGenerating.class, (key) -> new ObjectArrayList<>()).add(runnable);
+    public Load<T> thenGenerate(final Consumer<Load<T>> consumer) {
+        this.consumers.computeIfAbsent(DataGenerating.class, (key) -> new ObjectArrayList<>()).add(consumer);
 
         return this;
     }
@@ -60,22 +62,30 @@ public class Load<T> implements CommonLoaded, ClientLoaded, ServerLoaded, DataGe
 
     @Override
     public void loadCommon() {
-        this.runnables.getOrDefault(CommonLoaded.class, List.of()).forEach(Runnable::run);
+        for (final @NotNull Consumer<Load<T>> consumer : this.consumers.getOrDefault(CommonLoaded.class, List.of())) {
+            consumer.accept(this);
+        }
     }
 
     @Override
     public void loadClient() {
-        this.runnables.getOrDefault(ClientLoaded.class, List.of()).forEach(Runnable::run);
+        for (final @NotNull Consumer<Load<T>> consumer : this.consumers.getOrDefault(ClientLoaded.class, List.of())) {
+            consumer.accept(this);
+        }
     }
 
     @Override
     public void loadServer() {
-        this.runnables.getOrDefault(ServerLoaded.class, List.of()).forEach(Runnable::run);
+        for (final @NotNull Consumer<Load<T>> consumer : this.consumers.getOrDefault(ServerLoaded.class, List.of())) {
+            consumer.accept(this);
+        }
     }
 
     @Override
     public void generate() {
-        this.runnables.getOrDefault(DataGenerating.class, List.of()).forEach(Runnable::run);
+        for (final @NotNull Consumer<Load<T>> consumer : this.consumers.getOrDefault(DataGenerating.class, List.of())) {
+            consumer.accept(this);
+        }
     }
 
 }

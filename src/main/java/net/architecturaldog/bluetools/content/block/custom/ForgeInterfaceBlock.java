@@ -72,7 +72,7 @@ public class ForgeInterfaceBlock extends BlockWithEntity implements CustomBlock 
         if (world instanceof ServerWorld serverWorld) {
             return validateTicker(
                 type,
-                BlueToolsBlockEntityTypes.FORGE_INTERFACE,
+                BlueToolsBlockEntityTypes.FORGE_INTERFACE.getValue(),
                 (worldx, pos, state2, blockEntity) -> blockEntity.tick(
                     serverWorld,
                     worldx,

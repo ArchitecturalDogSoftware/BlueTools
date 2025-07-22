@@ -42,9 +42,9 @@ public record MiningLevel(Color color, List<Rule> rules) {
             rule -> rule instanceof BlockRule ? Either.left((BlockRule) rule) : Either.right((TagRule) rule)
         );
 
-        boolean stateMatches(final BlockState state);
-
         boolean inverted();
+
+        boolean stateMatches(final BlockState state);
 
     }
 

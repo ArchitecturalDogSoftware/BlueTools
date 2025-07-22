@@ -2,7 +2,6 @@ package net.architecturaldog.bluetools.content.material.property;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.architecturaldog.bluetools.content.material.BlueToolsMaterialPropertyTypes;
 import net.architecturaldog.bluetools.content.material.Temperature;
 import net.minecraft.fluid.Fluid;
 import net.minecraft.registry.Registries;

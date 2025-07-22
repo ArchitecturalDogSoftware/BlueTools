@@ -11,7 +11,7 @@ import java.util.function.UnaryOperator;
 
 public final class BlueToolsComponentTypes extends AutoLoader {
 
-    public static final RegistryLoad<ComponentType<MaterialComponent>> MATERIAL = create(
+    public static final RegistryLoad<ComponentType<MaterialComponent>> MATERIAL = BlueToolsComponentTypes.create(
         "material",
         builder -> builder.codec(MaterialComponent.CODEC).cache()
     );
@@ -21,9 +21,17 @@ public final class BlueToolsComponentTypes extends AutoLoader {
         final UnaryOperator<ComponentType.Builder<T>> function
     )
     {
+        return BlueToolsComponentTypes.create(BlueTools.id(path), function);
+    }
+
+    private static <T> RegistryLoad<ComponentType<T>> create(
+        final Identifier identifier,
+        final UnaryOperator<ComponentType.Builder<T>> function
+    )
+    {
         final ComponentType<T> component = function.apply(ComponentType.builder()).build();
 
-        return new RegistryLoad<>(path, Registries.DATA_COMPONENT_TYPE, component);
+        return new RegistryLoad<>(identifier, Registries.DATA_COMPONENT_TYPE, component);
     }
 
     @Override

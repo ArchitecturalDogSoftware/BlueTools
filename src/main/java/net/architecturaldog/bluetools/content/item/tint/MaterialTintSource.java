@@ -3,7 +3,9 @@ package net.architecturaldog.bluetools.content.item.tint;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.architecturaldog.bluetools.content.component.BlueToolsComponentTypes;
-import net.architecturaldog.bluetools.content.material.BlueToolsMaterialPropertyTypes;
+import net.architecturaldog.bluetools.content.material.property.BlueToolsMaterialPropertyTypes;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.render.item.tint.TintSource;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.LivingEntity;
@@ -13,6 +15,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
 
+@Environment(EnvType.CLIENT)
 public record MaterialTintSource(int defaultColor) implements TintSource {
 
     public static final MapCodec<MaterialTintSource> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(

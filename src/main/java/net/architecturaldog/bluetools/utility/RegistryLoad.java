@@ -3,6 +3,8 @@ package net.architecturaldog.bluetools.utility;
 import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
 
+import java.util.function.Consumer;
+
 public class RegistryLoad<T> extends Load<T> {
 
     private final Registry<? super T> registry;
@@ -23,20 +25,20 @@ public class RegistryLoad<T> extends Load<T> {
         return this.registry;
     }
 
-    public RegistryLoad<T> onCommonLoad(final Runnable runnable) {
-        return (RegistryLoad<T>) super.onCommonLoad(runnable);
+    public RegistryLoad<T> thenCommon(final Consumer<Load<T>> consumer) {
+        return (RegistryLoad<T>) super.thenCommon(consumer);
     }
 
-    public RegistryLoad<T> onClientLoad(final Runnable runnable) {
-        return (RegistryLoad<T>) super.onClientLoad(runnable);
+    public RegistryLoad<T> thenClient(final Consumer<Load<T>> consumer) {
+        return (RegistryLoad<T>) super.thenClient(consumer);
     }
 
-    public RegistryLoad<T> onServerLoad(final Runnable runnable) {
-        return (RegistryLoad<T>) super.onServerLoad(runnable);
+    public RegistryLoad<T> thenServer(final Consumer<Load<T>> consumer) {
+        return (RegistryLoad<T>) super.thenServer(consumer);
     }
 
-    public RegistryLoad<T> onDataGenerate(final Runnable runnable) {
-        return (RegistryLoad<T>) super.onDataGenerate(runnable);
+    public RegistryLoad<T> thenGenerate(final Consumer<Load<T>> consumer) {
+        return (RegistryLoad<T>) super.thenGenerate(consumer);
     }
 
     @Override

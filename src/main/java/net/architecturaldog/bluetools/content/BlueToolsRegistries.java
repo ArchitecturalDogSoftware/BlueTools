@@ -5,7 +5,6 @@ import net.architecturaldog.bluetools.BlueTools;
 import net.architecturaldog.bluetools.content.material.Material;
 import net.architecturaldog.bluetools.content.material.MaterialType;
 import net.architecturaldog.bluetools.content.material.MiningLevel;
-import net.architecturaldog.bluetools.content.material.property.MaterialProperty;
 import net.architecturaldog.bluetools.content.material.property.MaterialPropertyType;
 import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder;
 import net.minecraft.registry.Registry;
@@ -29,9 +28,6 @@ public final class BlueToolsRegistries extends AutoLoader {
 
         public static final RegistryKey<Registry<MaterialPropertyType<?>>> MATERIAL_PROPERTY_TYPE =
             RegistryKey.ofRegistry(BlueTools.id("material_property_type"));
-
-        public static final RegistryKey<Registry<MaterialProperty>> MATERIAL_PROPERTY =
-            RegistryKey.ofRegistry(BlueTools.id("material_property"));
 
         public static final RegistryKey<Registry<MaterialType<?>>> MATERIAL_TYPE =
             RegistryKey.ofRegistry(BlueTools.id("material_type"));

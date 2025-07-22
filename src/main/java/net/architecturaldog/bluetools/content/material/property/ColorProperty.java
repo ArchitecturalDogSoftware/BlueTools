@@ -2,7 +2,6 @@ package net.architecturaldog.bluetools.content.material.property;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.architecturaldog.bluetools.content.material.BlueToolsMaterialPropertyTypes;
 import net.architecturaldog.bluetools.utility.Color;
 
 public record ColorProperty(Color color) implements MaterialProperty {
