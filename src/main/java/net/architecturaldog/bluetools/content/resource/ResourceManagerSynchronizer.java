@@ -67,7 +67,7 @@ public final class ResourceManagerSynchronizer {
             () -> {
                 @Nullable ManagerState current;
 
-                while ((current = this.getCurrentState(identifier)) != null && current.equals(state)) {
+                while ((current = this.getCurrentState(identifier)) != null && !current.equals(state)) {
                     Thread.onSpinWait();
                 }
             }, executor
