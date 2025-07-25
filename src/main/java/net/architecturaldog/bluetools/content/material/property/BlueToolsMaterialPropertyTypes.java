@@ -14,6 +14,8 @@ public final class BlueToolsMaterialPropertyTypes extends AutoLoader {
         BlueToolsMaterialPropertyTypes.create("color", ColorProperty.CODEC);
     public static final @NotNull RegistryLoad<MaterialPropertyType<FluidProperty>> FLUID =
         BlueToolsMaterialPropertyTypes.create("fluid", FluidProperty.CODEC);
+    public static final @NotNull RegistryLoad<MaterialPropertyType<MiningLevelProperty>> MINING_LEVEL =
+        BlueToolsMaterialPropertyTypes.create("mining_level", MiningLevelProperty.CODEC);
 
     private static <P extends MaterialProperty> @NotNull RegistryLoad<MaterialPropertyType<P>> create(
         final @NotNull String path,
