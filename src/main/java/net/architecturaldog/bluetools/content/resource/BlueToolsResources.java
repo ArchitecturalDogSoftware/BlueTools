@@ -4,6 +4,7 @@ import dev.jaxydog.lodestone.api.AutoLoader;
 import net.architecturaldog.bluetools.BlueTools;
 import net.architecturaldog.bluetools.content.BlueToolsRegistries;
 import net.architecturaldog.bluetools.content.material.Material;
+import net.architecturaldog.bluetools.content.material.MaterialIngredient;
 import net.architecturaldog.bluetools.content.material.MiningLevel;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.NotNull;
@@ -24,6 +25,14 @@ public final class BlueToolsResources extends AutoLoader {
         Material.CODEC,
         List.of(BlueToolsResources.MINING_LEVEL.getFabricId())
     );
+
+    public static final @NotNull SimpleJsonResourceManager<MaterialIngredient> MATERIAL_INGREDIENT =
+        new SimpleJsonResourceManager<>(
+            "material_ingredient",
+            BlueToolsRegistries.Keys.MATERIAL_INGREDIENT,
+            MaterialIngredient.CODEC.codec(),
+            List.of(BlueToolsResources.MATERIAL.getLoaderId())
+        );
 
     @Override
     public @NotNull Identifier getLoaderId() {
