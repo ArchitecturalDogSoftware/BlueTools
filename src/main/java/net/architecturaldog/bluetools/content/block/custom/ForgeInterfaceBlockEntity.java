@@ -58,8 +58,10 @@ public class ForgeInterfaceBlockEntity extends LockableContainerBlockEntity
 
     private static Optional<Integer> checkValidConfiguration(BlockView world, BlockPos pos) {
         BlockPos.Mutable checkPos = new BlockPos.Mutable();
+        BlockPos.Mutable checkPos2 = new BlockPos.Mutable();
         checkPos.set(pos);
-        int[] check = checkValidStageOne(world, pos, checkPos);
+        checkPos2.set(pos);
+        int[] check = checkValidStageOne(world, pos, checkPos, checkPos2);
         if (Arrays.equals(check, new int[] { 0, 0 }) || Arrays.stream(check).anyMatch(i -> i < 0)) {
             return Optional.empty();
         }
@@ -95,34 +97,56 @@ public class ForgeInterfaceBlockEntity extends LockableContainerBlockEntity
     private static int[] checkValidStageOne(
         BlockView world,
         BlockPos pos,
-        BlockPos.Mutable checkPos
+        BlockPos.Mutable checkPos,
+        BlockPos.Mutable checkPos2
     )
     {
         Direction[] findDirections = findDirections(world, pos);
         Direction direction1 = findDirections[0];
         Direction direction2 = findDirections[1];
-
+        Direction forward = findDirections[2];
+        checkPos2.move(forward);
+        checkPos2.move(direction1);
         int d1 = 0;
         int d2 = 0;
         for (int i = 0; i < MAX_SIDE_VALUE; i++) {
             checkPos.move(direction1);
-            if (IS_FORGE_BLOCK.test(world.getBlockState(checkPos), world, checkPos)) {
+            checkPos2.move(direction1);
+            if (IS_FORGE_BLOCK.test(world.getBlockState(checkPos), world, checkPos) &&
+                !IS_FORGE_BLOCK.test(world.getBlockState(checkPos2), world, checkPos2))
+            {
                 d1++;
+            } else if (IS_FORGE_BLOCK.test(world.getBlockState(checkPos), world, checkPos) &&
+                IS_FORGE_BLOCK.test(world.getBlockState(checkPos2), world, checkPos2))
+            {
+                d1++;
+                break;
             } else {
                 break;
             }
         }
         checkPos.set(pos);
+        checkPos2.set(pos);
+        checkPos2.move(forward);
+        checkPos2.move(direction2);
         for (int i = 0; i < MAX_SIDE_VALUE; i++) {
             checkPos.move(direction2);
-            if (IS_FORGE_BLOCK.test(world.getBlockState(checkPos), world, checkPos)) {
+            checkPos2.move(direction2);
+            if (IS_FORGE_BLOCK.test(world.getBlockState(checkPos), world, checkPos) &&
+                !IS_FORGE_BLOCK.test(world.getBlockState(checkPos2), world, checkPos2))
+            {
                 d2++;
+            } else if (IS_FORGE_BLOCK.test(world.getBlockState(checkPos), world, checkPos) &&
+                IS_FORGE_BLOCK.test(world.getBlockState(checkPos2), world, checkPos2))
+            {
+                d2++;
+                break;
             } else {
                 break;
             }
         }
-        int[] directions = new int[] { d1, d2 };
-        return directions;
+        return new int[] { d1, d2 };
+
     }
 
     private static int[] checkValidStageTwo(
