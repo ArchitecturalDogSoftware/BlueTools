@@ -6,8 +6,9 @@ import net.fabricmc.api.Environment;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.screen.ArrayPropertyDelegate;
-import net.minecraft.screen.PropertyDelegate;
+import net.minecraft.network.RegistryByteBuf;
+import net.minecraft.network.codec.PacketCodec;
+import net.minecraft.network.codec.PacketCodecs;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.text.Text;
 import org.jetbrains.annotations.ApiStatus;
@@ -15,29 +16,25 @@ import org.jetbrains.annotations.NotNull;
 
 public class ForgeInterfaceScreenHandler extends ScreenHandler {
 
-    PropertyDelegate propertyDelegate;
-
-    public ForgeInterfaceScreenHandler(int syncId, PlayerInventory playerInventory) {
-        this(syncId, playerInventory, new ArrayPropertyDelegate(2));
-    }
+    private final Data data;
 
     public ForgeInterfaceScreenHandler(
         final int syncId,
         PlayerInventory playerInventory,
-        PropertyDelegate propertyDelegate
+        Data data
     )
     {
         super(BlueToolsScreenHandlerTypes.FORGE_INTERFACE.getValue(), syncId);
-        this.propertyDelegate = propertyDelegate;
-        this.addProperties(propertyDelegate);
-    }
-
-    public int getCurrentVolume() {
-        return this.propertyDelegate.get(1);
+        if (data == null) {
+            this.data = new Data(0);
+        } else {
+            this.data = data;
+        }
+        this.addPlayerSlots(playerInventory, 8, 84);
     }
 
     public int getMaxVolume() {
-        return this.propertyDelegate.get(0);
+        return this.data.maxVolume();
     }
 
     @Override
@@ -50,15 +47,24 @@ public class ForgeInterfaceScreenHandler extends ScreenHandler {
         return true;
     }
 
+    public record Data(int maxVolume) {
+
+        public static final PacketCodec<? super RegistryByteBuf, Data> CODEC = PacketCodecs.INTEGER.xmap(
+            Data::new,
+            Data::maxVolume
+        );
+
+    }
+
     @ApiStatus.Internal
     public static final class Factory
-        implements BlueToolsScreenHandlerTypes.Factory<ForgeInterfaceScreenHandler,
-        ForgeInterfaceScreen<ForgeInterfaceScreenHandler>>
+        implements BlueToolsScreenHandlerTypes.ExtendedFactory<ForgeInterfaceScreenHandler,
+        ForgeInterfaceScreen<ForgeInterfaceScreenHandler>, Data>
     {
 
         @Override
-        public ForgeInterfaceScreenHandler create(final int syncId, final PlayerInventory playerInventory) {
-            return new ForgeInterfaceScreenHandler(syncId, playerInventory);
+        public ForgeInterfaceScreenHandler create(final int syncId, final PlayerInventory inventory, final Data data) {
+            return new ForgeInterfaceScreenHandler(syncId, inventory, data);
         }
 
         @Environment(EnvType.CLIENT)

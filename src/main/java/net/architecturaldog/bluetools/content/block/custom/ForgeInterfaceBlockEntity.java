@@ -1,8 +1,8 @@
 package net.architecturaldog.bluetools.content.block.custom;
 
-import net.architecturaldog.bluetools.BlueTools;
 import net.architecturaldog.bluetools.content.block.BlueToolsBlockEntityTypes;
 import net.architecturaldog.bluetools.content.screen.custom.ForgeInterfaceScreenHandler;
+import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerFactory;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -10,8 +10,8 @@ import net.minecraft.block.entity.LockableContainerBlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.screen.PropertyDelegate;
 import net.minecraft.screen.ScreenHandler;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.Text;
 import net.minecraft.util.collection.DefaultedList;
@@ -23,7 +23,9 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Arrays;
 import java.util.Optional;
 
-public class ForgeInterfaceBlockEntity extends LockableContainerBlockEntity {
+public class ForgeInterfaceBlockEntity extends LockableContainerBlockEntity
+    implements ExtendedScreenHandlerFactory<ForgeInterfaceScreenHandler.Data>
+{
 
     public static final int MAX_SIDE_VALUE = 10;
     public static final int WIDTH_MAX_VALUE = MAX_SIDE_VALUE * 2 + 1;
@@ -33,30 +35,6 @@ public class ForgeInterfaceBlockEntity extends LockableContainerBlockEntity {
 
     private int maxVolume;
     private int currentVolume;
-    private final PropertyDelegate propertyDelegate = new PropertyDelegate() {
-
-        @Override
-        public int get(final int index) {
-            return switch (index) {
-                case 0 -> ForgeInterfaceBlockEntity.this.maxVolume;
-                case 1 -> ForgeInterfaceBlockEntity.this.currentVolume;
-                default -> 0;
-            };
-        }
-
-        @Override
-        public void set(final int index, final int value) {
-            switch (index) {
-                case 0 -> ForgeInterfaceBlockEntity.this.maxVolume = value;
-                case 1 -> ForgeInterfaceBlockEntity.this.currentVolume = value;
-            }
-        }
-
-        @Override
-        public int size() {
-            return 2;
-        }
-    };
 
     public ForgeInterfaceBlockEntity(final BlockPos pos, final BlockState state) {
         super(BlueToolsBlockEntityTypes.FORGE_INTERFACE.getValue(), pos, state);
@@ -83,7 +61,6 @@ public class ForgeInterfaceBlockEntity extends LockableContainerBlockEntity {
         checkPos.set(pos);
         int[] check = checkValidStageOne(world, pos, checkPos);
         if (Arrays.equals(check, new int[] { 0, 0 }) || Arrays.stream(check).anyMatch(i -> i < 0)) {
-            BlueTools.LOGGER.info("stage 1 failed");
             return Optional.empty();
         }
         int endPointOne = check[0];
@@ -92,7 +69,6 @@ public class ForgeInterfaceBlockEntity extends LockableContainerBlockEntity {
 
         check = checkValidStageTwo(world, pos, checkPos, endPointOne, endPointTwo);
         if (Arrays.equals(check, new int[] { 0, 0 }) || Arrays.stream(check).anyMatch(i -> i < 0)) {
-            BlueTools.LOGGER.info("stage 2 failed");
             return Optional.empty();
         }
         endPointOne = check[0];
@@ -100,17 +76,13 @@ public class ForgeInterfaceBlockEntity extends LockableContainerBlockEntity {
         length = 1 + endPointOne + endPointTwo;
 
         if (!checkValidStageThree(world, pos, checkPos, length, endPointOne)) {
-            BlueTools.LOGGER.info("stage 3 failed");
             return Optional.empty();
         }
         int height = checkValidStageFour(world, pos, checkPos, endPointOne, endPointTwo);
-        BlueTools.LOGGER.info("Stage 4 {}", height);
         if (height < 2) {
-            BlueTools.LOGGER.info("stage 4 failed");
             return Optional.empty();
         }
         if (!checkValidStageFive(world, pos, checkPos, endPointTwo, height, length)) {
-            BlueTools.LOGGER.info("stage 5 failed");
             return Optional.empty();
         }
 
@@ -150,7 +122,6 @@ public class ForgeInterfaceBlockEntity extends LockableContainerBlockEntity {
             }
         }
         int[] directions = new int[] { d1, d2 };
-        BlueTools.LOGGER.info("Stage 1 {}", directions);
         return directions;
     }
 
@@ -185,7 +156,6 @@ public class ForgeInterfaceBlockEntity extends LockableContainerBlockEntity {
             checkForgeSide(world, checkPos, pos, direction, direction2, endPointTwo, stageOneLength))
         {
             int[] width = new int[] { endPointOne, endPointTwo };
-            BlueTools.LOGGER.info("Stage 2 {}", width);
             return width;
         } else {
             return new int[] { 0, 0 };
@@ -214,7 +184,6 @@ public class ForgeInterfaceBlockEntity extends LockableContainerBlockEntity {
             }
             checkPos.move(direction2);
         }
-        BlueTools.LOGGER.info("Stage 3");
         return true;
     }
 
@@ -244,7 +213,6 @@ public class ForgeInterfaceBlockEntity extends LockableContainerBlockEntity {
                 (endPointOne + endPointTwo + 1)
             ))
             {
-                BlueTools.LOGGER.info("front side 1 failed");
                 return height;
             }
             if (!checkForgeSide(
@@ -257,7 +225,6 @@ public class ForgeInterfaceBlockEntity extends LockableContainerBlockEntity {
                 (endPointOne + endPointTwo + 1)
             ))
             {
-                BlueTools.LOGGER.info("side 1 failed");
                 return height;
             }
             if (!checkForgeSide(
@@ -270,7 +237,6 @@ public class ForgeInterfaceBlockEntity extends LockableContainerBlockEntity {
                 (endPointOne + endPointTwo + 1)
             ))
             {
-                BlueTools.LOGGER.info("side 2 failed");
                 return height;
             }
             if (!checkForgeSide(
@@ -283,7 +249,6 @@ public class ForgeInterfaceBlockEntity extends LockableContainerBlockEntity {
                 (endPointOne + endPointTwo + 1)
             ))
             {
-                BlueTools.LOGGER.info("back side 1 failed");
                 return height;
             }
 
@@ -314,7 +279,6 @@ public class ForgeInterfaceBlockEntity extends LockableContainerBlockEntity {
             for (int x = 0; x < length; x++) {
                 for (int z = 0; z < length; z++) {
                     if (!world.getBlockState(checkPos).isAir()) {
-                        BlueTools.LOGGER.info("stage 5 failed on {}, {}, {}", x, y, z);
                         return false;
                     }
                     checkPos.move(forward);
@@ -328,7 +292,6 @@ public class ForgeInterfaceBlockEntity extends LockableContainerBlockEntity {
             checkPos.move(side2, endPointTwo);
 
         }
-        BlueTools.LOGGER.info("Stage 5");
         return true;
     }
 
@@ -354,7 +317,6 @@ public class ForgeInterfaceBlockEntity extends LockableContainerBlockEntity {
         for (int x = 0; x < length; x++) {
             for (int z = 0; z < length; z++) {
                 if (!IS_FORGE_BLOCK.test(world.getBlockState(checkPos), world, checkPos)) {
-                    BlueTools.LOGGER.info("stage 6 failed on {}, {}", x, z);
                     return false;
                 }
                 checkPos.move(forward);
@@ -362,7 +324,6 @@ public class ForgeInterfaceBlockEntity extends LockableContainerBlockEntity {
             checkPos.move(side1);
             checkPos.move(back, length);
         }
-        BlueTools.LOGGER.info("Stage 6");
         return true;
     }
 
@@ -436,17 +397,37 @@ public class ForgeInterfaceBlockEntity extends LockableContainerBlockEntity {
         final PlayerEntity playerEntity
     )
     {
-        return new ForgeInterfaceScreenHandler(syncId, playerInventory, this.propertyDelegate);
+        if (playerEntity instanceof final ServerPlayerEntity serverPlayerEntity) {
+            return new ForgeInterfaceScreenHandler(
+                syncId,
+                playerInventory,
+                this.getScreenOpeningData(serverPlayerEntity)
+            );
+        } else {
+            return new ForgeInterfaceScreenHandler(syncId, playerInventory, null);
+        }
     }
 
     @Override
     protected ScreenHandler createScreenHandler(final int syncId, final PlayerInventory playerInventory) {
-        return new ForgeInterfaceScreenHandler(syncId, playerInventory, this.propertyDelegate);
+        if (playerInventory.player instanceof final ServerPlayerEntity serverPlayerEntity) {
+            return new ForgeInterfaceScreenHandler(
+                syncId,
+                playerInventory,
+                this.getScreenOpeningData(serverPlayerEntity)
+            );
+        }
+        return new ForgeInterfaceScreenHandler(syncId, playerInventory, null);
     }
 
     @Override
     public int size() {
         return 0;
+    }
+
+    @Override
+    public ForgeInterfaceScreenHandler.Data getScreenOpeningData(final ServerPlayerEntity serverPlayerEntity) {
+        return new ForgeInterfaceScreenHandler.Data(this.maxVolume);
     }
 
 }
