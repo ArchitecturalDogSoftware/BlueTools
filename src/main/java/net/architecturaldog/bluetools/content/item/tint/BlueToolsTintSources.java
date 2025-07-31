@@ -16,6 +16,8 @@ public final class BlueToolsTintSources extends AutoLoader {
 
     public static final @NotNull TintSourceLoader<MaterialTintSource> MATERIAL =
         new TintSourceLoader<>("material", MaterialTintSource.CODEC);
+    public static final @NotNull TintSourceLoader<MaterialMapTintSource> MATERIAL_MAP =
+        new TintSourceLoader<>("material_map", MaterialMapTintSource.CODEC);
 
     @Override
     public @NotNull Identifier getLoaderId() {
@@ -28,7 +30,7 @@ public final class BlueToolsTintSources extends AutoLoader {
         private final @NotNull String path;
         private final @NotNull MapCodec<T> codec;
 
-        public TintSourceLoader(final String path, final MapCodec<T> codec) {
+        public TintSourceLoader(final @NotNull String path, final @NotNull MapCodec<T> codec) {
             this.path = path;
             this.codec = codec;
         }

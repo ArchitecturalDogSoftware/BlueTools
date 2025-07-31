@@ -15,6 +15,8 @@ public final class BlueToolsComponentTypes extends AutoLoader {
 
     public static final @NotNull AutoLoaded<ComponentType<MaterialComponent>> MATERIAL =
         BlueToolsComponentTypes.create("material", builder -> builder.codec(MaterialComponent.CODEC).cache());
+    public static final @NotNull AutoLoaded<ComponentType<MaterialMapComponent>> MATERIAL_MAP =
+        BlueToolsComponentTypes.create("material_map", builder -> builder.codec(MaterialMapComponent.CODEC).cache());
 
     private static <T> @NotNull AutoLoaded<ComponentType<T>> create(
         final @NotNull String path,
