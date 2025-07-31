@@ -1,0 +1,10 @@
+{
+    "material": "bluetools:iron",
+    "item_type": "into_fluid",
+    "ingredient": {
+        "item": "minecraft:flint_and_steel"
+    },
+    "value": {
+        "ingots": 1
+    }
+}

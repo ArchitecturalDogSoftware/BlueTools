@@ -1,0 +1,10 @@
+{
+    "material": "bluetools:iron",
+    "item_type": "into_fluid",
+    "ingredient": {
+        "item": "minecraft:heavy_weighted_pressure_plate"
+    },
+    "value": {
+        "ingots": 2
+    }
+}

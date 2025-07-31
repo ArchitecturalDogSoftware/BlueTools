@@ -1,0 +1,10 @@
+{
+    "material": "bluetools:iron",
+    "item_type": "into_fluid",
+    "ingredient": {
+        "item": "minecraft:furnace_minecart"
+    },
+    "value": {
+        "ingots": 5
+    }
+}

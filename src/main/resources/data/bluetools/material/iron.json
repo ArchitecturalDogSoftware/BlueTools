@@ -1,0 +1,37 @@
+{
+    "type": "bluetools:simple",
+    "properties": [
+        {
+            "type": "bluetools:color",
+            "color": "#E0E0F0"
+        }, {
+            "type": "bluetools:fluid",
+            "fluid": "minecraft:lava",
+            "melting_temperature": {
+                "celsius": 1538.0
+            }
+        }, {
+            "type": "bluetools:mining_level",
+            "level": "bluetools:iron"
+        }, {
+            "type": "bluetools:mining_speed",
+            "speed": 0.5
+        }, {
+            "type": "bluetools:attack_damage",
+            "damage": 6.0
+        }, {
+            "type": "bluetools:attack_speed",
+            "speed": 1.6
+        }, {
+            "type": "bluetools:durability",
+            "tool": 250,
+            "armor": 240
+        }, {
+            "type": "bluetools:armor_defense",
+            "head": 2,
+            "body": 6,
+            "legs": 5,
+            "feet": 2
+        }
+    ]
+}

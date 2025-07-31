@@ -1,6 +1,7 @@
 package net.architecturaldog.bluetools.content.material;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.DataResult;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.architecturaldog.bluetools.utility.BlueToolsCodecs;
@@ -34,6 +35,9 @@ public interface MaterialValue {
             )
         )
     );
+    @NotNull Codec<MaterialValue> POSITIVE_CODEC = MaterialValue.CODEC.validate(value -> value.asDroplets() > 0
+        ? DataResult.success(value)
+        : DataResult.error(() -> "Value " + value + " must be positive"));
 
     long asDroplets();
 

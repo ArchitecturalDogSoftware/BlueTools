@@ -1,0 +1,10 @@
+{
+    "material": "bluetools:iron",
+    "item_type": "into_fluid",
+    "ingredient": {
+        "item": "minecraft:iron_horse_armor"
+    },
+    "value": {
+        "ingots": 4
+    }
+}

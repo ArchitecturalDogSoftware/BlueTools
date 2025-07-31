@@ -1,0 +1,11 @@
+{
+    "material": "bluetools:iron",
+    "item_type": "into_fluid",
+    "ingredient": {
+        "item": "minecraft:chipped_anvil"
+    },
+    "value": {
+        "blocks": 3,
+        "ingots": 2
+    }
+}

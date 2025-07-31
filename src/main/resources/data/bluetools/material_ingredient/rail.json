@@ -1,0 +1,11 @@
+{
+    "material": "bluetools:iron",
+    "item_type": "into_fluid",
+    "ingredient": {
+        "item": "minecraft:rail"
+    },
+    "value": {
+        "nuggets": 3,
+        "droplets": 375
+    }
+}
