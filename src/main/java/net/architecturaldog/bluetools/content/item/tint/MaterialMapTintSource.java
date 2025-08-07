@@ -40,7 +40,7 @@ public record MaterialMapTintSource(@NotNull String part, int defaultColor) impl
         return Optional
             .ofNullable(stack.get(BlueToolsComponentTypes.MATERIAL_MAP.getValue()))
             .flatMap(material -> Optional.ofNullable(material.materials().get(this.part())))
-            .flatMap(material -> material.getProperty(BlueToolsMaterialPropertyTypes.COLOR.getValue()))
+            .flatMap(material -> material.value().getProperty(BlueToolsMaterialPropertyTypes.COLOR.getValue()))
             .map(property -> property.color().integer())
             .orElseGet(this::defaultColor);
     }

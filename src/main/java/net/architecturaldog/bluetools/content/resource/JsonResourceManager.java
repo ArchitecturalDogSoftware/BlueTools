@@ -21,10 +21,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.io.Reader;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 import java.util.stream.Stream;
@@ -64,6 +61,14 @@ public abstract class JsonResourceManager<T> extends SinglePreparationResourceRe
 
     public @NotNull List<Entry<T>> getEntries() {
         return List.copyOf(this.loadedEntries.values());
+    }
+
+    public @NotNull List<Entry<T>> getSortedEntries() {
+        return this.loadedEntries
+            .values()
+            .stream()
+            .sorted(Comparator.comparing(entry -> entry.key().getValue().toString(), String::compareTo))
+            .toList();
     }
 
     public @NotNull Optional<Entry<T>> getEntry(final @NotNull Identifier identifier) {

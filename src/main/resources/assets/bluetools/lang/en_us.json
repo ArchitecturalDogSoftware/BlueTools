@@ -1,0 +1,11 @@
+{
+    "material.bluetools.iron": "Iron",
+    "material.missing": "Unknown",
+
+    "part.bluetools.heavy_binding": "Heavy %s Binding",
+    "part.bluetools.large_handle": "Large %s Tool Handle",
+    "part.bluetools.light_binding": "Light %s Binding",
+    "part.bluetools.medium_handle": "Medium %s Tool Handle",
+    "part.bluetools.small_handle": "Small %s Tool Handle",
+    "part.missing": "%s Part"
+}

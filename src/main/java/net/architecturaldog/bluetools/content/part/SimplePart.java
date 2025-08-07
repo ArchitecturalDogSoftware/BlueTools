@@ -15,9 +15,9 @@ import java.util.stream.Collectors;
 
 public record SimplePart(@NotNull Map<PartPropertyType<?>, PartProperty> properties) implements Part {
 
-    public static final @NotNull MapCodec<SimplePart> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-        PartProperty.CODEC.listOf().fieldOf("properties").forGetter(SimplePart::getProperties)
-    ).apply(instance, SimplePart::new));
+    public static final @NotNull MapCodec<SimplePart> CODEC = RecordCodecBuilder.mapCodec(instance -> instance
+        .group(PartProperty.CODEC.listOf().fieldOf("properties").forGetter(SimplePart::getProperties))
+        .apply(instance, SimplePart::new));
 
     public SimplePart(final @NotNull List<PartProperty> properties) {
         this(properties.stream().collect(Collectors.toMap(PartProperty::getType, Function.identity())));
@@ -25,7 +25,7 @@ public record SimplePart(@NotNull Map<PartPropertyType<?>, PartProperty> propert
 
     @Override
     public @NotNull PartType<SimplePart> getType() {
-        return null;
+        return BlueToolsPartTypes.SIMPLE.getValue();
     }
 
     @Override

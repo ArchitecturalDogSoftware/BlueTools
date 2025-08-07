@@ -9,13 +9,23 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
-public record MaterialsProperty(int count, @NotNull Optional<List<Material>> materials) implements PartProperty {
+public record MaterialsProperty(@NotNull Optional<Set<String>> keys, @NotNull Optional<List<Material>> materials)
+    implements PartProperty
+{
 
-    public static final @NotNull MaterialsProperty DEFAULT = new MaterialsProperty(1, Optional.empty());
+    public static final @NotNull MaterialsProperty DEFAULT = new MaterialsProperty(
+        Optional.of(Set.of("material")),
+        Optional.empty()
+    );
     public static final @NotNull MapCodec<MaterialsProperty> CODEC = RecordCodecBuilder.mapCodec(instance -> instance
         .group(
-            Codecs.POSITIVE_INT.optionalFieldOf("count", 1).forGetter(MaterialsProperty::count),
+            Codecs.NON_EMPTY_STRING
+                .listOf()
+                .xmap(Set::copyOf, List::copyOf)
+                .optionalFieldOf("keys")
+                .forGetter(MaterialsProperty::keys),
             BlueToolsResources.MATERIAL
                 .getCodec()
                 .listOf()

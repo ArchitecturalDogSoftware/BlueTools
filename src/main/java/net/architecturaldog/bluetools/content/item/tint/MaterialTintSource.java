@@ -38,7 +38,10 @@ public record MaterialTintSource(int defaultColor) implements TintSource {
     {
         return Optional
             .ofNullable(stack.get(BlueToolsComponentTypes.MATERIAL.getValue()))
-            .flatMap(material -> material.material().getProperty(BlueToolsMaterialPropertyTypes.COLOR.getValue()))
+            .flatMap(material -> material
+                .materialEntry()
+                .value()
+                .getProperty(BlueToolsMaterialPropertyTypes.COLOR.getValue()))
             .map(property -> property.color().integer())
             .orElseGet(this::defaultColor);
     }

@@ -7,6 +7,7 @@ import net.architecturaldog.bluetools.BlueTools;
 import net.architecturaldog.bluetools.content.block.BlueToolsBlockEntityTypes;
 import net.architecturaldog.bluetools.content.block.BlueToolsBlocks;
 import net.architecturaldog.bluetools.content.component.BlueToolsComponentTypes;
+import net.architecturaldog.bluetools.content.item.BlueToolsItemGroups;
 import net.architecturaldog.bluetools.content.item.BlueToolsItems;
 import net.architecturaldog.bluetools.content.material.BlueToolsMaterialTypes;
 import net.architecturaldog.bluetools.content.material.property.BlueToolsMaterialPropertyTypes;
@@ -28,6 +29,8 @@ public final class BlueToolsContent extends AutoLoader {
         new BlueToolsBlockEntityTypes();
     public static final @NotNull BlueToolsComponentTypes COMPONENT_TYPES =
         new BlueToolsComponentTypes();
+    public static final @NotNull BlueToolsItemGroups ITEM_GROUPS =
+        new BlueToolsItemGroups();
     public static final @NotNull BlueToolsItems ITEMS =
         new BlueToolsItems();
     public static final @NotNull BlueToolsMaterialPropertyTypes MATERIAL_PROPERTY_TYPES =

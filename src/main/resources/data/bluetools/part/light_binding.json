@@ -1,0 +1,9 @@
+{
+    "type": "bluetools:simple",
+    "properties": [
+        {
+            "type": "bluetools:materials",
+            "materials": [ ]
+        }
+    ]
+}

@@ -2,12 +2,16 @@ package net.architecturaldog.bluetools.content.item;
 
 import dev.jaxydog.lodestone.api.AutoLoaded;
 import dev.jaxydog.lodestone.api.AutoLoader;
+import dev.jaxydog.lodestone.api.CommonLoaded;
 import net.architecturaldog.bluetools.BlueTools;
 import net.architecturaldog.bluetools.content.block.BlueToolsBlocks;
+import net.architecturaldog.bluetools.content.resource.BlueToolsResources;
 import net.architecturaldog.bluetools.utility.RegistryLoaded;
+import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.minecraft.block.Block;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemGroup;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
@@ -16,8 +20,44 @@ import org.jetbrains.annotations.NotNull;
 
 public final class BlueToolsItems extends AutoLoader {
 
-    public static final @NotNull AutoLoaded<BlockItem> FORGE_INTERFACE =
-        BlueToolsItems.create(BlockItem.class, "forge_interface", BlockItem::new, BlueToolsBlocks.FORGE_INTERFACE);
+    public static final @NotNull AutoLoaded<BlockItem> FORGE_INTERFACE = BlueToolsItems
+        .create(BlockItem.class, "forge_interface", BlockItem::new, BlueToolsBlocks.FORGE_INTERFACE)
+        .on(CommonLoaded.class, BlueToolsItems::addToItemGroup);
+    public static final @NotNull AutoLoaded<PartItem> PART = BlueToolsItems
+        .create(PartItem.class, "part", PartItem::new)
+        .on(
+            CommonLoaded.class,
+            self -> ItemGroupEvents
+                .modifyEntriesEvent(BlueToolsItemGroups.registryKey(BlueToolsItemGroups.PARTS))
+                .register(entries -> BlueToolsResources.PART.getSortedEntries().forEach(partEntry -> {
+                    BlueToolsResources.MATERIAL.getSortedEntries().forEach(materialEntry -> {
+                        entries.add(self.getValue().getDefaultStack(partEntry, materialEntry));
+                    });
+                }))
+        );
+
+    private static <T extends Item> void addToItemGroup(
+        final @NotNull AutoLoaded<T> self
+    )
+    {
+        BlueToolsItems.addToItemGroup(self, BlueToolsItemGroups.DEFAULT);
+    }
+
+    private static <T extends Item> void addToItemGroup(
+        final @NotNull AutoLoaded<T> self,
+        final @NotNull AutoLoaded<ItemGroup> itemGroup
+    )
+    {
+        BlueToolsItems.addToItemGroup(self, BlueToolsItemGroups.registryKey(itemGroup));
+    }
+
+    private static <T extends Item> void addToItemGroup(
+        final @NotNull AutoLoaded<T> self,
+        final @NotNull RegistryKey<ItemGroup> registryKey
+    )
+    {
+        ItemGroupEvents.modifyEntriesEvent(registryKey).register(entries -> entries.add(self.getValue()));
+    }
 
     private static <T extends BlockItem> @NotNull AutoLoaded<T> create(
         final @NotNull Class<T> type,
