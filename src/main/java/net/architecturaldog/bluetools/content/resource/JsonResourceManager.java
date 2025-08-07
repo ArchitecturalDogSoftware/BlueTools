@@ -62,6 +62,10 @@ public abstract class JsonResourceManager<T> extends SinglePreparationResourceRe
 
     public abstract @NotNull String getName();
 
+    public @NotNull List<Entry<T>> getEntries() {
+        return List.copyOf(this.loadedEntries.values());
+    }
+
     public @NotNull Optional<Entry<T>> getEntry(final @NotNull Identifier identifier) {
         return this.getEntry(RegistryKey.of(this.registryKey, identifier));
     }
