@@ -10,6 +10,8 @@ import net.minecraft.block.Block;
 import net.minecraft.block.FluidBlock;
 import net.minecraft.fluid.FlowableFluid;
 import net.minecraft.registry.Registries;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.RegistryKeys;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.NotNull;
 
@@ -24,84 +26,84 @@ public final class BlueToolsBlocks extends AutoLoader {
     private static <T extends FluidBlock> @NotNull AutoLoaded<T> create(
         final @NotNull Class<T> type,
         final @NotNull String path,
-        final @NotNull BlueToolsBlocks.FluidFactory<T> blockFactory,
+        final @NotNull BlueToolsBlocks.FluidBlockFactory<T> blockFactory,
         final @NotNull FlowableFluid flowableFluid
     )
     {
-        return BlueToolsBlocks.create(type, path, blockFactory, flowableFluid, BlueToolsBlockSettings.DEFAULT);
+        return BlueToolsBlocks.create(type, path, blockFactory, flowableFluid, settings -> settings);
     }
 
     private static <T extends Block> @NotNull AutoLoaded<T> create(
         final @NotNull Class<T> type,
         final @NotNull String path,
-        final @NotNull BlueToolsBlocks.Factory<T> blockFactory
+        final @NotNull BlueToolsBlocks.BlockFactory<T> blockFactory
     )
     {
-        return BlueToolsBlocks.create(type, path, blockFactory, BlueToolsBlockSettings.DEFAULT);
+        return BlueToolsBlocks.create(type, path, blockFactory, settings -> settings);
     }
 
     private static <T extends FluidBlock> @NotNull AutoLoaded<T> create(
         final @NotNull Class<T> type,
         final @NotNull Identifier identifier,
-        final @NotNull BlueToolsBlocks.FluidFactory<T> blockFactory,
+        final @NotNull BlueToolsBlocks.FluidBlockFactory<T> blockFactory,
         final @NotNull FlowableFluid flowableFluid
     )
     {
-        return BlueToolsBlocks.create(type, identifier, blockFactory, flowableFluid, BlueToolsBlockSettings.DEFAULT);
+        return BlueToolsBlocks.create(type, identifier, blockFactory, flowableFluid, settings -> settings);
     }
 
     private static <T extends Block> @NotNull AutoLoaded<T> create(
         final @NotNull Class<T> type,
         final @NotNull Identifier identifier,
-        final @NotNull BlueToolsBlocks.Factory<T> blockFactory
+        final @NotNull BlueToolsBlocks.BlockFactory<T> blockFactory
     )
     {
-        return BlueToolsBlocks.create(type, identifier, blockFactory, BlueToolsBlockSettings.DEFAULT);
+        return BlueToolsBlocks.create(type, identifier, blockFactory, settings -> settings);
     }
 
     private static <T extends FluidBlock> @NotNull AutoLoaded<T> create(
         final @NotNull Class<T> type,
         final @NotNull String path,
-        final @NotNull BlueToolsBlocks.FluidFactory<T> blockFactory,
+        final @NotNull BlueToolsBlocks.FluidBlockFactory<T> blockFactory,
         final @NotNull FlowableFluid flowableFluid,
-        final @NotNull BlueToolsBlockSettings.Factory settingsFactory
+        final @NotNull SettingsBuilder settingsBuilder
     )
     {
-        return BlueToolsBlocks.create(type, BlueTools.id(path), blockFactory, flowableFluid, settingsFactory);
+        return BlueToolsBlocks.create(type, BlueTools.id(path), blockFactory, flowableFluid, settingsBuilder);
     }
 
     private static <T extends Block> @NotNull AutoLoaded<T> create(
         final @NotNull Class<T> type,
         final @NotNull String path,
-        final @NotNull BlueToolsBlocks.Factory<T> blockFactory,
-        final @NotNull BlueToolsBlockSettings.Factory settingsFactory
+        final @NotNull BlueToolsBlocks.BlockFactory<T> blockFactory,
+        final @NotNull SettingsBuilder settingsBuilder
     )
     {
-        return BlueToolsBlocks.create(type, BlueTools.id(path), blockFactory, settingsFactory);
+        return BlueToolsBlocks.create(type, BlueTools.id(path), blockFactory, settingsBuilder);
     }
 
     private static <T extends FluidBlock> @NotNull AutoLoaded<T> create(
         final @NotNull Class<T> type,
         final @NotNull Identifier identifier,
-        final @NotNull BlueToolsBlocks.FluidFactory<T> blockFactory,
+        final @NotNull BlueToolsBlocks.FluidBlockFactory<T> blockFactory,
         final @NotNull FlowableFluid flowableFluid,
-        final @NotNull BlueToolsBlockSettings.Factory settingsFactory
+        final @NotNull SettingsBuilder settingsBuilder
     )
     {
-        return BlueToolsBlocks.create(type, identifier, blockFactory.bind(flowableFluid), settingsFactory);
+        return BlueToolsBlocks.create(type, identifier, blockFactory.bind(flowableFluid), settingsBuilder);
     }
 
     private static <T extends Block> @NotNull AutoLoaded<T> create(
         final @NotNull Class<T> type,
         final @NotNull Identifier identifier,
-        final @NotNull BlueToolsBlocks.Factory<T> blockFactory,
-        final @NotNull BlueToolsBlockSettings.Factory settingsFactory
+        final @NotNull BlueToolsBlocks.BlockFactory<T> blockFactory,
+        final @NotNull SettingsBuilder settingsBuilder
     )
     {
         return new RegistryLoaded<>(
             identifier,
             Registries.BLOCK,
-            blockFactory.create(settingsFactory.create(type, identifier))
+            blockFactory.create(settingsBuilder.create(type, identifier))
         );
     }
 
@@ -111,19 +113,44 @@ public final class BlueToolsBlocks extends AutoLoader {
     }
 
     @FunctionalInterface
-    public interface Factory<T extends Block> {
+    public interface BlockFactory<T extends Block> {
 
         @NotNull T create(final @NotNull AbstractBlock.Settings settings);
 
     }
 
     @FunctionalInterface
-    public interface FluidFactory<T extends FluidBlock> {
+    public interface FluidBlockFactory<T extends FluidBlock> {
 
         @NotNull T create(final @NotNull FlowableFluid flowableFluid, final @NotNull AbstractBlock.Settings settings);
 
-        default @NotNull BlueToolsBlocks.Factory<T> bind(final @NotNull FlowableFluid flowableFluid) {
+        default @NotNull BlueToolsBlocks.BlockFactory<T> bind(final @NotNull FlowableFluid flowableFluid) {
             return settings -> this.create(flowableFluid, settings);
+        }
+
+    }
+
+    @FunctionalInterface
+    public interface SettingsBuilder {
+
+        @NotNull AbstractBlock.Settings build(final @NotNull AbstractBlock.Settings settings);
+
+        default @NotNull AbstractBlock.Settings create(
+            final @NotNull Class<? extends Block> type,
+            final @NotNull Identifier identifier
+        )
+        {
+            final @NotNull RegistryKey<Block> registryKey = RegistryKey.of(RegistryKeys.BLOCK, identifier);
+
+            @NotNull AbstractBlock.Settings settings = AbstractBlock.Settings.create().registryKey(registryKey);
+
+            if (FluidBlock.class.isAssignableFrom(type)) {
+                settings = settings.liquid();
+            } else {
+                settings = settings.solid();
+            }
+
+            return this.build(settings);
         }
 
     }
