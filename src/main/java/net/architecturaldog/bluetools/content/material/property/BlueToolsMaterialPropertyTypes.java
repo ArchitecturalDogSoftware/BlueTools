@@ -50,7 +50,7 @@ public final class BlueToolsMaterialPropertyTypes extends AutoLoader {
 
     @Override
     public @NotNull Identifier getLoaderId() {
-        return BlueTools.id("property_types");
+        return BlueTools.id("material_property_types");
     }
 
 }

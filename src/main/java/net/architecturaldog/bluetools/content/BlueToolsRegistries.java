@@ -7,6 +7,9 @@ import net.architecturaldog.bluetools.content.material.MaterialIngredient;
 import net.architecturaldog.bluetools.content.material.MaterialType;
 import net.architecturaldog.bluetools.content.material.MiningLevel;
 import net.architecturaldog.bluetools.content.material.property.MaterialPropertyType;
+import net.architecturaldog.bluetools.content.part.Part;
+import net.architecturaldog.bluetools.content.part.PartType;
+import net.architecturaldog.bluetools.content.part.property.PartPropertyType;
 import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
@@ -20,6 +23,12 @@ public final class BlueToolsRegistries extends AutoLoader {
 
     public static final @NotNull Registry<MaterialType<?>> MATERIAL_TYPE =
         FabricRegistryBuilder.createSimple(Keys.MATERIAL_TYPE).buildAndRegister();
+
+    public static final @NotNull Registry<PartPropertyType<?>> PART_PROPERTY_TYPE =
+        FabricRegistryBuilder.createSimple(Keys.PART_PROPERTY_TYPE).buildAndRegister();
+
+    public static final @NotNull Registry<PartType<?>> PART_TYPE =
+        FabricRegistryBuilder.createSimple(Keys.PART_TYPE).buildAndRegister();
 
     @Override
     public @NotNull Identifier getLoaderId() {
@@ -42,6 +51,15 @@ public final class BlueToolsRegistries extends AutoLoader {
 
         public static final @NotNull RegistryKey<Registry<MiningLevel>> MINING_LEVEL =
             RegistryKey.ofRegistry(BlueTools.id("mining_level"));
+
+        public static final @NotNull RegistryKey<Registry<PartPropertyType<?>>> PART_PROPERTY_TYPE =
+            RegistryKey.ofRegistry(BlueTools.id("part_property_type"));
+
+        public static final @NotNull RegistryKey<Registry<PartType<?>>> PART_TYPE =
+            RegistryKey.ofRegistry(BlueTools.id("part_type"));
+
+        public static final @NotNull RegistryKey<Registry<Part>> PART =
+            RegistryKey.ofRegistry(BlueTools.id("part"));
 
     }
 

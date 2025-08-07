@@ -6,6 +6,7 @@ import net.architecturaldog.bluetools.content.BlueToolsRegistries;
 import net.architecturaldog.bluetools.content.material.Material;
 import net.architecturaldog.bluetools.content.material.MaterialIngredient;
 import net.architecturaldog.bluetools.content.material.MiningLevel;
+import net.architecturaldog.bluetools.content.part.Part;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.NotNull;
 
@@ -33,6 +34,9 @@ public final class BlueToolsResources extends AutoLoader {
             MaterialIngredient.CODEC.codec(),
             List.of(BlueToolsResources.MATERIAL.getLoaderId())
         );
+
+    public static final @NotNull SimpleJsonResourceManager<Part> PART =
+        new SimpleJsonResourceManager<>("part", BlueToolsRegistries.Keys.PART, Part.CODEC);
 
     @Override
     public @NotNull Identifier getLoaderId() {

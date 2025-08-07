@@ -13,25 +13,19 @@ import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-public final class SimpleMaterial implements Material {
+public record SimpleMaterial(@NotNull Map<MaterialPropertyType<?>, MaterialProperty> properties) implements Material {
 
     public static final @NotNull MapCodec<SimpleMaterial> CODEC = RecordCodecBuilder.mapCodec(instance -> instance
         .group(MaterialProperty.CODEC.listOf().fieldOf("properties").forGetter(SimpleMaterial::getProperties))
         .apply(instance, SimpleMaterial::new)
     );
 
-    private final @NotNull Map<MaterialPropertyType<?>, MaterialProperty> properties;
-
-    private SimpleMaterial(final @NotNull List<MaterialProperty> properties) {
+    public SimpleMaterial(final @NotNull List<MaterialProperty> properties) {
         this(properties.stream().collect(Collectors.toMap(MaterialProperty::getType, Function.identity())));
     }
 
-    private SimpleMaterial(final @NotNull Map<MaterialPropertyType<?>, MaterialProperty> properties) {
-        this.properties = properties;
-    }
-
     @Override
-    public @NotNull MaterialType<? extends Material> getType() {
+    public @NotNull MaterialType<SimpleMaterial> getType() {
         return BlueToolsMaterialTypes.SIMPLE.getValue();
     }
 

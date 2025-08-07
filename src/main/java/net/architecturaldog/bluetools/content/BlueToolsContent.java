@@ -10,6 +10,8 @@ import net.architecturaldog.bluetools.content.component.BlueToolsComponentTypes;
 import net.architecturaldog.bluetools.content.item.BlueToolsItems;
 import net.architecturaldog.bluetools.content.material.BlueToolsMaterialTypes;
 import net.architecturaldog.bluetools.content.material.property.BlueToolsMaterialPropertyTypes;
+import net.architecturaldog.bluetools.content.part.BlueToolsPartTypes;
+import net.architecturaldog.bluetools.content.part.property.BlueToolsPartPropertyTypes;
 import net.architecturaldog.bluetools.content.resource.BlueToolsResources;
 import net.architecturaldog.bluetools.content.screen.BlueToolsScreenHandlerTypes;
 import net.minecraft.util.Identifier;
@@ -32,6 +34,10 @@ public final class BlueToolsContent extends AutoLoader {
         new BlueToolsMaterialPropertyTypes();
     public static final @NotNull BlueToolsMaterialTypes MATERIAL_TYPES =
         new BlueToolsMaterialTypes();
+    public static final @NotNull BlueToolsPartPropertyTypes PART_PROPERTY_TYPES =
+        new BlueToolsPartPropertyTypes();
+    public static final @NotNull BlueToolsPartTypes PART_TYPES =
+        new BlueToolsPartTypes();
     @LoadingPriority(Integer.MAX_VALUE)
     public static final @NotNull BlueToolsRegistries REGISTRIES =
         new BlueToolsRegistries();
