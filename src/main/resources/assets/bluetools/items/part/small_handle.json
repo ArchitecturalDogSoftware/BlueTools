@@ -1,0 +1,12 @@
+{
+    "model": {
+        "type": "minecraft:model",
+        "model": "bluetools:item/part/small_handle",
+        "tints": [
+            {
+                "type": "bluetools:material",
+                "default": [ 1.0, 1.0, 1.0 ]
+            }
+        ]
+    }
+}

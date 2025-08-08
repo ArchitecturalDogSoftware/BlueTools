@@ -1,4 +1,7 @@
 {
+    "itemGroup.bluetools.default": "BlueTools",
+    "itemGroup.bluetools.parts": "BlueTools: Parts",
+
     "material.bluetools.iron": "Iron",
     "material.missing": "Unknown",
 

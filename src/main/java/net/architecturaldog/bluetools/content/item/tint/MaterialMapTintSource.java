@@ -11,6 +11,7 @@ import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.dynamic.Codecs;
+import net.minecraft.util.math.ColorHelper;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -37,12 +38,12 @@ public record MaterialMapTintSource(@NotNull String part, int defaultColor) impl
         final @Nullable LivingEntity user
     )
     {
-        return Optional
+        return ColorHelper.fullAlpha(Optional
             .ofNullable(stack.get(BlueToolsComponentTypes.MATERIAL_MAP.getValue()))
             .flatMap(material -> Optional.ofNullable(material.materials().get(this.part())))
             .flatMap(material -> material.value().getProperty(BlueToolsMaterialPropertyTypes.COLOR.getValue()))
             .map(property -> property.color().integer())
-            .orElseGet(this::defaultColor);
+            .orElseGet(this::defaultColor));
     }
 
 }
