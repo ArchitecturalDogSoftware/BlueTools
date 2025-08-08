@@ -2,10 +2,11 @@ package net.architecturaldog.bluetools.content.component;
 
 import dev.jaxydog.lodestone.api.AutoLoaded;
 import dev.jaxydog.lodestone.api.AutoLoader;
+import dev.jaxydog.lodestone.api.CommonLoaded;
 import net.architecturaldog.bluetools.BlueTools;
-import net.architecturaldog.bluetools.utility.RegistryLoaded;
 import net.minecraft.component.ComponentType;
 import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.NotNull;
 
@@ -33,9 +34,10 @@ public final class BlueToolsComponentTypes extends AutoLoader {
         final @NotNull UnaryOperator<ComponentType.Builder<T>> function
     )
     {
-        final @NotNull ComponentType<T> component = function.apply(ComponentType.builder()).build();
-
-        return new RegistryLoaded<>(identifier, Registries.DATA_COMPONENT_TYPE, component);
+        return new AutoLoaded<>(identifier, function.apply(ComponentType.builder()).build()).on(
+            CommonLoaded.class,
+            self -> Registry.register(Registries.DATA_COMPONENT_TYPE, self.getLoaderId(), self.getValue())
+        );
     }
 
     @Override

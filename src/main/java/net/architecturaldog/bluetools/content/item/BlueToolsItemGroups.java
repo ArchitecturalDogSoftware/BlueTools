@@ -2,11 +2,12 @@ package net.architecturaldog.bluetools.content.item;
 
 import dev.jaxydog.lodestone.api.AutoLoaded;
 import dev.jaxydog.lodestone.api.AutoLoader;
+import dev.jaxydog.lodestone.api.CommonLoaded;
 import net.architecturaldog.bluetools.BlueTools;
-import net.architecturaldog.bluetools.utility.RegistryLoaded;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.text.Text;
@@ -49,7 +50,10 @@ public final class BlueToolsItemGroups extends AutoLoader {
         final @NotNull G itemGroup
     )
     {
-        return new RegistryLoaded<>(identifier, Registries.ITEM_GROUP, itemGroup);
+        return new AutoLoaded<>(identifier, itemGroup).on(
+            CommonLoaded.class,
+            self -> Registry.register(Registries.ITEM_GROUP, self.getLoaderId(), self.getValue())
+        );
     }
 
     @Override

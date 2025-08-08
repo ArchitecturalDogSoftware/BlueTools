@@ -2,14 +2,15 @@ package net.architecturaldog.bluetools.content.block;
 
 import dev.jaxydog.lodestone.api.AutoLoaded;
 import dev.jaxydog.lodestone.api.AutoLoader;
+import dev.jaxydog.lodestone.api.CommonLoaded;
 import net.architecturaldog.bluetools.BlueTools;
 import net.architecturaldog.bluetools.content.block.custom.ForgeInterfaceBlock;
-import net.architecturaldog.bluetools.utility.RegistryLoaded;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.FluidBlock;
 import net.minecraft.fluid.FlowableFluid;
 import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.util.Identifier;
@@ -100,10 +101,9 @@ public final class BlueToolsBlocks extends AutoLoader {
         final @NotNull SettingsBuilder settingsBuilder
     )
     {
-        return new RegistryLoaded<>(
-            identifier,
-            Registries.BLOCK,
-            blockFactory.create(settingsBuilder.create(type, identifier))
+        return new AutoLoaded<>(identifier, blockFactory.create(settingsBuilder.create(type, identifier))).on(
+            CommonLoaded.class,
+            self -> Registry.register(Registries.BLOCK, self.getLoaderId(), self.getValue())
         );
     }
 

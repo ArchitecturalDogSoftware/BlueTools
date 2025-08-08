@@ -6,13 +6,13 @@ import dev.jaxydog.lodestone.api.CommonLoaded;
 import net.architecturaldog.bluetools.BlueTools;
 import net.architecturaldog.bluetools.content.block.BlueToolsBlocks;
 import net.architecturaldog.bluetools.content.resource.BlueToolsResources;
-import net.architecturaldog.bluetools.utility.RegistryLoaded;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.minecraft.block.Block;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.util.Identifier;
@@ -136,10 +136,9 @@ public final class BlueToolsItems extends AutoLoader {
         final @NotNull SettingsBuilder settingsBuilder
     )
     {
-        return new RegistryLoaded<>(
-            identifier,
-            Registries.ITEM,
-            itemFactory.create(settingsBuilder.create(type, identifier))
+        return new AutoLoaded<>(identifier, itemFactory.create(settingsBuilder.create(type, identifier))).on(
+            CommonLoaded.class,
+            self -> Registry.register(Registries.ITEM, self.getLoaderId(), self.getValue())
         );
     }
 

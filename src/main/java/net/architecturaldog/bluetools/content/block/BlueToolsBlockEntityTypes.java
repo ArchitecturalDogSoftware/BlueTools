@@ -2,13 +2,14 @@ package net.architecturaldog.bluetools.content.block;
 
 import dev.jaxydog.lodestone.api.AutoLoaded;
 import dev.jaxydog.lodestone.api.AutoLoader;
+import dev.jaxydog.lodestone.api.CommonLoaded;
 import net.architecturaldog.bluetools.BlueTools;
 import net.architecturaldog.bluetools.content.block.custom.ForgeInterfaceBlockEntity;
-import net.architecturaldog.bluetools.utility.RegistryLoaded;
 import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.NotNull;
 
@@ -38,7 +39,10 @@ public final class BlueToolsBlockEntityTypes extends AutoLoader {
         final @NotNull Set<Block> blocks
     )
     {
-        return new RegistryLoaded<>(identifier, Registries.BLOCK_ENTITY_TYPE, new BlockEntityType<>(factory, blocks));
+        return new AutoLoaded<>(identifier, new BlockEntityType<>(factory, blocks)).on(
+            CommonLoaded.class,
+            self -> Registry.register(Registries.BLOCK_ENTITY_TYPE, self.getLoaderId(), self.getValue())
+        );
     }
 
     @Override

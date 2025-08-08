@@ -3,9 +3,10 @@ package net.architecturaldog.bluetools.content.material;
 import com.mojang.serialization.MapCodec;
 import dev.jaxydog.lodestone.api.AutoLoaded;
 import dev.jaxydog.lodestone.api.AutoLoader;
+import dev.jaxydog.lodestone.api.CommonLoaded;
 import net.architecturaldog.bluetools.BlueTools;
 import net.architecturaldog.bluetools.content.BlueToolsRegistries;
-import net.architecturaldog.bluetools.utility.RegistryLoaded;
+import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.NotNull;
 
@@ -27,7 +28,10 @@ public final class BlueToolsMaterialTypes extends AutoLoader {
         final @NotNull MapCodec<M> codec
     )
     {
-        return new RegistryLoaded<>(identifier, BlueToolsRegistries.MATERIAL_TYPE, () -> codec);
+        return new AutoLoaded<MaterialType<M>>(identifier, () -> codec).on(
+            CommonLoaded.class,
+            self -> Registry.register(BlueToolsRegistries.MATERIAL_TYPE, self.getLoaderId(), self.getValue())
+        );
     }
 
     @Override

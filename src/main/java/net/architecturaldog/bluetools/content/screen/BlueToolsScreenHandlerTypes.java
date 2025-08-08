@@ -3,9 +3,9 @@ package net.architecturaldog.bluetools.content.screen;
 import dev.jaxydog.lodestone.api.AutoLoaded;
 import dev.jaxydog.lodestone.api.AutoLoader;
 import dev.jaxydog.lodestone.api.ClientLoaded;
+import dev.jaxydog.lodestone.api.CommonLoaded;
 import net.architecturaldog.bluetools.BlueTools;
 import net.architecturaldog.bluetools.content.screen.custom.ForgeInterfaceScreenHandler;
-import net.architecturaldog.bluetools.utility.RegistryLoaded;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.screenhandler.v1.ExtendedScreenHandlerType;
@@ -16,6 +16,7 @@ import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.network.RegistryByteBuf;
 import net.minecraft.network.codec.PacketCodec;
 import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
 import net.minecraft.resource.featuretoggle.FeatureFlags;
 import net.minecraft.resource.featuretoggle.FeatureSet;
 import net.minecraft.screen.ScreenHandler;
@@ -71,8 +72,13 @@ public final class BlueToolsScreenHandlerTypes extends AutoLoader {
         final @NotNull FeatureSet featureSet
     )
     {
-        return new RegistryLoaded<>(identifier, Registries.SCREEN_HANDLER, new ScreenHandlerType<>(factory, featureSet))
-            .on(ClientLoaded.class, self -> HandledScreens.register(self.getValue(), factory::createScreen));
+        return new AutoLoaded<>(identifier, new ScreenHandlerType<>(factory, featureSet)).on(
+            CommonLoaded.class,
+            self -> Registry.register(Registries.SCREEN_HANDLER, self.getLoaderId(), self.getValue())
+        ).on(
+            ClientLoaded.class,
+            self -> HandledScreens.register(self.getValue(), factory::createScreen)
+        );
     }
 
     private static <T extends ScreenHandler, U extends Screen & ScreenHandlerProvider<T>, D> @NotNull AutoLoaded<ExtendedScreenHandlerType<T, D>> create(
@@ -90,12 +96,13 @@ public final class BlueToolsScreenHandlerTypes extends AutoLoader {
         final @NotNull PacketCodec<? super RegistryByteBuf, D> codec
     )
     {
-        return new RegistryLoaded<>(
-            identifier,
-            Registries.SCREEN_HANDLER,
-            new ExtendedScreenHandlerType<>(factory, codec)
-        )
-            .on(ClientLoaded.class, self -> HandledScreens.register(self.getValue(), factory::createScreen));
+        return new AutoLoaded<>(identifier, new ExtendedScreenHandlerType<>(factory, codec)).on(
+            CommonLoaded.class,
+            self -> Registry.register(Registries.SCREEN_HANDLER, self.getLoaderId(), self.getValue())
+        ).on(
+            ClientLoaded.class,
+            self -> HandledScreens.register(self.getValue(), factory::createScreen)
+        );
     }
 
     @ApiStatus.Internal
