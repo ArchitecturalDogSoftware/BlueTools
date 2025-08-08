@@ -59,16 +59,16 @@ public abstract class JsonResourceManager<T> extends SinglePreparationResourceRe
 
     public abstract @NotNull String getName();
 
+    public @NotNull Comparator<Entry<T>> getEntryComparator() {
+        return Comparator.comparing(entry -> entry.key().getValue().toString(), String::compareTo);
+    }
+
     public @NotNull List<Entry<T>> getEntries() {
         return List.copyOf(this.loadedEntries.values());
     }
 
     public @NotNull List<Entry<T>> getSortedEntries() {
-        return this.loadedEntries
-            .values()
-            .stream()
-            .sorted(Comparator.comparing(entry -> entry.key().getValue().toString(), String::compareTo))
-            .toList();
+        return this.loadedEntries.values().stream().sorted(this.getEntryComparator()).toList();
     }
 
     public @NotNull Optional<Entry<T>> getEntry(final @NotNull Identifier identifier) {

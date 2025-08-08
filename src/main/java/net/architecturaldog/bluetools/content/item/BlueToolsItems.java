@@ -5,6 +5,8 @@ import dev.jaxydog.lodestone.api.AutoLoader;
 import dev.jaxydog.lodestone.api.CommonLoaded;
 import net.architecturaldog.bluetools.BlueTools;
 import net.architecturaldog.bluetools.content.block.BlueToolsBlocks;
+import net.architecturaldog.bluetools.content.part.property.BlueToolsPartPropertyTypes;
+import net.architecturaldog.bluetools.content.part.property.MaterialsProperty;
 import net.architecturaldog.bluetools.content.resource.BlueToolsResources;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.minecraft.block.Block;
@@ -29,10 +31,15 @@ public final class BlueToolsItems extends AutoLoader {
             CommonLoaded.class,
             self -> ItemGroupEvents
                 .modifyEntriesEvent(BlueToolsItemGroups.registryKey(BlueToolsItemGroups.PARTS))
-                .register(entries -> BlueToolsResources.PART.getSortedEntries().forEach(partEntry -> {
-                    BlueToolsResources.MATERIAL.getSortedEntries().forEach(materialEntry -> {
-                        entries.add(self.getValue().getDefaultStack(partEntry, materialEntry));
-                    });
+                .register(entries -> BlueToolsResources.PART.getSortedEntries().forEach(part -> {
+                    part.value().getPropertyOr(
+                        BlueToolsPartPropertyTypes.MATERIALS.getValue(),
+                        MaterialsProperty.DEFAULT
+                    ).getPermittedMaterials().stream().sorted(
+                        BlueToolsResources.MATERIAL.getEntryComparator()
+                    ).forEach(
+                        material -> entries.add(self.getValue().getDefaultStack(part, material))
+                    );
                 }))
         );
 

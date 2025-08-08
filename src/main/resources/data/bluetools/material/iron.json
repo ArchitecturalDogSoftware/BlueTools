@@ -3,7 +3,7 @@
     "properties": [
         {
             "type": "bluetools:color",
-            "color": "#E0E0F0"
+            "color": "#FCFCFC"
         }, {
             "type": "bluetools:fluid",
             "fluid": "minecraft:lava",

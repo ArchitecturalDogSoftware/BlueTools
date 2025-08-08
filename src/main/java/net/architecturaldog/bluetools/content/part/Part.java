@@ -8,6 +8,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Supplier;
 
 public interface Part {
 
@@ -20,5 +21,21 @@ public interface Part {
     <P extends PartProperty> @NotNull Optional<P> getProperty(final @NotNull PartPropertyType<P> type);
 
     @NotNull List<PartProperty> getProperties();
+
+    default <P extends PartProperty> @NotNull P getPropertyOr(
+        final @NotNull PartPropertyType<P> type,
+        final @NotNull P property
+    )
+    {
+        return this.getProperty(type).orElse(property);
+    }
+
+    default <P extends PartProperty> @NotNull P getPropertyOrElse(
+        final @NotNull PartPropertyType<P> type,
+        final @NotNull Supplier<P> supplier
+    )
+    {
+        return this.getProperty(type).orElseGet(supplier);
+    }
 
 }

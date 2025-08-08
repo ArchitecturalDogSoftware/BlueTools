@@ -8,6 +8,7 @@
             }
         }, {
             "type": "bluetools:materials",
+            "list_type": "exclude",
             "materials": [ ]
         }
     ]
