@@ -1,4 +1,11 @@
 {
     "type": "bluetools:simple",
-    "properties": [ ]
+    "properties": [
+        {
+            "type": "bluetools:material_value",
+            "value": {
+                "ingots": 2
+            }
+        }
+    ]
 }

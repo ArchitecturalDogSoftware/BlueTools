@@ -12,6 +12,8 @@ import org.jetbrains.annotations.NotNull;
 
 public final class BlueToolsPartPropertyTypes extends AutoLoader {
 
+    public static final @NotNull AutoLoaded<PartPropertyType<MaterialValueProperty>> MATERIAL_VALUE =
+        BlueToolsPartPropertyTypes.create("material_value", MaterialValueProperty.CODEC);
     public static final @NotNull AutoLoaded<PartPropertyType<MaterialsProperty>> MATERIALS =
         BlueToolsPartPropertyTypes.create("materials", MaterialsProperty.CODEC);
     public static final @NotNull AutoLoaded<PartPropertyType<RepairableProperty>> REPAIRABLE =
