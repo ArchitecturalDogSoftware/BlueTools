@@ -1,0 +1,10 @@
+{
+    "material": "bluetools:gold",
+    "item_type": "into_fluid",
+    "ingredient": {
+        "item": "minecraft:light_weighted_pressure_plate"
+    },
+    "value": {
+        "ingots": 2
+    }
+}

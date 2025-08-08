@@ -2,6 +2,7 @@
     "itemGroup.bluetools.default": "BlueTools",
     "itemGroup.bluetools.parts": "BlueTools: Parts",
 
+    "material.bluetools.gold": "Gold",
     "material.bluetools.iron": "Iron",
     "material.missing": "Unknown",
 

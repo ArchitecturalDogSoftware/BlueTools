@@ -1,0 +1,10 @@
+{
+    "material": "bluetools:gold",
+    "item_type": "swap_fluid",
+    "ingredient": {
+        "item": "minecraft:gold_block"
+    },
+    "value": {
+        "blocks": 1
+    }
+}

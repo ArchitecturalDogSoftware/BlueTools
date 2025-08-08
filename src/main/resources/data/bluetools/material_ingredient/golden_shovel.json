@@ -1,0 +1,10 @@
+{
+    "material": "bluetools:gold",
+    "item_type": "into_fluid",
+    "ingredient": {
+        "item": "minecraft:golden_shovel"
+    },
+    "value": {
+        "ingots": 1
+    }
+}
