@@ -1,0 +1,11 @@
+{
+    "material": "bluetools:diamond",
+    "item_type": "craft_item",
+    "ingredient": {
+        "tag": "#minecraft:wool_carpets"
+    },
+    "value": {
+        "ingots": 2,
+        "nuggets": 6
+    }
+}

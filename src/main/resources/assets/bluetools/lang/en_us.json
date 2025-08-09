@@ -16,6 +16,7 @@
     "material.bluetools.netherite": "Netherite",
     "material.bluetools.gold": "Gold",
     "material.bluetools.iron": "Iron",
+    "material.bluetools.string": "String",
     "material.missing": "Unknown",
 
     "part.bluetools.heavy_binding": "Heavy %s Binding",

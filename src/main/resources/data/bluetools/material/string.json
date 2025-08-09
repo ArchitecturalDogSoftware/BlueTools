@@ -1,0 +1,24 @@
+{
+    "type": "bluetools:simple",
+    "properties": [
+        {
+            "type": "bluetools:color",
+            "highlight": "#F7F7F7",
+            "base": "#DBDBDB",
+            "shadow": "#C1C1C1",
+            "border_highlight": "#4C5F60",
+            "border": "#2F4547",
+            "border_shadow": "#1C3133"
+        }, {
+            "type": "bluetools:durability",
+            "tool": 64,
+            "armor_multiplier": 4
+        }, {
+            "type": "bluetools:armor_defense",
+            "head": 1,
+            "body": 3,
+            "legs": 2,
+            "feet": 1
+        }
+    ]
+}

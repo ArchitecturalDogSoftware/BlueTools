@@ -6,6 +6,10 @@
             "value": {
                 "ingots": 2
             }
+        }, {
+            "type": "bluetools:materials",
+            "list_type": "exclude",
+            "materials": [ "bluetools:string" ]
         }
     ]
 }
