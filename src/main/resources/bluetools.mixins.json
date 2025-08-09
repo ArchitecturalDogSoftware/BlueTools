@@ -4,7 +4,7 @@
     "required": true,
 
     "mixins": [ ],
-    "client": [ "client.ItemModelManagerMixin" ],
+    "client": [ "client.BakedModelManagerMixin", "client.ItemModelManagerMixin" ],
     "server": [ ],
 
     "injectors": {

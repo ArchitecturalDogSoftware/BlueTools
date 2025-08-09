@@ -1,6 +1,11 @@
 {
-    "parent": "minecraft:item/generated",
+    "parent": "bluetools:item/generated/part_6_layers",
     "textures": {
-        "layer0": "bluetools:item/part/heavy_binding"
+        "layer0": "bluetools:item/part/heavy_binding_layer0",
+        "layer1": "bluetools:item/part/heavy_binding_layer1",
+        "layer2": "bluetools:item/part/heavy_binding_layer2",
+        "layer3": "bluetools:item/part/heavy_binding_layer3",
+        "layer4": "bluetools:item/part/heavy_binding_layer4",
+        "layer5": "bluetools:item/part/heavy_binding_layer5"
     }
 }

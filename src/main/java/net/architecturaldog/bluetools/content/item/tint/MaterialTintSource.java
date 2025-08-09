@@ -4,6 +4,7 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.architecturaldog.bluetools.content.component.BlueToolsComponentTypes;
 import net.architecturaldog.bluetools.content.material.property.BlueToolsMaterialPropertyTypes;
+import net.architecturaldog.bluetools.content.material.property.ColorProperty;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.render.item.tint.TintSource;
@@ -18,10 +19,15 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Optional;
 
 @Environment(EnvType.CLIENT)
-public record MaterialTintSource(int defaultColor) implements TintSource {
+public record MaterialTintSource(@NotNull ColorProperty.PaletteColor paletteColor, int defaultColor)
+    implements TintSource
+{
 
     public static final @NotNull MapCodec<MaterialTintSource> CODEC = RecordCodecBuilder.mapCodec(instance -> instance
-        .group(Codecs.RGB.fieldOf("default").forGetter(MaterialTintSource::defaultColor))
+        .group(
+            ColorProperty.PaletteColor.CODEC.fieldOf("palette_color").forGetter(MaterialTintSource::paletteColor),
+            Codecs.RGB.optionalFieldOf("default", 0xFFFFFF).forGetter(MaterialTintSource::defaultColor)
+        )
         .apply(instance, MaterialTintSource::new)
     );
 
@@ -43,7 +49,7 @@ public record MaterialTintSource(int defaultColor) implements TintSource {
                 .materialEntry()
                 .value()
                 .getProperty(BlueToolsMaterialPropertyTypes.COLOR.getValue()))
-            .map(property -> property.color().integer())
+            .map(property -> property.getColor(this.paletteColor()).integer())
             .orElseGet(this::defaultColor));
     }
 

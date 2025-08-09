@@ -3,7 +3,12 @@
     "properties": [
         {
             "type": "bluetools:color",
-            "color": "#FCFCFC"
+            "highlight": "#FCFCFC",
+            "base": "#D5D5D5",
+            "shadow": "#A6A6A6",
+            "border_highlight": "#717171",
+            "border": "#5D5D5D",
+            "border_shadow": "#343434"
         }, {
             "type": "bluetools:fluid",
             "fluid": "minecraft:lava",

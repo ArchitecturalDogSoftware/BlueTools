@@ -4,6 +4,7 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.architecturaldog.bluetools.content.component.BlueToolsComponentTypes;
 import net.architecturaldog.bluetools.content.material.property.BlueToolsMaterialPropertyTypes;
+import net.architecturaldog.bluetools.content.material.property.ColorProperty;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.render.item.tint.TintSource;
@@ -18,12 +19,18 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Optional;
 
 @Environment(EnvType.CLIENT)
-public record MaterialMapTintSource(@NotNull String part, int defaultColor) implements TintSource {
+public record MaterialMapTintSource(
+    @NotNull ColorProperty.PaletteColor paletteColor,
+    @NotNull String part,
+    int defaultColor
+) implements TintSource
+{
 
     public static final @NotNull MapCodec<MaterialMapTintSource> CODEC =
         RecordCodecBuilder.mapCodec(instance -> instance.group(
+            ColorProperty.PaletteColor.CODEC.fieldOf("palette_color").forGetter(MaterialMapTintSource::paletteColor),
             Codecs.NON_EMPTY_STRING.fieldOf("part").forGetter(MaterialMapTintSource::part),
-            Codecs.RGB.fieldOf("default").forGetter(MaterialMapTintSource::defaultColor)
+            Codecs.RGB.optionalFieldOf("default", 0xFFFFFF).forGetter(MaterialMapTintSource::defaultColor)
         ).apply(instance, MaterialMapTintSource::new));
 
     @Override
@@ -42,7 +49,7 @@ public record MaterialMapTintSource(@NotNull String part, int defaultColor) impl
             .ofNullable(stack.get(BlueToolsComponentTypes.MATERIAL_MAP.getValue()))
             .flatMap(material -> Optional.ofNullable(material.materials().get(this.part())))
             .flatMap(material -> material.value().getProperty(BlueToolsMaterialPropertyTypes.COLOR.getValue()))
-            .map(property -> property.color().integer())
+            .map(property -> property.getColor(this.paletteColor()).integer())
             .orElseGet(this::defaultColor));
     }
 

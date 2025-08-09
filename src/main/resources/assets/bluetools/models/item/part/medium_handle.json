@@ -1,6 +1,11 @@
 {
-    "parent": "minecraft:item/generated",
+    "parent": "bluetools:item/generated/handheld_rod_part_6_layers",
     "textures": {
-        "layer0": "bluetools:item/part/medium_handle"
+        "layer0": "bluetools:item/part/medium_handle_layer0",
+        "layer1": "bluetools:item/part/medium_handle_layer1",
+        "layer2": "bluetools:item/part/medium_handle_layer2",
+        "layer3": "bluetools:item/part/medium_handle_layer3",
+        "layer4": "bluetools:item/part/medium_handle_layer4",
+        "layer5": "bluetools:item/part/medium_handle_layer5"
     }
 }
