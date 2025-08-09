@@ -22,7 +22,10 @@
     "part.bluetools.heavy_binding": "Heavy %s Binding",
     "part.bluetools.large_handle": "Large %s Tool Handle",
     "part.bluetools.light_binding": "Light %s Binding",
+    "part.bluetools.medium_blade": "Medium %s Blade",
     "part.bluetools.medium_handle": "Medium %s Tool Handle",
+    "part.bluetools.pickaxe_head": "%s Pickaxe Head",
+    "part.bluetools.small_blade": "Small %s Blade",
     "part.bluetools.small_handle": "Small %s Tool Handle",
     "part.missing": "%s Part"
 }

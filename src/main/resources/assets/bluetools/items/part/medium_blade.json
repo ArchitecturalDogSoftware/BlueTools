@@ -1,0 +1,27 @@
+{
+    "model": {
+        "type": "minecraft:model",
+        "model": "bluetools:item/part/medium_blade",
+        "tints": [
+            {
+                "type": "bluetools:material",
+                "palette_color": "border_shadow"
+            }, {
+                "type": "bluetools:material",
+                "palette_color": "border"
+            }, {
+                "type": "bluetools:material",
+                "palette_color": "border_highlight"
+            }, {
+                "type": "bluetools:material",
+                "palette_color": "shadow"
+            }, {
+                "type": "bluetools:material",
+                "palette_color": "base"
+            }, {
+                "type": "bluetools:material",
+                "palette_color": "highlight"
+            }
+        ]
+    }
+}

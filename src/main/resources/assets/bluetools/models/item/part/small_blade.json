@@ -1,0 +1,11 @@
+{
+    "parent": "bluetools:item/generated/handheld_part_6_layers",
+    "textures": {
+        "layer0": "bluetools:item/part/small_blade_layer0",
+        "layer1": "bluetools:item/part/small_blade_layer1",
+        "layer2": "bluetools:item/part/small_blade_layer2",
+        "layer3": "bluetools:item/part/small_blade_layer3",
+        "layer4": "bluetools:item/part/small_blade_layer4",
+        "layer5": "bluetools:item/part/small_blade_layer5"
+    }
+}
