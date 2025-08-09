@@ -1,0 +1,10 @@
+{
+    "material": "bluetools:netherite",
+    "item_type": "into_fluid",
+    "ingredient": {
+        "item": "minecraft:netherite_leggings"
+    },
+    "value": {
+        "ingots": 1
+    }
+}

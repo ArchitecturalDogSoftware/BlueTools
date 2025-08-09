@@ -1,0 +1,42 @@
+{
+    "type": "bluetools:simple",
+    "properties": [
+        {
+            "type": "bluetools:color",
+            "highlight": "#737173",
+            "base": "#4D494D",
+            "shadow": "#31292A",
+            "border_highlight": "#31292A",
+            "border": "#271C1D",
+            "border_shadow": "#111111"
+        }, {
+            "type": "bluetools:fluid",
+            "fluid": "minecraft:lava",
+            "melting_temperature": {
+                "celsius": 2800.0
+            }
+        }, {
+            "type": "bluetools:mining_level",
+            "level": "bluetools:netherite"
+        }, {
+            "type": "bluetools:mining_speed",
+            "speed": 9.0
+        }, {
+            "type": "bluetools:attack_damage",
+            "damage": 4.0
+        }, {
+            "type": "bluetools:attack_speed",
+            "speed": 1.6
+        }, {
+            "type": "bluetools:durability",
+            "tool": 2031,
+            "armor_multiplier": 37
+        }, {
+            "type": "bluetools:armor_defense",
+            "head": 3,
+            "body": 8,
+            "legs": 6,
+            "feet": 3
+        }
+    ]
+}

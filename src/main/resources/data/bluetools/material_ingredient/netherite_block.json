@@ -1,0 +1,10 @@
+{
+    "material": "bluetools:netherite",
+    "item_type": "swap_fluid",
+    "ingredient": {
+        "item": "minecraft:netherite_block"
+    },
+    "value": {
+        "blocks": 1
+    }
+}
