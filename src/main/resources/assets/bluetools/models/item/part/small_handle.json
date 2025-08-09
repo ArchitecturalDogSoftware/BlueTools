@@ -1,5 +1,5 @@
 {
-    "parent": "bluetools:item/generated/handheld_rod_part_6_layers",
+    "parent": "bluetools:item/generated/handheld_part_6_layers",
     "textures": {
         "layer0": "bluetools:item/part/small_handle_layer0",
         "layer1": "bluetools:item/part/small_handle_layer1",

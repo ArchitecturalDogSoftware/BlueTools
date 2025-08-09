@@ -20,17 +20,17 @@
             "level": "bluetools:gold"
         }, {
             "type": "bluetools:mining_speed",
-            "speed": 0.5
+            "speed": 12.0
         }, {
             "type": "bluetools:attack_damage",
-            "damage": 4.0
+            "damage": 0.0
         }, {
             "type": "bluetools:attack_speed",
             "speed": 1.6
         }, {
             "type": "bluetools:durability",
             "tool": 32,
-            "armor": 112
+            "armor_multiplier": 7
         }, {
             "type": "bluetools:armor_defense",
             "head": 2,

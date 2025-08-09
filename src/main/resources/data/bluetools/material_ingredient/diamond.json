@@ -1,0 +1,10 @@
+{
+    "material": "bluetools:diamond",
+    "item_type": "craft_item",
+    "ingredient": {
+        "item": "minecraft:diamond"
+    },
+    "value": {
+        "ingots": 1
+    }
+}

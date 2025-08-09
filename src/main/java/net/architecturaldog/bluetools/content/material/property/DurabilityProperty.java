@@ -5,12 +5,12 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.util.dynamic.Codecs;
 import org.jetbrains.annotations.NotNull;
 
-public record DurabilityProperty(int tool, int armor) implements MaterialProperty {
+public record DurabilityProperty(int tool, int armorMultiplier) implements MaterialProperty {
 
     public static final @NotNull MapCodec<DurabilityProperty> CODEC = RecordCodecBuilder.mapCodec(instance -> instance
         .group(
             Codecs.POSITIVE_INT.fieldOf("tool").forGetter(DurabilityProperty::tool),
-            Codecs.POSITIVE_INT.fieldOf("armor").forGetter(DurabilityProperty::armor)
+            Codecs.POSITIVE_INT.fieldOf("armor_multiplier").forGetter(DurabilityProperty::armorMultiplier)
         )
         .apply(instance, DurabilityProperty::new));
 
