@@ -1,0 +1,10 @@
+{
+    "material": "bluetools:copper",
+    "item_type": "into_fluid",
+    "ingredient": {
+        "item": "minecraft:waxed_weathered_copper_grate"
+    },
+    "value": {
+        "blocks": 1
+    }
+}

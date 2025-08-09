@@ -1,0 +1,10 @@
+{
+    "material": "bluetools:copper",
+    "item_type": "into_fluid",
+    "ingredient": {
+        "item": "minecraft:weathered_copper_trapdoor"
+    },
+    "value": {
+        "ingots": 3
+    }
+}

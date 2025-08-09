@@ -1,0 +1,10 @@
+{
+    "material": "bluetools:copper",
+    "item_type": "into_fluid",
+    "ingredient": {
+        "item": "minecraft:exposed_copper_door"
+    },
+    "value": {
+        "ingots": 2
+    }
+}

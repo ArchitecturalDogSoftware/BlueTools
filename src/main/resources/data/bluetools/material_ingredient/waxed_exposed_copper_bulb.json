@@ -1,0 +1,12 @@
+{
+    "material": "bluetools:copper",
+    "item_type": "into_fluid",
+    "ingredient": {
+        "item": "minecraft:waxed_exposed_copper_bulb"
+    },
+    "value": {
+        "ingots": 2,
+        "nuggets": 2,
+        "droplets": 250
+    }
+}

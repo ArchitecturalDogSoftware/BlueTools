@@ -1,0 +1,13 @@
+{
+    "material": "bluetools:copper",
+    "item_type": "into_fluid",
+    "ingredient": {
+        "item": "minecraft:cut_copper_stairs"
+    },
+    "value": {
+        "blocks": 1,
+        "ingots": 4,
+        "nuggets": 4,
+        "droplets": 500
+    }
+}

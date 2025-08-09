@@ -1,0 +1,12 @@
+{
+    "material": "bluetools:copper",
+    "item_type": "into_fluid",
+    "ingredient": {
+        "item": "minecraft:waxed_cut_copper_slab"
+    },
+    "value": {
+        "ingots": 4,
+        "nuggets": 4,
+        "droplets": 500
+    }
+}

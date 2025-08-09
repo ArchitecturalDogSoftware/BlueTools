@@ -1,0 +1,10 @@
+{
+    "material": "bluetools:copper",
+    "item_type": "swap_fluid",
+    "ingredient": {
+        "item": "minecraft:oxidized_copper"
+    },
+    "value": {
+        "blocks": 1
+    }
+}

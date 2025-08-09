@@ -1,0 +1,10 @@
+{
+    "material": "bluetools:copper",
+    "item_type": "into_fluid",
+    "ingredient": {
+        "item": "minecraft:oxidized_cut_copper"
+    },
+    "value": {
+        "blocks": 1
+    }
+}

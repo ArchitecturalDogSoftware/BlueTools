@@ -1,0 +1,10 @@
+{
+    "material": "bluetools:copper",
+    "item_type": "into_fluid",
+    "ingredient": {
+        "item": "minecraft:raw_copper_block"
+    },
+    "value": {
+        "ingots": 9
+    }
+}

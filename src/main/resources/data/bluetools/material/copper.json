@@ -3,40 +3,40 @@
     "properties": [
         {
             "type": "bluetools:color",
-            "highlight": "#FCFCFC",
-            "base": "#D5D5D5",
-            "shadow": "#A6A6A6",
-            "border_highlight": "#717171",
-            "border": "#5D5D5D",
-            "border_shadow": "#343434"
+            "highlight": "#FC9982",
+            "base": "#E77C56",
+            "shadow": "#C15A36",
+            "border_highlight": "#9C4529",
+            "border": "#8A4129",
+            "border_shadow": "#6D3421"
         }, {
             "type": "bluetools:fluid",
             "fluid": "minecraft:lava",
             "melting_temperature": {
-                "celsius": 1538.0
+                "celsius": 1084.0
             }
         }, {
             "type": "bluetools:mining_level",
-            "level": "bluetools:iron"
+            "level": "bluetools:stone"
         }, {
             "type": "bluetools:mining_speed",
-            "speed": 6.0
+            "speed": 5.0
         }, {
             "type": "bluetools:attack_damage",
-            "damage": 2.0
+            "damage": 1.0
         }, {
             "type": "bluetools:attack_speed",
             "speed": 1.6
         }, {
             "type": "bluetools:durability",
-            "tool": 250,
-            "armor_multiplier": 15
+            "tool": 190,
+            "armor_multiplier": 11
         }, {
             "type": "bluetools:armor_defense",
             "head": 2,
-            "body": 6,
-            "legs": 5,
-            "feet": 2
+            "body": 4,
+            "legs": 3,
+            "feet": 1
         }
     ]
 }
