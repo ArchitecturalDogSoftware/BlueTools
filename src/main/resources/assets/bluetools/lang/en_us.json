@@ -2,6 +2,16 @@
     "itemGroup.bluetools.default": "BlueTools",
     "itemGroup.bluetools.parts": "BlueTools: Parts",
 
+    "item.partMaterialValue": "Material value: %2$s of %1$s",
+
+    "materialValue.bluetools.blocks": "%d Blocks",
+    "materialValue.bluetools.bottles": "%d Bottles",
+    "materialValue.bluetools.bowls": "%d Bowls",
+    "materialValue.bluetools.buckets": "%d Buckets",
+    "materialValue.bluetools.droplets": "%d Droplets",
+    "materialValue.bluetools.ingots": "%d Ingots",
+    "materialValue.bluetools.nuggets": "%d Nuggets",
+
     "material.bluetools.diamond": "Diamond",
     "material.bluetools.gold": "Gold",
     "material.bluetools.iron": "Iron",

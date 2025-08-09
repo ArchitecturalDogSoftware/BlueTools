@@ -4,8 +4,10 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.architecturaldog.bluetools.BlueTools;
 import net.architecturaldog.bluetools.utility.BlueToolsCodecs;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
+import net.minecraft.text.Text;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Optional;
@@ -40,6 +42,10 @@ public interface MaterialValue {
         : DataResult.error(() -> "Value " + value + " must be positive"));
 
     long asDroplets();
+
+    @NotNull String getTranslationKey();
+
+    @NotNull Text getText();
 
     default @NotNull ConversionResult asNuggets() {
         return ConversionResult.of(this, FluidConstants.NUGGET);
@@ -83,6 +89,16 @@ public interface MaterialValue {
             return this.amount();
         }
 
+        @Override
+        public @NotNull String getTranslationKey() {
+            return BlueTools.id("droplets").toTranslationKey("materialValue");
+        }
+
+        @Override
+        public @NotNull Text getText() {
+            return Text.translatable(this.getTranslationKey(), this.amount());
+        }
+
     }
 
     record Nuggets(long amount) implements MaterialValue {
@@ -93,6 +109,16 @@ public interface MaterialValue {
         @Override
         public long asDroplets() {
             return this.amount() * FluidConstants.NUGGET;
+        }
+
+        @Override
+        public @NotNull String getTranslationKey() {
+            return BlueTools.id("nuggets").toTranslationKey("materialValue");
+        }
+
+        @Override
+        public @NotNull Text getText() {
+            return Text.translatable(this.getTranslationKey(), this.amount());
         }
 
     }
@@ -107,6 +133,16 @@ public interface MaterialValue {
             return this.amount() * FluidConstants.INGOT;
         }
 
+        @Override
+        public @NotNull String getTranslationKey() {
+            return BlueTools.id("ingots").toTranslationKey("materialValue");
+        }
+
+        @Override
+        public @NotNull Text getText() {
+            return Text.translatable(this.getTranslationKey(), this.amount());
+        }
+
     }
 
     record Blocks(long amount) implements MaterialValue {
@@ -117,6 +153,16 @@ public interface MaterialValue {
         @Override
         public long asDroplets() {
             return this.amount() * FluidConstants.BLOCK;
+        }
+
+        @Override
+        public @NotNull String getTranslationKey() {
+            return BlueTools.id("blocks").toTranslationKey("materialValue");
+        }
+
+        @Override
+        public @NotNull Text getText() {
+            return Text.translatable(this.getTranslationKey(), this.amount());
         }
 
     }
@@ -131,6 +177,16 @@ public interface MaterialValue {
             return this.amount() * FluidConstants.BOWL;
         }
 
+        @Override
+        public @NotNull String getTranslationKey() {
+            return BlueTools.id("bowls").toTranslationKey("materialValue");
+        }
+
+        @Override
+        public @NotNull Text getText() {
+            return Text.translatable(this.getTranslationKey(), this.amount());
+        }
+
     }
 
     record Bottles(long amount) implements MaterialValue {
@@ -143,6 +199,16 @@ public interface MaterialValue {
             return this.amount() * FluidConstants.BOTTLE;
         }
 
+        @Override
+        public @NotNull String getTranslationKey() {
+            return BlueTools.id("bottles").toTranslationKey("materialValue");
+        }
+
+        @Override
+        public @NotNull Text getText() {
+            return Text.translatable(this.getTranslationKey(), this.amount());
+        }
+
     }
 
     record Buckets(long amount) implements MaterialValue {
@@ -153,6 +219,16 @@ public interface MaterialValue {
         @Override
         public long asDroplets() {
             return this.amount() * FluidConstants.BUCKET;
+        }
+
+        @Override
+        public @NotNull String getTranslationKey() {
+            return BlueTools.id("buckets").toTranslationKey("materialValue");
+        }
+
+        @Override
+        public @NotNull Text getText() {
+            return Text.translatable(this.getTranslationKey(), this.amount());
         }
 
     }
@@ -188,6 +264,16 @@ public interface MaterialValue {
                 + this.bowls().orElse(0L)
                 + this.bottles().orElse(0L)
                 + this.buckets().orElse(0L);
+        }
+
+        @Override
+        public @NotNull String getTranslationKey() {
+            return BlueTools.id("droplets").toTranslationKey("materialValue");
+        }
+
+        @Override
+        public @NotNull Text getText() {
+            return Text.translatable(this.getTranslationKey(), this.asDroplets());
         }
 
     }

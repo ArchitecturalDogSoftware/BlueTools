@@ -7,6 +7,8 @@ import org.jetbrains.annotations.NotNull;
 
 public record MaterialValueProperty(@NotNull MaterialValue value) implements PartProperty {
 
+    public static final @NotNull MaterialValueProperty DEFAULT =
+        new MaterialValueProperty(new MaterialValue.Ingots(1L));
     public static final @NotNull MapCodec<MaterialValueProperty> CODEC =
         RecordCodecBuilder.mapCodec(instance -> instance
             .group(MaterialValue.POSITIVE_CODEC.fieldOf("value").forGetter(MaterialValueProperty::value))

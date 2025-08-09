@@ -2,12 +2,11 @@ package net.architecturaldog.bluetools.content.item;
 
 import dev.jaxydog.lodestone.api.AutoLoaded;
 import dev.jaxydog.lodestone.api.AutoLoader;
+import dev.jaxydog.lodestone.api.ClientLoaded;
 import dev.jaxydog.lodestone.api.CommonLoaded;
 import net.architecturaldog.bluetools.BlueTools;
 import net.architecturaldog.bluetools.content.block.BlueToolsBlocks;
-import net.architecturaldog.bluetools.content.part.property.BlueToolsPartPropertyTypes;
-import net.architecturaldog.bluetools.content.part.property.MaterialsProperty;
-import net.architecturaldog.bluetools.content.resource.BlueToolsResources;
+import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.minecraft.block.Block;
 import net.minecraft.item.BlockItem;
@@ -28,19 +27,15 @@ public final class BlueToolsItems extends AutoLoader {
     public static final @NotNull AutoLoaded<PartItem> PART = BlueToolsItems
         .create(PartItem.class, "part", PartItem::new)
         .on(
+            ClientLoaded.class,
+            self -> ItemTooltipCallback.EVENT.register(
+                (stack, context, type, list) -> self.getValue().getTooltip(stack).ifPresent(text -> list.add(1, text))
+            )
+        ).on(
             CommonLoaded.class,
             self -> ItemGroupEvents
                 .modifyEntriesEvent(BlueToolsItemGroups.registryKey(BlueToolsItemGroups.PARTS))
-                .register(entries -> BlueToolsResources.PART.getSortedEntries().forEach(part -> {
-                    part.value().getPropertyOr(
-                        BlueToolsPartPropertyTypes.MATERIALS.getValue(),
-                        MaterialsProperty.DEFAULT
-                    ).getPermittedMaterials().stream().sorted(
-                        BlueToolsResources.MATERIAL.getEntryComparator()
-                    ).forEach(
-                        material -> entries.add(self.getValue().getDefaultStack(part, material))
-                    );
-                }))
+                .register(entries -> entries.addAll(self.getValue().getValidDefaultStacks()))
         );
 
     private static <T extends Item> void addToItemGroup(
