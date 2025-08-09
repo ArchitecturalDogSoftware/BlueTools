@@ -5,7 +5,7 @@ import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.architecturaldog.bluetools.content.component.BlueToolsComponentTypes;
 import net.architecturaldog.bluetools.content.component.PartComponent;
-import net.architecturaldog.bluetools.content.item.BlueToolsItems;
+import net.architecturaldog.bluetools.content.item.PartItem;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.item.ItemAsset;
@@ -68,7 +68,7 @@ public abstract class ItemModelManagerMixin {
     {
         final @Nullable PartComponent component;
 
-        if (stack.isOf(BlueToolsItems.PART.getValue()) &&
+        if (stack.getItem() instanceof PartItem &&
             Objects.nonNull(component = stack.get(BlueToolsComponentTypes.PART.getValue())))
         {
             final @NotNull Identifier modelIdentifier = this.getModelIdentifier(component);
@@ -91,7 +91,7 @@ public abstract class ItemModelManagerMixin {
         final @Nullable @Local Identifier identifier
     )
     {
-        if (stack.isOf(BlueToolsItems.PART.getValue())) {
+        if (stack.getItem() instanceof PartItem) {
             final @Nullable PartComponent component = stack.get(BlueToolsComponentTypes.PART.getValue());
 
             if (Objects.isNull(component)) return original;

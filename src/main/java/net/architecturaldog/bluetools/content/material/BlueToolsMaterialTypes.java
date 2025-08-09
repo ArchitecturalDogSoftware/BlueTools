@@ -14,6 +14,8 @@ public final class BlueToolsMaterialTypes extends AutoLoader {
 
     public static final @NotNull AutoLoaded<MaterialType<SimpleMaterial>> SIMPLE =
         BlueToolsMaterialTypes.create("simple", SimpleMaterial.CODEC);
+    public static final @NotNull AutoLoaded<MaterialType<UpgradeMaterial>> UPGRADE =
+        BlueToolsMaterialTypes.create("upgrade", UpgradeMaterial.CODEC);
 
     private static <M extends Material> @NotNull AutoLoaded<MaterialType<M>> create(
         final @NotNull String path,

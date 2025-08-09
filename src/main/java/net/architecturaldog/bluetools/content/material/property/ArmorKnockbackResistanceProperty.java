@@ -9,6 +9,8 @@ public record ArmorKnockbackResistanceProperty(float head, float body, float leg
     implements MaterialProperty
 {
 
+    public static final @NotNull ArmorKnockbackResistanceProperty DEFAULT =
+        new ArmorKnockbackResistanceProperty(0F, 0F, 0F, 0F);
     public static final @NotNull MapCodec<ArmorKnockbackResistanceProperty> CODEC =
         RecordCodecBuilder.mapCodec(instance -> instance.group(
             Codecs.NON_NEGATIVE_FLOAT.fieldOf("head").forGetter(ArmorKnockbackResistanceProperty::head),

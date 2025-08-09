@@ -2,6 +2,7 @@ package net.architecturaldog.bluetools.content.part;
 
 import com.mojang.serialization.Codec;
 import net.architecturaldog.bluetools.content.BlueToolsRegistries;
+import net.architecturaldog.bluetools.content.part.property.DefaultedPartPropertyType;
 import net.architecturaldog.bluetools.content.part.property.PartProperty;
 import net.architecturaldog.bluetools.content.part.property.PartPropertyType;
 import org.jetbrains.annotations.NotNull;
@@ -36,6 +37,10 @@ public interface Part {
     )
     {
         return this.getProperty(type).orElseGet(supplier);
+    }
+
+    default <P extends PartProperty> @NotNull P getPropertyOrDefault(final @NotNull DefaultedPartPropertyType<P> type) {
+        return this.getPropertyOrElse(type, type::getDefault);
     }
 
 }

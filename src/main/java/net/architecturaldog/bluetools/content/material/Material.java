@@ -2,6 +2,7 @@ package net.architecturaldog.bluetools.content.material;
 
 import com.mojang.serialization.Codec;
 import net.architecturaldog.bluetools.content.BlueToolsRegistries;
+import net.architecturaldog.bluetools.content.material.property.DefaultedMaterialPropertyType;
 import net.architecturaldog.bluetools.content.material.property.MaterialProperty;
 import net.architecturaldog.bluetools.content.material.property.MaterialPropertyType;
 import org.jetbrains.annotations.NotNull;
@@ -38,6 +39,10 @@ public interface Material {
     )
     {
         return this.getProperty(type).orElseGet(supplier);
+    }
+
+    default <P extends MaterialProperty> @NotNull P getPropertyOrDefault(final @NotNull DefaultedMaterialPropertyType<P> type) {
+        return this.getPropertyOrElse(type, type::getDefault);
     }
 
 }

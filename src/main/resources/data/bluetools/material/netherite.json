@@ -1,5 +1,6 @@
 {
-    "type": "bluetools:simple",
+    "type": "bluetools:upgrade",
+    "parent": "bluetools:diamond",
     "properties": [
         {
             "type": "bluetools:color",

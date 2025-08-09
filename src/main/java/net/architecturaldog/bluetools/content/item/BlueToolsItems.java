@@ -37,6 +37,19 @@ public final class BlueToolsItems extends AutoLoader {
                 .modifyEntriesEvent(BlueToolsItemGroups.registryKey(BlueToolsItemGroups.PARTS))
                 .register(entries -> entries.addAll(self.getValue().getValidDefaultStacks()))
         );
+    public static final @NotNull AutoLoaded<UpgradedPartItem> UPGRADED_PART = BlueToolsItems
+        .create(UpgradedPartItem.class, "upgraded_part", UpgradedPartItem::new)
+        .on(
+            ClientLoaded.class,
+            self -> ItemTooltipCallback.EVENT.register(
+                (stack, context, type, list) -> self.getValue().getTooltip(stack).ifPresent(text -> list.add(1, text))
+            )
+        ).on(
+            CommonLoaded.class,
+            self -> ItemGroupEvents
+                .modifyEntriesEvent(BlueToolsItemGroups.registryKey(BlueToolsItemGroups.PARTS))
+                .register(entries -> entries.addAll(self.getValue().getValidDefaultStacks()))
+        );
 
     private static <T extends Item> void addToItemGroup(
         final @NotNull AutoLoaded<T> self

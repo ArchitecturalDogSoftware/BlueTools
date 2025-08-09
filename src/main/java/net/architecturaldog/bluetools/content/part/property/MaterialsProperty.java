@@ -30,6 +30,12 @@ public record MaterialsProperty(
                 .forGetter(MaterialsProperty::materials)
         ).apply(instance, MaterialsProperty::new));
 
+    public boolean permitsMaterial(final @NotNull JsonResourceManager.Entry<Material> material) {
+        final @NotNull List<JsonResourceManager.Entry<Material>> entries = this.materials().orElseGet(List::of);
+
+        return this.listType().equals(ListType.INCLUDE) == entries.contains(material);
+    }
+
     public @NotNull List<JsonResourceManager.Entry<Material>> getPermittedMaterials() {
         final @NotNull List<JsonResourceManager.Entry<Material>> entries = this.materials().orElseGet(List::of);
 

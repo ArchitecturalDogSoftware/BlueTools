@@ -7,6 +7,7 @@ import org.jetbrains.annotations.NotNull;
 
 public record ArmorToughnessProperty(float head, float body, float legs, float feet) implements MaterialProperty {
 
+    public static final @NotNull ArmorToughnessProperty DEFAULT = new ArmorToughnessProperty(0F, 0F, 0F, 0F);
     public static final @NotNull MapCodec<ArmorToughnessProperty> CODEC =
         RecordCodecBuilder.mapCodec(instance -> instance.group(
             Codecs.NON_NEGATIVE_FLOAT.fieldOf("head").forGetter(ArmorToughnessProperty::head),

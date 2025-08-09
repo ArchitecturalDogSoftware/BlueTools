@@ -10,7 +10,7 @@ public record DurabilityProperty(int tool, int armorMultiplier) implements Mater
     public static final @NotNull MapCodec<DurabilityProperty> CODEC = RecordCodecBuilder.mapCodec(instance -> instance
         .group(
             Codecs.POSITIVE_INT.fieldOf("tool").forGetter(DurabilityProperty::tool),
-            Codecs.POSITIVE_INT.fieldOf("armor_multiplier").forGetter(DurabilityProperty::armorMultiplier)
+            Codecs.POSITIVE_INT.optionalFieldOf("armor_multiplier", 1).forGetter(DurabilityProperty::armorMultiplier)
         )
         .apply(instance, DurabilityProperty::new));
 

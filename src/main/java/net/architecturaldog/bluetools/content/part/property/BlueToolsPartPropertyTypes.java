@@ -12,12 +12,33 @@ import org.jetbrains.annotations.NotNull;
 
 public final class BlueToolsPartPropertyTypes extends AutoLoader {
 
-    public static final @NotNull AutoLoaded<PartPropertyType<MaterialValueProperty>> MATERIAL_VALUE =
-        BlueToolsPartPropertyTypes.create("material_value", MaterialValueProperty.CODEC);
-    public static final @NotNull AutoLoaded<PartPropertyType<MaterialsProperty>> MATERIALS =
-        BlueToolsPartPropertyTypes.create("materials", MaterialsProperty.CODEC);
-    public static final @NotNull AutoLoaded<PartPropertyType<RepairableProperty>> REPAIRABLE =
-        BlueToolsPartPropertyTypes.create("repairable", RepairableProperty.CODEC);
+    public static final @NotNull AutoLoaded<DefaultedPartPropertyType<MaterialValueProperty>> MATERIAL_VALUE =
+        BlueToolsPartPropertyTypes.create("material_value", MaterialValueProperty.CODEC, MaterialValueProperty.DEFAULT);
+    public static final @NotNull AutoLoaded<DefaultedPartPropertyType<MaterialsProperty>> MATERIALS =
+        BlueToolsPartPropertyTypes.create("materials", MaterialsProperty.CODEC, MaterialsProperty.DEFAULT);
+    public static final @NotNull AutoLoaded<DefaultedPartPropertyType<RepairableProperty>> REPAIRABLE =
+        BlueToolsPartPropertyTypes.create("repairable", RepairableProperty.CODEC, RepairableProperty.DEFAULT);
+
+    private static <P extends PartProperty> @NotNull AutoLoaded<DefaultedPartPropertyType<P>> create(
+        final @NotNull String path,
+        final @NotNull MapCodec<P> codec,
+        final @NotNull P defaultProperty
+    )
+    {
+        return BlueToolsPartPropertyTypes.create(BlueTools.id(path), codec, defaultProperty);
+    }
+
+    private static <P extends PartProperty> @NotNull AutoLoaded<DefaultedPartPropertyType<P>> create(
+        final @NotNull Identifier identifier,
+        final @NotNull MapCodec<P> codec,
+        final @NotNull P defaultProperty
+    )
+    {
+        return new AutoLoaded<>(identifier, DefaultedPartPropertyType.of(codec, defaultProperty)).on(
+            CommonLoaded.class,
+            self -> Registry.register(BlueToolsRegistries.PART_PROPERTY_TYPE, self.getLoaderId(), self.getValue())
+        );
+    }
 
     private static <P extends PartProperty> @NotNull AutoLoaded<PartPropertyType<P>> create(
         final @NotNull String path,
