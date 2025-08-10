@@ -1,0 +1,15 @@
+{
+    "type": "bluetools:simple",
+    "properties": [
+        {
+            "type": "bluetools:material_value",
+            "value": {
+                "ingots": 3
+            }
+        }, {
+            "type": "bluetools:materials",
+            "list_type": "exclude",
+            "materials": [ "bluetools:string" ]
+        }
+    ]
+}
