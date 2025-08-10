@@ -1,0 +1,42 @@
+{
+    "type": "bluetools:simple",
+    "properties": [
+        {
+            "type": "bluetools:color",
+            "highlight": "#C9FECE",
+            "base": "#8CD782",
+            "shadow": "#76BE6D",
+            "border_highlight": "#57914F",
+            "border": "#477A42",
+            "border_shadow": "#34532F"
+        }, {
+            "type": "bluetools:fluid",
+            "fluid": "minecraft:lava",
+            "melting_temperature": {
+                "celsius": 0.0
+            }
+        }, {
+            "type": "bluetools:mining_level",
+            "level": "bluetools:wood"
+        }, {
+            "type": "bluetools:mining_speed",
+            "speed": 3.0
+        }, {
+            "type": "bluetools:attack_damage",
+            "damage": -1.0
+        }, {
+            "type": "bluetools:attack_speed",
+            "speed": 1.2
+        }, {
+            "type": "bluetools:durability",
+            "tool": 750,
+            "armor_multiplier": 17
+        }, {
+            "type": "bluetools:armor_defense",
+            "head": 2,
+            "body": 6,
+            "legs": 4,
+            "feet": 2
+        }
+    ]
+}
