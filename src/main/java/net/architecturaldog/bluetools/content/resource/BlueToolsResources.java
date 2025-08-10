@@ -1,16 +1,20 @@
 package net.architecturaldog.bluetools.content.resource;
 
 import dev.jaxydog.lodestone.api.AutoLoader;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.architecturaldog.bluetools.BlueTools;
 import net.architecturaldog.bluetools.content.BlueToolsRegistries;
 import net.architecturaldog.bluetools.content.material.Material;
 import net.architecturaldog.bluetools.content.material.MaterialIngredient;
 import net.architecturaldog.bluetools.content.material.MiningLevel;
 import net.architecturaldog.bluetools.content.part.Part;
+import net.minecraft.registry.RegistryKey;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.UnknownNullability;
 
 import java.util.List;
+import java.util.Map;
 
 public final class BlueToolsResources extends AutoLoader {
 
@@ -33,7 +37,40 @@ public final class BlueToolsResources extends AutoLoader {
             BlueToolsRegistries.Keys.MATERIAL_INGREDIENT,
             MaterialIngredient.CODEC.codec(),
             List.of(BlueToolsResources.MATERIAL.getLoaderId())
-        );
+        )
+        {
+
+            private @UnknownNullability Map<MaterialIngredient.Ingredient, RegistryKey<MaterialIngredient>> ingredientCache;
+
+            @Override
+            protected void prepareVerification() {
+                this.ingredientCache = new Object2ObjectOpenHashMap<>(this.getEntries().size());
+            }
+
+            @Override
+            protected void cleanupVerification() {
+                this.ingredientCache = null;
+            }
+
+            @Override
+            protected boolean verifyEntry(final @NotNull Entry<MaterialIngredient> entry) {
+                if (!this.ingredientCache.containsKey(entry.value().ingredient())) {
+                    this.ingredientCache.put(entry.value().ingredient(), entry.key());
+
+                    return super.verifyEntry(entry);
+                }
+
+                BlueTools.LOGGER.error(
+                    "Duplicate ingredients for JSON manager '{}': {}, {}",
+                    this.getName(),
+                    this.ingredientCache.get(entry.value().ingredient()),
+                    entry.key()
+                );
+
+                return false;
+            }
+
+        };
 
     public static final @NotNull SimpleJsonResourceManager<Part> PART =
         new SimpleJsonResourceManager<>("part", BlueToolsRegistries.Keys.PART, Part.CODEC);

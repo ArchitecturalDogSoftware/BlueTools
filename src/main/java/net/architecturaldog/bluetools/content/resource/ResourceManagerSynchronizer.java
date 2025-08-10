@@ -81,6 +81,7 @@ public final class ResourceManagerSynchronizer {
         UNSPECIFIED,
         PREPARING,
         APPLYING,
+        VERIFYING,
         FINISHED,
 
     }

@@ -7,6 +7,7 @@ import com.mojang.serialization.DataResult;
 import com.mojang.serialization.JsonOps;
 import dev.jaxydog.lodestone.api.CommonLoaded;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.architecturaldog.bluetools.BlueTools;
 import net.architecturaldog.bluetools.content.resource.ResourceManagerSynchronizer.ManagerState;
 import net.fabricmc.fabric.api.resource.IdentifiableResourceReloadListener;
@@ -58,6 +59,18 @@ public abstract class JsonResourceManager<T> extends SinglePreparationResourceRe
     }
 
     public abstract @NotNull String getName();
+
+    protected void prepareVerification() {
+
+    }
+
+    protected void cleanupVerification() {
+
+    }
+
+    protected boolean verifyEntry(final @NotNull Entry<T> entry) {
+        return true;
+    }
 
     public @NotNull Comparator<Entry<T>> getEntryComparator() {
         return Comparator.comparing(entry -> entry.key().getValue().toString(), String::compareTo);
@@ -208,8 +221,25 @@ public abstract class JsonResourceManager<T> extends SinglePreparationResourceRe
 
         this.loadedEntries = loadedEntries;
 
-        BlueTools.LOGGER.info("Loaded {} entries for JSON manager '{}'", this.loadedEntries.size(), this.getName());
+        ResourceManagerSynchronizer.INSTANCE.setCurrentState(this, ManagerState.VERIFYING);
+
+        final @NotNull List<RegistryKey<T>> invalidEntries = new ObjectArrayList<>();
+
+        this.prepareVerification();
+
+        for (final Map.Entry<RegistryKey<T>, Entry<T>> mapEntry : this.loadedEntries.entrySet()) {
+            if (this.verifyEntry(mapEntry.getValue())) continue;
+
+            invalidEntries.add(mapEntry.getKey());
+        }
+
+        invalidEntries.forEach(this.loadedEntries::remove);
+
+        this.cleanupVerification();
+
         ResourceManagerSynchronizer.INSTANCE.setCurrentState(this, ManagerState.FINISHED);
+
+        BlueTools.LOGGER.info("Loaded {} entries for JSON manager '{}'", this.loadedEntries.size(), this.getName());
     }
 
     public record Entry<T>(RegistryKey<T> key, T value) {}
