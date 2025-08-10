@@ -9,7 +9,7 @@
         }, {
             "type": "bluetools:materials",
             "list_type": "exclude",
-            "materials": [ ]
+            "materials": [ "bluetools:amethyst", "bluetools:flint" ]
         }
     ]
 }

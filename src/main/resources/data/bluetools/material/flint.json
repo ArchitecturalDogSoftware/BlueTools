@@ -1,0 +1,36 @@
+{
+    "type": "bluetools:simple",
+    "properties": [
+        {
+            "type": "bluetools:color",
+            "highlight": "#A8A8A8",
+            "base": "#565656",
+            "shadow": "#3D3C3C",
+            "border_highlight": "#2E2D2D",
+            "border": "#222020",
+            "border_shadow": "#0E0E0E"
+        }, {
+            "type": "bluetools:mining_level",
+            "level": "bluetools:stone"
+        }, {
+            "type": "bluetools:mining_speed",
+            "speed": 4.0
+        }, {
+            "type": "bluetools:attack_damage",
+            "damage": 1.5
+        }, {
+            "type": "bluetools:attack_speed",
+            "speed": 1.6
+        }, {
+            "type": "bluetools:durability",
+            "tool": 140,
+            "armor_multiplier": 6
+        }, {
+            "type": "bluetools:armor_defense",
+            "head": 1,
+            "body": 3,
+            "legs": 2,
+            "feet": 1
+        }
+    ]
+}

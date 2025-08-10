@@ -1,5 +1,5 @@
 {
-    "material": "bluetools:iron",
+    "material": "bluetools:slime",
     "item_type": "swap_fluid",
     "ingredient": {
         "item": "minecraft:slime_block"

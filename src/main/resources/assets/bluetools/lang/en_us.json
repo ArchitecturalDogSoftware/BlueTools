@@ -12,8 +12,10 @@
     "materialValue.bluetools.ingots": "%d Ingots",
     "materialValue.bluetools.nuggets": "%d Nuggets",
 
+    "material.bluetools.amethyst": "Amethyst",
     "material.bluetools.copper": "Copper",
     "material.bluetools.diamond": "Diamond",
+    "material.bluetools.flint": "Flint",
     "material.bluetools.netherite": "Netherite",
     "material.bluetools.gold": "Gold",
     "material.bluetools.iron": "Iron",

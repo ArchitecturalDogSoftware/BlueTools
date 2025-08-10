@@ -1,0 +1,10 @@
+{
+    "material": "bluetools:amethyst",
+    "item_type": "craft_item",
+    "ingredient": {
+        "item": "minecraft:amethyst_shard"
+    },
+    "value": {
+        "ingots": 1
+    }
+}

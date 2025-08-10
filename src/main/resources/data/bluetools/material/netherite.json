@@ -38,6 +38,18 @@
             "body": 8,
             "legs": 6,
             "feet": 3
+        }, {
+            "type": "bluetools:armor_toughness",
+            "head": 3.0,
+            "body": 3.0,
+            "legs": 3.0,
+            "feet": 3.0
+        }, {
+            "type": "bluetools:armor_knockback_resistance",
+            "head": 0.1,
+            "body": 0.1,
+            "legs": 0.1,
+            "feet": 0.1
         }
     ]
 }

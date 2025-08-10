@@ -31,6 +31,12 @@
             "body": 8,
             "legs": 6,
             "feet": 3
+        }, {
+            "type": "bluetools:armor_toughness",
+            "head": 3.0,
+            "body": 3.0,
+            "legs": 3.0,
+            "feet": 3.0
         }
     ]
 }
