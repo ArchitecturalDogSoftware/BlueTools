@@ -9,7 +9,7 @@
         }, {
             "type": "bluetools:materials",
             "list_type": "include",
-            "materials": [ "bluetools:copper", "bluetools:string" ]
+            "materials": [ "bluetools:copper", "bluetools:slime", "bluetools:string" ]
         }
     ]
 }
