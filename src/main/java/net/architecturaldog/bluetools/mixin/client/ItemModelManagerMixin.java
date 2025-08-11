@@ -5,7 +5,9 @@ import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.architecturaldog.bluetools.content.component.BlueToolsComponentTypes;
 import net.architecturaldog.bluetools.content.component.PartComponent;
+import net.architecturaldog.bluetools.content.component.ToolComponent;
 import net.architecturaldog.bluetools.content.item.PartItem;
+import net.architecturaldog.bluetools.content.item.ToolItem;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.item.ItemAsset;
@@ -49,6 +51,14 @@ public abstract class ItemModelManagerMixin {
         );
     }
 
+    @Unique
+    private @NotNull Identifier getModelIdentifier(final @NotNull ToolComponent component) {
+        return Identifier.of(
+            component.toolEntry().key().getValue().getNamespace(),
+            "tool/" + component.toolEntry().key().getValue().getPath()
+        );
+    }
+
     @ModifyExpressionValue(
         method = "update",
         at = @At(
@@ -66,12 +76,26 @@ public abstract class ItemModelManagerMixin {
         final @Local(argsOnly = true) int seed
     )
     {
-        final @Nullable PartComponent component;
+        final @Nullable PartComponent partComponent;
+        final @Nullable ToolComponent toolComponent;
 
         if (stack.getItem() instanceof PartItem &&
-            Objects.nonNull(component = stack.get(BlueToolsComponentTypes.PART.getValue())))
+            Objects.nonNull(partComponent = stack.get(BlueToolsComponentTypes.PART.getValue()))
+        )
         {
-            final @NotNull Identifier modelIdentifier = this.getModelIdentifier(component);
+            final @NotNull Identifier modelIdentifier = this.getModelIdentifier(partComponent);
+            final @NotNull ItemModelManager self = (ItemModelManager) (Object) this;
+            final @Nullable ClientWorld clientWorld = world instanceof ClientWorld w ? w : null;
+
+            renderState.setOversizedInGui(this.propertiesGetter.apply(modelIdentifier).oversizedInGui());
+            this.modelGetter.apply(modelIdentifier).update(renderState, stack, self, context, clientWorld, user, seed);
+
+            return null;
+        } else if (stack.getItem() instanceof ToolItem &&
+            Objects.nonNull(toolComponent = stack.get(BlueToolsComponentTypes.TOOL.getValue()))
+        )
+        {
+            final @NotNull Identifier modelIdentifier = this.getModelIdentifier(toolComponent);
             final @NotNull ItemModelManager self = (ItemModelManager) (Object) this;
             final @Nullable ClientWorld clientWorld = world instanceof ClientWorld w ? w : null;
 
@@ -93,6 +117,12 @@ public abstract class ItemModelManagerMixin {
     {
         if (stack.getItem() instanceof PartItem) {
             final @Nullable PartComponent component = stack.get(BlueToolsComponentTypes.PART.getValue());
+
+            if (Objects.isNull(component)) return original;
+
+            return this.propertiesGetter.apply(this.getModelIdentifier(component)).handAnimationOnSwap();
+        } else if (stack.getItem() instanceof ToolItem) {
+            final @Nullable ToolComponent component = stack.get(BlueToolsComponentTypes.TOOL.getValue());
 
             if (Objects.isNull(component)) return original;
 

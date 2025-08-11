@@ -16,8 +16,8 @@ public final class BlueToolsTintSources extends AutoLoader {
 
     public static final @NotNull TintSourceLoader<MaterialTintSource> MATERIAL =
         new TintSourceLoader<>("material", MaterialTintSource.CODEC);
-    public static final @NotNull TintSourceLoader<MaterialMapTintSource> MATERIAL_MAP =
-        new TintSourceLoader<>("material_map", MaterialMapTintSource.CODEC);
+    public static final @NotNull TintSourceLoader<ToolMaterialTintSource> TOOL_MATERIAL =
+        new TintSourceLoader<>("tool_material", ToolMaterialTintSource.CODEC);
 
     @Override
     public @NotNull Identifier getLoaderId() {

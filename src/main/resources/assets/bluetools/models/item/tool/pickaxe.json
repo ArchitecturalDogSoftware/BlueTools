@@ -1,0 +1,23 @@
+{
+    "parent": "bluetools:item/generated/handheld_tool_18_layers",
+    "textures": {
+        "layer0": "bluetools:item/tool/pickaxe_handle_layer0",
+        "layer1": "bluetools:item/tool/pickaxe_handle_layer1",
+        "layer2": "bluetools:item/tool/pickaxe_handle_layer2",
+        "layer3": "bluetools:item/tool/pickaxe_handle_layer3",
+        "layer4": "bluetools:item/tool/pickaxe_handle_layer4",
+        "layer5": "bluetools:item/tool/pickaxe_handle_layer5",
+        "layer6": "bluetools:item/tool/pickaxe_head_layer0",
+        "layer7": "bluetools:item/tool/pickaxe_head_layer1",
+        "layer8": "bluetools:item/tool/pickaxe_head_layer2",
+        "layer9": "bluetools:item/tool/pickaxe_head_layer3",
+        "layer10": "bluetools:item/tool/pickaxe_head_layer4",
+        "layer11": "bluetools:item/tool/pickaxe_head_layer5",
+        "layer12": "bluetools:item/tool/pickaxe_binding_layer0",
+        "layer13": "bluetools:item/tool/pickaxe_binding_layer1",
+        "layer14": "bluetools:item/tool/pickaxe_binding_layer2",
+        "layer15": "bluetools:item/tool/pickaxe_binding_layer3",
+        "layer16": "bluetools:item/tool/pickaxe_binding_layer4",
+        "layer17": "bluetools:item/tool/pickaxe_binding_layer5"
+    }
+}

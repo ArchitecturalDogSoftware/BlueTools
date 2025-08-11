@@ -50,6 +50,12 @@ public final class BlueToolsItems extends AutoLoader {
                 .modifyEntriesEvent(BlueToolsItemGroups.registryKey(BlueToolsItemGroups.PARTS))
                 .register(entries -> entries.addAll(self.getValue().getValidDefaultStacks()))
         );
+    public static final @NotNull AutoLoaded<ToolItem> TOOL = BlueToolsItems
+        .create(ToolItem.class, "tool", ToolItem::new)
+        .on(
+            CommonLoaded.class,
+            self -> {}
+        );
 
     private static <T extends Item> void addToItemGroup(
         final @NotNull AutoLoaded<T> self

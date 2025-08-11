@@ -10,8 +10,6 @@ import net.architecturaldog.bluetools.content.part.Part;
 import net.architecturaldog.bluetools.content.part.property.BlueToolsPartPropertyTypes;
 import net.architecturaldog.bluetools.content.resource.BlueToolsResources;
 import net.architecturaldog.bluetools.content.resource.JsonResourceManager;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.text.Text;
@@ -84,10 +82,6 @@ public class PartItem extends Item {
 
     @Override
     public @NotNull Text getName(final @NotNull ItemStack stack) {
-        if (!FabricLoader.getInstance().getEnvironmentType().equals(EnvType.CLIENT)) {
-            return super.getName(stack);
-        }
-
         return Text.translatable(
             Optional
                 .ofNullable(stack.get(BlueToolsComponentTypes.PART.getValue()))

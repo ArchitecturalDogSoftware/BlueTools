@@ -10,6 +10,9 @@ import net.architecturaldog.bluetools.content.material.property.MaterialProperty
 import net.architecturaldog.bluetools.content.part.Part;
 import net.architecturaldog.bluetools.content.part.PartType;
 import net.architecturaldog.bluetools.content.part.property.PartPropertyType;
+import net.architecturaldog.bluetools.content.tool.Tool;
+import net.architecturaldog.bluetools.content.tool.ToolType;
+import net.architecturaldog.bluetools.content.tool.property.ToolPropertyType;
 import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
@@ -29,6 +32,12 @@ public final class BlueToolsRegistries extends AutoLoader {
 
     public static final @NotNull Registry<PartType<?>> PART_TYPE =
         FabricRegistryBuilder.createSimple(Keys.PART_TYPE).buildAndRegister();
+
+    public static final @NotNull Registry<ToolPropertyType<?>> TOOL_PROPERTY_TYPE =
+        FabricRegistryBuilder.createSimple(Keys.TOOL_PROPERTY_TYPE).buildAndRegister();
+
+    public static final @NotNull Registry<ToolType<?>> TOOL_TYPE =
+        FabricRegistryBuilder.createSimple(Keys.TOOL_TYPE).buildAndRegister();
 
     @Override
     public @NotNull Identifier getLoaderId() {
@@ -60,6 +69,15 @@ public final class BlueToolsRegistries extends AutoLoader {
 
         public static final @NotNull RegistryKey<Registry<Part>> PART =
             RegistryKey.ofRegistry(BlueTools.id("part"));
+
+        public static final @NotNull RegistryKey<Registry<ToolPropertyType<?>>> TOOL_PROPERTY_TYPE =
+            RegistryKey.ofRegistry(BlueTools.id("tool_property_type"));
+
+        public static final @NotNull RegistryKey<Registry<ToolType<?>>> TOOL_TYPE =
+            RegistryKey.ofRegistry(BlueTools.id("tool_type"));
+
+        public static final @NotNull RegistryKey<Registry<Tool>> TOOL =
+            RegistryKey.ofRegistry(BlueTools.id("tool"));
 
     }
 

@@ -8,6 +8,7 @@ import net.architecturaldog.bluetools.content.material.Material;
 import net.architecturaldog.bluetools.content.material.MaterialIngredient;
 import net.architecturaldog.bluetools.content.material.MiningLevel;
 import net.architecturaldog.bluetools.content.part.Part;
+import net.architecturaldog.bluetools.content.tool.Tool;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.NotNull;
@@ -36,7 +37,7 @@ public final class BlueToolsResources extends AutoLoader {
             "material_ingredient",
             BlueToolsRegistries.Keys.MATERIAL_INGREDIENT,
             MaterialIngredient.CODEC.codec(),
-            List.of(BlueToolsResources.MATERIAL.getLoaderId())
+            List.of(BlueToolsResources.MATERIAL.getFabricId())
         )
         {
 
@@ -72,8 +73,19 @@ public final class BlueToolsResources extends AutoLoader {
 
         };
 
-    public static final @NotNull SimpleJsonResourceManager<Part> PART =
-        new SimpleJsonResourceManager<>("part", BlueToolsRegistries.Keys.PART, Part.CODEC);
+    public static final @NotNull SimpleJsonResourceManager<Part> PART = new SimpleJsonResourceManager<>(
+        "part",
+        BlueToolsRegistries.Keys.PART,
+        Part.CODEC,
+        List.of(BlueToolsResources.MATERIAL.getFabricId())
+    );
+
+    public static final @NotNull SimpleJsonResourceManager<Tool> TOOL = new SimpleJsonResourceManager<>(
+        "tool",
+        BlueToolsRegistries.Keys.TOOL,
+        Tool.CODEC,
+        List.of(BlueToolsResources.MATERIAL.getFabricId(), BlueToolsResources.PART.getFabricId())
+    );
 
     @Override
     public @NotNull Identifier getLoaderId() {

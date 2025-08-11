@@ -32,6 +32,14 @@ public final class BlueToolsItemGroups extends AutoLoader {
             .icon(() -> BlueToolsItems.PART.getValue().getDefaultStack())
             .build()
     );
+    public static final @NotNull AutoLoaded<ItemGroup> TOOLS = BlueToolsItemGroups.create(
+        "tools",
+        FabricItemGroup
+            .builder()
+            .displayName(Text.translatable(BlueTools.id("tools").toTranslationKey("itemGroup")))
+            .icon(() -> BlueToolsItems.PART.getValue().getDefaultStack())
+            .build()
+    );
 
     public static @NotNull RegistryKey<ItemGroup> registryKey(final @NotNull AutoLoaded<? extends ItemGroup> loaded) {
         return RegistryKey.of(RegistryKeys.ITEM_GROUP, loaded.getLoaderId());

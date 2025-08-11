@@ -1,0 +1,13 @@
+{
+    "type": "bluetools:simple",
+    "properties": [
+        {
+            "type": "bluetools:parts",
+            "parts": {
+                "head": "bluetools:pickaxe_head",
+                "handle": "bluetools:medium_handle",
+                "binding": "bluetools:light_binding"
+            }
+        }
+    ]
+}

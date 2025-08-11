@@ -15,6 +15,8 @@ import net.architecturaldog.bluetools.content.part.BlueToolsPartTypes;
 import net.architecturaldog.bluetools.content.part.property.BlueToolsPartPropertyTypes;
 import net.architecturaldog.bluetools.content.resource.BlueToolsResources;
 import net.architecturaldog.bluetools.content.screen.BlueToolsScreenHandlerTypes;
+import net.architecturaldog.bluetools.content.tool.BlueToolsToolTypes;
+import net.architecturaldog.bluetools.content.tool.property.BlueToolsToolPropertyTypes;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.NotNull;
 
@@ -48,6 +50,10 @@ public final class BlueToolsContent extends AutoLoader {
         new BlueToolsResources();
     public static final @NotNull BlueToolsScreenHandlerTypes SCREEN_HANDLER_TYPES =
         new BlueToolsScreenHandlerTypes();
+    public static final @NotNull BlueToolsToolPropertyTypes TOOL_PROPERTY_TYPES =
+        new BlueToolsToolPropertyTypes();
+    public static final @NotNull BlueToolsToolTypes TOOL_TYPES =
+        new BlueToolsToolTypes();
 
     @Override
     public @NotNull Identifier getLoaderId() {
