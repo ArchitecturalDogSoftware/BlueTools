@@ -25,7 +25,7 @@ public record MaterialTintSource(@NotNull ColorProperty.PaletteColor paletteColo
     public static final @NotNull MapCodec<MaterialTintSource> CODEC = RecordCodecBuilder.mapCodec(instance -> instance
         .group(
             ColorProperty.PaletteColor.CODEC.fieldOf("palette_color").forGetter(MaterialTintSource::paletteColor),
-            Codecs.RGB.optionalFieldOf("default", 0xFFFFFF).forGetter(MaterialTintSource::defaultColor)
+            Codecs.RGB.optionalFieldOf("default", 0xFFFFFFFF).forGetter(MaterialTintSource::defaultColor)
         )
         .apply(instance, MaterialTintSource::new)
     );
