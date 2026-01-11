@@ -4,6 +4,5 @@ accessible class net/minecraft/client/render/model/json/GeneratedItemModel$class
 accessible class net/minecraft/client/render/model/json/GeneratedItemModel$Side
 accessible method net/minecraft/block/entity/BlockEntityType <init> (Lnet/minecraft/block/entity/BlockEntityType$BlockEntityFactory;Ljava/util/Set;)V
 accessible method net/minecraft/client/render/model/json/GeneratedItemModel$Side isVertical ()Z
-extendable method net/minecraft/resource/SinglePreparationResourceReloader reload (Lnet/minecraft/resource/ResourceReloader$Store;Ljava/util/concurrent/Executor;Lnet/minecraft/resource/ResourceReloader$Synchronizer;Ljava/util/concurrent/Executor;)Ljava/util/concurrent/CompletableFuture;
 accessible field net/minecraft/client/render/model/json/GeneratedItemModel FACING_NORTH_UV Lnet/minecraft/client/render/model/json/ModelElementFace$UV;
 accessible field net/minecraft/client/render/model/json/GeneratedItemModel FACING_SOUTH_UV Lnet/minecraft/client/render/model/json/ModelElementFace$UV;
