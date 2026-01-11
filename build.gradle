@@ -30,7 +30,7 @@ dependencies {
 }
 
 loom {
-    accessWidenerPath = file("src/main/resources/bluetools.accesswidener")
+    accessWidenerPath = file("src/main/resources/bluetools.classtweaker")
 }
 
 processResources {
@@ -65,18 +65,5 @@ jar {
 
     from('LICENSE') {
         rename { "${it}_${inputs.properties.archivesName}" }
-    }
-}
-
-publishing {
-    publications {
-        create('mavenJava', MavenPublication) {
-            artifactId = project.archives_base_name
-
-            from components.java
-        }
-    }
-
-    repositories {
     }
 }

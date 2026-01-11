@@ -29,62 +29,62 @@ public final class BlueToolsResources extends AutoLoader {
         "material",
         BlueToolsRegistries.Keys.MATERIAL,
         Material.CODEC,
-        List.of(BlueToolsResources.MINING_LEVEL.getFabricId())
+        List.of(BlueToolsResources.MINING_LEVEL.getLoaderId())
     );
 
-    public static final @NotNull SimpleJsonResourceManager<MaterialIngredient> MATERIAL_INGREDIENT =
-        new SimpleJsonResourceManager<>(
-            "material_ingredient",
-            BlueToolsRegistries.Keys.MATERIAL_INGREDIENT,
-            MaterialIngredient.CODEC.codec(),
-            List.of(BlueToolsResources.MATERIAL.getFabricId())
-        )
-        {
+    public static final @NotNull SimpleJsonResourceManager<MaterialIngredient> MATERIAL_INGREDIENT = new SimpleJsonResourceManager<>(
+        "material_ingredient",
+        BlueToolsRegistries.Keys.MATERIAL_INGREDIENT,
+        MaterialIngredient.CODEC.codec(),
+        List.of(BlueToolsResources.MATERIAL.getLoaderId())
+    )
+    {
 
-            private @UnknownNullability Map<MaterialIngredient.Ingredient, RegistryKey<MaterialIngredient>> ingredientCache;
+        private @UnknownNullability Map<MaterialIngredient.Ingredient, RegistryKey<MaterialIngredient>> ingredientCache;
 
-            @Override
-            protected void prepareVerification() {
-                this.ingredientCache = new Object2ObjectOpenHashMap<>(this.getEntries().size());
+        @Override
+        protected void prepareVerification() {
+            this.ingredientCache = new Object2ObjectOpenHashMap<>(this.getEntries().size());
+        }
+
+        @Override
+        protected void cleanupVerification() {
+            this.ingredientCache = null;
+        }
+
+        @Override
+        protected boolean verifyEntry(final @NotNull Entry<MaterialIngredient> entry) {
+            if (!this.ingredientCache.containsKey(entry.value().ingredient())) {
+                this.ingredientCache.put(entry.value().ingredient(), entry.key());
+
+                return super.verifyEntry(entry);
             }
 
-            @Override
-            protected void cleanupVerification() {
-                this.ingredientCache = null;
-            }
-
-            @Override
-            protected boolean verifyEntry(final @NotNull Entry<MaterialIngredient> entry) {
-                if (!this.ingredientCache.containsKey(entry.value().ingredient())) {
-                    this.ingredientCache.put(entry.value().ingredient(), entry.key());
-
-                    return super.verifyEntry(entry);
-                }
-
-                BlueTools.LOGGER.error(
+            BlueTools.LOGGER
+                .error(
                     "Duplicate ingredients for JSON manager '{}': {}, {}",
                     this.getName(),
                     this.ingredientCache.get(entry.value().ingredient()),
                     entry.key()
                 );
 
-                return false;
-            }
+            return false;
+        }
 
-        };
+    };
 
     public static final @NotNull SimpleJsonResourceManager<Part> PART = new SimpleJsonResourceManager<>(
         "part",
         BlueToolsRegistries.Keys.PART,
         Part.CODEC,
-        List.of(BlueToolsResources.MATERIAL.getFabricId())
+        List.of(BlueToolsResources.MATERIAL.getLoaderId())
     );
 
     public static final @NotNull SimpleJsonResourceManager<Tool> TOOL = new SimpleJsonResourceManager<>(
         "tool",
         BlueToolsRegistries.Keys.TOOL,
         Tool.CODEC,
-        List.of(BlueToolsResources.MATERIAL.getFabricId(), BlueToolsResources.PART.getFabricId())
+        List.of(BlueToolsResources.MATERIAL.getLoaderId(), BlueToolsResources.PART.getLoaderId())
     );
 
     @Override

@@ -21,23 +21,29 @@ import org.jetbrains.annotations.NotNull;
 
 public final class BlueToolsRegistries extends AutoLoader {
 
-    public static final @NotNull Registry<MaterialPropertyType<?>> MATERIAL_PROPERTY_TYPE =
-        FabricRegistryBuilder.createSimple(Keys.MATERIAL_PROPERTY_TYPE).buildAndRegister();
+    public static final @NotNull Registry<MaterialPropertyType<?>> MATERIAL_PROPERTY_TYPE = FabricRegistryBuilder
+        .createSimple(Keys.MATERIAL_PROPERTY_TYPE)
+        .buildAndRegister();
 
-    public static final @NotNull Registry<MaterialType<?>> MATERIAL_TYPE =
-        FabricRegistryBuilder.createSimple(Keys.MATERIAL_TYPE).buildAndRegister();
+    public static final @NotNull Registry<MaterialType<?>> MATERIAL_TYPE = FabricRegistryBuilder
+        .createSimple(Keys.MATERIAL_TYPE)
+        .buildAndRegister();
 
-    public static final @NotNull Registry<PartPropertyType<?>> PART_PROPERTY_TYPE =
-        FabricRegistryBuilder.createSimple(Keys.PART_PROPERTY_TYPE).buildAndRegister();
+    public static final @NotNull Registry<PartPropertyType<?>> PART_PROPERTY_TYPE = FabricRegistryBuilder
+        .createSimple(Keys.PART_PROPERTY_TYPE)
+        .buildAndRegister();
 
-    public static final @NotNull Registry<PartType<?>> PART_TYPE =
-        FabricRegistryBuilder.createSimple(Keys.PART_TYPE).buildAndRegister();
+    public static final @NotNull Registry<PartType<?>> PART_TYPE = FabricRegistryBuilder
+        .createSimple(Keys.PART_TYPE)
+        .buildAndRegister();
 
-    public static final @NotNull Registry<ToolPropertyType<?>> TOOL_PROPERTY_TYPE =
-        FabricRegistryBuilder.createSimple(Keys.TOOL_PROPERTY_TYPE).buildAndRegister();
+    public static final @NotNull Registry<ToolPropertyType<?>> TOOL_PROPERTY_TYPE = FabricRegistryBuilder
+        .createSimple(Keys.TOOL_PROPERTY_TYPE)
+        .buildAndRegister();
 
-    public static final @NotNull Registry<ToolType<?>> TOOL_TYPE =
-        FabricRegistryBuilder.createSimple(Keys.TOOL_TYPE).buildAndRegister();
+    public static final @NotNull Registry<ToolType<?>> TOOL_TYPE = FabricRegistryBuilder
+        .createSimple(Keys.TOOL_TYPE)
+        .buildAndRegister();
 
     @Override
     public @NotNull Identifier getLoaderId() {
@@ -46,38 +52,36 @@ public final class BlueToolsRegistries extends AutoLoader {
 
     public static final class Keys {
 
-        public static final @NotNull RegistryKey<Registry<MaterialIngredient>> MATERIAL_INGREDIENT =
-            RegistryKey.ofRegistry(BlueTools.id("material_ingredient"));
+        public static final @NotNull RegistryKey<Registry<MaterialIngredient>> MATERIAL_INGREDIENT = RegistryKey
+            .ofRegistry(BlueTools.id("material_ingredient"));
 
-        public static final @NotNull RegistryKey<Registry<MaterialPropertyType<?>>> MATERIAL_PROPERTY_TYPE =
-            RegistryKey.ofRegistry(BlueTools.id("material_property_type"));
+        public static final @NotNull RegistryKey<Registry<MaterialPropertyType<?>>> MATERIAL_PROPERTY_TYPE = RegistryKey
+            .ofRegistry(BlueTools.id("material_property_type"));
 
-        public static final @NotNull RegistryKey<Registry<MaterialType<?>>> MATERIAL_TYPE =
-            RegistryKey.ofRegistry(BlueTools.id("material_type"));
+        public static final @NotNull RegistryKey<Registry<MaterialType<?>>> MATERIAL_TYPE = RegistryKey
+            .ofRegistry(BlueTools.id("material_type"));
 
-        public static final @NotNull RegistryKey<Registry<Material>> MATERIAL =
-            RegistryKey.ofRegistry(BlueTools.id("material"));
+        public static final @NotNull RegistryKey<Registry<Material>> MATERIAL = RegistryKey
+            .ofRegistry(BlueTools.id("material"));
 
-        public static final @NotNull RegistryKey<Registry<MiningLevel>> MINING_LEVEL =
-            RegistryKey.ofRegistry(BlueTools.id("mining_level"));
+        public static final @NotNull RegistryKey<Registry<MiningLevel>> MINING_LEVEL = RegistryKey
+            .ofRegistry(BlueTools.id("mining_level"));
 
-        public static final @NotNull RegistryKey<Registry<PartPropertyType<?>>> PART_PROPERTY_TYPE =
-            RegistryKey.ofRegistry(BlueTools.id("part_property_type"));
+        public static final @NotNull RegistryKey<Registry<PartPropertyType<?>>> PART_PROPERTY_TYPE = RegistryKey
+            .ofRegistry(BlueTools.id("part_property_type"));
 
-        public static final @NotNull RegistryKey<Registry<PartType<?>>> PART_TYPE =
-            RegistryKey.ofRegistry(BlueTools.id("part_type"));
+        public static final @NotNull RegistryKey<Registry<PartType<?>>> PART_TYPE = RegistryKey
+            .ofRegistry(BlueTools.id("part_type"));
 
-        public static final @NotNull RegistryKey<Registry<Part>> PART =
-            RegistryKey.ofRegistry(BlueTools.id("part"));
+        public static final @NotNull RegistryKey<Registry<Part>> PART = RegistryKey.ofRegistry(BlueTools.id("part"));
 
-        public static final @NotNull RegistryKey<Registry<ToolPropertyType<?>>> TOOL_PROPERTY_TYPE =
-            RegistryKey.ofRegistry(BlueTools.id("tool_property_type"));
+        public static final @NotNull RegistryKey<Registry<ToolPropertyType<?>>> TOOL_PROPERTY_TYPE = RegistryKey
+            .ofRegistry(BlueTools.id("tool_property_type"));
 
-        public static final @NotNull RegistryKey<Registry<ToolType<?>>> TOOL_TYPE =
-            RegistryKey.ofRegistry(BlueTools.id("tool_type"));
+        public static final @NotNull RegistryKey<Registry<ToolType<?>>> TOOL_TYPE = RegistryKey
+            .ofRegistry(BlueTools.id("tool_type"));
 
-        public static final @NotNull RegistryKey<Registry<Tool>> TOOL =
-            RegistryKey.ofRegistry(BlueTools.id("tool"));
+        public static final @NotNull RegistryKey<Registry<Tool>> TOOL = RegistryKey.ofRegistry(BlueTools.id("tool"));
 
     }
 

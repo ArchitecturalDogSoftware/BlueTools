@@ -5,30 +5,41 @@
     "name": "BlueTools",
     "description": "Da ba dee. Da ba di.",
     "icon": "assets/bluetools/icon.png",
-    "authors": [ "Jaxydog", "IcePenguin" ],
-    "contributors": [ ],
+    "authors": [
+        "Jaxydog",
+        "IcePenguin"
+    ],
+    "contributors": [],
     "license": "AGPL-3.0-or-later",
     "contact": {
         "sources": "https://github.com/ArchitecturalDogSoftware/BlueTools",
         "issues": "https://github.com/ArchitecturalDogSoftware/BlueTools/issues"
     },
-
     "environment": "*",
-    "mixins": [ "bluetools.mixins.json" ],
-    "accessWidener": "bluetools.accesswidener",
+    "mixins": [
+        "bluetools.mixins.json"
+    ],
+    "accessWidener": "bluetools.classtweaker",
     "entrypoints": {
-        "main": [ "net.architecturaldog.bluetools.BlueTools" ],
-        "client": [ "net.architecturaldog.bluetools.BlueToolsClient" ],
-        "server": [ "net.architecturaldog.bluetools.BlueToolsServer" ],
-        "fabric-datagen": [ "net.architecturaldog.bluetools.datagen.BlueToolsDataGenerator" ]
+        "main": [
+            "net.architecturaldog.bluetools.BlueTools"
+        ],
+        "client": [
+            "net.architecturaldog.bluetools.BlueToolsClient"
+        ],
+        "server": [
+            "net.architecturaldog.bluetools.BlueToolsServer"
+        ],
+        "fabric-datagen": [
+            "net.architecturaldog.bluetools.datagen.BlueToolsDataGenerator"
+        ]
     },
     "custom": {
-        "loom:injected_interfaces": { }
+        "loom:injected_interfaces": {}
     },
-
     "depends": {
-        "fabricloader": ">=0.16.14",
-        "minecraft": "~1.21.5",
+        "fabricloader": ">=0.18.4",
+        "minecraft": "~1.21.11",
         "java": ">=21",
         "fabric-api": "*",
         "lodestone": "*"

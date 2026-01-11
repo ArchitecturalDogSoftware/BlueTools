@@ -97,7 +97,7 @@ public class ForgeInterfaceBlock extends BlockWithEntity implements CustomBlock 
         if (!state.get(ACTIVE)) {
             return ActionResult.PASS;
         }
-        if (!world.isClient) {
+        if (!world.isClient()) {
             if (world.getBlockEntity(pos) instanceof ForgeInterfaceBlockEntity block) {
                 player.openHandledScreen(block);
             }

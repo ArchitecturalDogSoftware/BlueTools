@@ -18,6 +18,7 @@ import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemDisplayContext;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.HeldItemContext;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
@@ -45,18 +46,20 @@ public abstract class ItemModelManagerMixin {
 
     @Unique
     private @NotNull Identifier getModelIdentifier(final @NotNull PartComponent component) {
-        return Identifier.of(
-            component.partEntry().key().getValue().getNamespace(),
-            "part/" + component.partEntry().key().getValue().getPath()
-        );
+        return Identifier
+            .of(
+                component.partEntry().key().getValue().getNamespace(),
+                "part/" + component.partEntry().key().getValue().getPath()
+            );
     }
 
     @Unique
     private @NotNull Identifier getModelIdentifier(final @NotNull ToolComponent component) {
-        return Identifier.of(
-            component.toolEntry().key().getValue().getNamespace(),
-            "tool/" + component.toolEntry().key().getValue().getPath()
-        );
+        return Identifier
+            .of(
+                component.toolEntry().key().getValue().getNamespace(),
+                "tool/" + component.toolEntry().key().getValue().getPath()
+            );
     }
 
     @ModifyExpressionValue(
@@ -68,11 +71,16 @@ public abstract class ItemModelManagerMixin {
     )
     private @Nullable Object overridePartUpdate(
         final @Nullable Object original,
-        final @NotNull @Local(argsOnly = true) ItemRenderState renderState,
-        final @NotNull @Local(argsOnly = true) ItemStack stack,
-        final @NotNull @Local(argsOnly = true) ItemDisplayContext context,
-        final @Nullable @Local(argsOnly = true) World world,
-        final @Nullable @Local(argsOnly = true) LivingEntity user,
+        final @NotNull
+        @Local(argsOnly = true) ItemRenderState renderState,
+        final @NotNull
+        @Local(argsOnly = true) ItemStack stack,
+        final @NotNull
+        @Local(argsOnly = true) ItemDisplayContext displayContext,
+        final @Nullable
+        @Local(argsOnly = true) World world,
+        final @Nullable
+        @Local(argsOnly = true) HeldItemContext context,
         final @Local(argsOnly = true) int seed
     )
     {
@@ -88,7 +96,10 @@ public abstract class ItemModelManagerMixin {
             final @Nullable ClientWorld clientWorld = world instanceof ClientWorld w ? w : null;
 
             renderState.setOversizedInGui(this.propertiesGetter.apply(modelIdentifier).oversizedInGui());
-            this.modelGetter.apply(modelIdentifier).update(renderState, stack, self, context, clientWorld, user, seed);
+
+            this.modelGetter
+                .apply(modelIdentifier)
+                .update(renderState, stack, self, displayContext, clientWorld, context, seed);
 
             return null;
         } else if (stack.getItem() instanceof ToolItem &&
@@ -100,7 +111,10 @@ public abstract class ItemModelManagerMixin {
             final @Nullable ClientWorld clientWorld = world instanceof ClientWorld w ? w : null;
 
             renderState.setOversizedInGui(this.propertiesGetter.apply(modelIdentifier).oversizedInGui());
-            this.modelGetter.apply(modelIdentifier).update(renderState, stack, self, context, clientWorld, user, seed);
+
+            this.modelGetter
+                .apply(modelIdentifier)
+                .update(renderState, stack, self, displayContext, clientWorld, context, seed);
 
             return null;
         }
@@ -111,8 +125,10 @@ public abstract class ItemModelManagerMixin {
     @ModifyReturnValue(method = "hasHandAnimationOnSwap", at = @At("RETURN"))
     private boolean overridePartHasHandAnimationOnSwap(
         final boolean original,
-        final @NotNull @Local(argsOnly = true) ItemStack stack,
-        final @Nullable @Local Identifier identifier
+        final @NotNull
+        @Local(argsOnly = true) ItemStack stack,
+        final @Nullable
+        @Local Identifier identifier
     )
     {
         if (stack.getItem() instanceof PartItem) {

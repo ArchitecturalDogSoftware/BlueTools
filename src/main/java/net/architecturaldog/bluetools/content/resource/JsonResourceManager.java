@@ -9,27 +9,19 @@ import dev.jaxydog.lodestone.api.CommonLoaded;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.architecturaldog.bluetools.BlueTools;
-import net.architecturaldog.bluetools.content.resource.ResourceManagerSynchronizer.ManagerState;
-import net.fabricmc.fabric.api.resource.IdentifiableResourceReloadListener;
-import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
+import net.fabricmc.fabric.api.resource.v1.ResourceLoader;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.resource.*;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.profiler.Profiler;
-import net.minecraft.util.profiler.Profilers;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.io.Reader;
 import java.util.*;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Executor;
-import java.util.stream.Stream;
 
-public abstract class JsonResourceManager<T> extends SinglePreparationResourceReloader<Map<Identifier, Resource>>
-    implements CommonLoaded, IdentifiableResourceReloadListener
-{
+public abstract class JsonResourceManager<T> extends SinglePreparationResourceReloader<Map<Identifier, Resource>> implements CommonLoaded {
 
     private final @NotNull RegistryKey<Registry<T>> registryKey;
     private final @NotNull Codec<T> codec;
@@ -53,7 +45,7 @@ public abstract class JsonResourceManager<T> extends SinglePreparationResourceRe
         this.fabricDependencies = fabricDependencies;
         this.resourceFinder = new ResourceFinder(this.registryKey.getValue().getPath(), ".json");
 
-        if (this.fabricDependencies.stream().anyMatch(identifier -> identifier.equals(this.getFabricId()))) {
+        if (this.fabricDependencies.stream().anyMatch(identifier -> identifier.equals(this.getLoaderId()))) {
             throw new IllegalArgumentException("Managers must not depend on themselves");
         }
     }
@@ -97,21 +89,19 @@ public abstract class JsonResourceManager<T> extends SinglePreparationResourceRe
     }
 
     public @NotNull Codec<T> getCodec() {
-        return this.getEntryCodec().flatComapMap(
-            Entry::value,
-            value -> this.getEntry(value).map(DataResult::success).orElseGet(
-                () -> DataResult.error(() -> "Unregistered value in %s: %s".formatted(this.registryKey, value))
-            )
-        );
+        return this.getEntryCodec().flatComapMap(Entry::value, value -> {
+            return this.getEntry(value).map(DataResult::success).orElseGet(() -> {
+                return DataResult.error(() -> "Unregistered value in %s: %s".formatted(this.registryKey, value));
+            });
+        });
     }
 
     public @NotNull Codec<Entry<T>> getEntryCodec() {
-        return Identifier.CODEC.comapFlatMap(
-            identifier -> this.getEntry(identifier).map(DataResult::success).orElseGet(
-                () -> DataResult.error(() -> "Unknown registry key in %s: %s".formatted(this.registryKey, identifier))
-            ),
-            entry -> entry.key().getValue()
-        );
+        return Identifier.CODEC.comapFlatMap(identifier -> {
+            return this.getEntry(identifier).map(DataResult::success).orElseGet(() -> {
+                return DataResult.error(() -> "Unknown registry key in %s: %s".formatted(this.registryKey, identifier));
+            });
+        }, entry -> entry.key().getValue());
     }
 
     @Override
@@ -119,43 +109,19 @@ public abstract class JsonResourceManager<T> extends SinglePreparationResourceRe
         return this.registryKey.getValue();
     }
 
-    @Override
-    public @NotNull Identifier getFabricId() {
-        return this.getLoaderId();
-    }
-
-    @Override
-    public @NotNull List<Identifier> getFabricDependencies() {
+    public @NotNull List<Identifier> getLoaderDependencies() {
         return List.copyOf(this.fabricDependencies);
     }
 
     @Override
     public void loadCommon() {
-        ResourceManagerSynchronizer.INSTANCE.setCurrentState(this, ManagerState.UNSPECIFIED);
+        final @NotNull ResourceLoader loader = ResourceLoader.get(ResourceType.SERVER_DATA);
 
-        ResourceManagerHelper.get(ResourceType.SERVER_DATA).registerReloadListener(this);
-    }
+        loader.registerReloader(this.getLoaderId(), this::reload);
 
-    protected @NotNull CompletableFuture<Void> waitForFabricDependencies(final @NotNull Executor executor) {
-        final @NotNull Stream<CompletableFuture<Void>> futures = this.getFabricDependencies().stream().map(
-            id -> ResourceManagerSynchronizer.INSTANCE.waitForLoader(id, ManagerState.FINISHED, executor)
-        );
-
-        return CompletableFuture.allOf(futures.toArray(CompletableFuture[]::new));
-    }
-
-    @Override
-    public @NotNull CompletableFuture<Void> reload(
-        final @NotNull Synchronizer synchronizer,
-        final @NotNull ResourceManager manager,
-        final @NotNull Executor prepareExecutor,
-        final @NotNull Executor applyExecutor
-    )
-    {
-        return CompletableFuture.supplyAsync(() -> this.prepare(manager, Profilers.get()), prepareExecutor)
-            .thenCompose(synchronizer::whenPrepared)
-            .thenComposeAsync(value -> this.waitForFabricDependencies(applyExecutor).thenApply(nothing -> value))
-            .thenAcceptAsync(prepared -> this.apply(prepared, manager, Profilers.get()), applyExecutor);
+        for (final @NotNull Identifier identifier : this.getLoaderDependencies()) {
+            loader.addReloaderOrdering(identifier, this.getLoaderId());
+        }
     }
 
     @Override
@@ -164,8 +130,6 @@ public abstract class JsonResourceManager<T> extends SinglePreparationResourceRe
         final @NotNull Profiler profiler
     )
     {
-        ResourceManagerSynchronizer.INSTANCE.setCurrentState(this, ManagerState.PREPARING);
-
         return this.resourceFinder.findResources(manager);
     }
 
@@ -176,8 +140,6 @@ public abstract class JsonResourceManager<T> extends SinglePreparationResourceRe
         final @NotNull Profiler profiler
     )
     {
-        ResourceManagerSynchronizer.INSTANCE.setCurrentState(this, ManagerState.APPLYING);
-
         final @NotNull Map<RegistryKey<T>, Entry<T>> loadedEntries = new Object2ObjectOpenHashMap<>(prepared.size());
 
         for (final @NotNull Map.Entry<Identifier, Resource> resourceEntry : prepared.entrySet()) {
@@ -194,10 +156,8 @@ public abstract class JsonResourceManager<T> extends SinglePreparationResourceRe
             }
 
             try {
-                final @NotNull DataResult<T> dataResult = this.codec.parse(
-                    JsonOps.INSTANCE,
-                    JsonParser.parseReader(reader)
-                );
+                final @NotNull DataResult<T> dataResult = this.codec
+                    .parse(JsonOps.INSTANCE, JsonParser.parseReader(reader));
 
                 dataResult.ifSuccess(value -> {
                     final @NotNull RegistryKey<T> registryKey = RegistryKey.of(this.registryKey, resourceId);
@@ -221,8 +181,6 @@ public abstract class JsonResourceManager<T> extends SinglePreparationResourceRe
 
         this.loadedEntries = loadedEntries;
 
-        ResourceManagerSynchronizer.INSTANCE.setCurrentState(this, ManagerState.VERIFYING);
-
         final @NotNull List<RegistryKey<T>> invalidEntries = new ObjectArrayList<>();
 
         this.prepareVerification();
@@ -236,8 +194,6 @@ public abstract class JsonResourceManager<T> extends SinglePreparationResourceRe
         invalidEntries.forEach(this.loadedEntries::remove);
 
         this.cleanupVerification();
-
-        ResourceManagerSynchronizer.INSTANCE.setCurrentState(this, ManagerState.FINISHED);
 
         BlueTools.LOGGER.info("Loaded {} entries for JSON manager '{}'", this.loadedEntries.size(), this.getName());
     }
