@@ -4,11 +4,8 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-import org.jetbrains.annotations.NotNullByDefault;
-
 import com.mojang.serialization.DataResult;
 
-@NotNullByDefault
 public sealed interface Fallible<T, E extends Exception> permits Fallible.Okay, Fallible.Error {
 
     @SuppressWarnings("unchecked")

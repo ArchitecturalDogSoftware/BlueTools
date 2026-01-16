@@ -1,19 +1,18 @@
 package net.architecturaldog.bluetools.utility;
 
+import java.util.List;
+import java.util.Objects;
+
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+
 import net.minecraft.network.RegistryByteBuf;
 import net.minecraft.network.codec.PacketCodec;
 import net.minecraft.network.codec.PacketCodecs;
 import net.minecraft.util.dynamic.Codecs;
 import net.minecraft.util.math.ColorHelper;
-import org.jetbrains.annotations.NotNullByDefault;
 
-import java.util.List;
-import java.util.Objects;
-
-@NotNullByDefault
 public record Color(int integer) {
 
     public static final Codec<Color> INT_CODEC = Codec.INT.xmap(Color::new, Color::integer);
@@ -43,11 +42,12 @@ public record Color(int integer) {
                 : "#%02X%02X%02X%02X".formatted(color.r(), color.g(), color.b(), color.a()))
         );
 
-    public static final Codec<Color> CODEC = Codec
-        .withAlternative(
-            Codec.withAlternative(Color.INT_CODEC, Color.MAP_CODEC.codec()),
-            Codec.withAlternative(Color.TUPLE_CODEC, Color.HEX_CODEC)
-        );
+    public static final Codec<Color> CODEC = BlueToolsCodecs
+        .chain(Color.INT_CODEC)
+        .chain(Color.TUPLE_CODEC)
+        .chain(Color.HEX_CODEC)
+        .chain(Color.MAP_CODEC)
+        .build();
 
     public static final PacketCodec<? super RegistryByteBuf, Color> PACKET_CODEC = PacketCodecs.INTEGER
         .xmap(Color::new, Color::integer);

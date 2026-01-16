@@ -1,5 +1,7 @@
 package net.architecturaldog.bluetools.content.block;
 
+import java.util.Set;
+
 import dev.jaxydog.lodestone.api.AutoLoaded;
 import dev.jaxydog.lodestone.api.AutoLoader;
 import dev.jaxydog.lodestone.api.CommonLoaded;
@@ -11,42 +13,42 @@ import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.Set;
 
 public final class BlueToolsBlockEntityTypes extends AutoLoader {
 
-    public static final @NotNull AutoLoaded<BlockEntityType<ForgeInterfaceBlockEntity>> FORGE_INTERFACE =
-        BlueToolsBlockEntityTypes.create(
-            "forge_interface",
-            ForgeInterfaceBlockEntity::new,
-            Set.of(BlueToolsBlocks.FORGE_INTERFACE)
-        );
+    public static final AutoLoaded<BlockEntityType<ForgeInterfaceBlockEntity>> FORGE_INTERFACE = BlueToolsBlockEntityTypes
+        .create("forge_interface", ForgeInterfaceBlockEntity::new, Set.of(BlueToolsBlocks.FORGE_INTERFACE));
 
-    private static <T extends BlockEntity> @NotNull AutoLoaded<BlockEntityType<T>> create(
-        final @NotNull String path,
-        final @NotNull BlockEntityType.BlockEntityFactory<T> factory,
-        final @NotNull Set<Block> blocks
+    private static <T extends BlockEntity> AutoLoaded<BlockEntityType<T>> create(
+        final String path,
+        final BlockEntityType.BlockEntityFactory<T> factory,
+        final Set<Block> blocks
     )
     {
         return BlueToolsBlockEntityTypes.create(BlueTools.id(path), factory, blocks);
     }
 
-    private static <T extends BlockEntity> @NotNull AutoLoaded<BlockEntityType<T>> create(
-        final @NotNull Identifier identifier,
-        final @NotNull BlockEntityType.BlockEntityFactory<T> factory,
-        final @NotNull Set<Block> blocks
+    private static <T extends BlockEntity> AutoLoaded<BlockEntityType<T>> create(
+        final Identifier identifier,
+        final BlockEntityType.BlockEntityFactory<T> factory,
+        final Set<Block> blocks
     )
     {
-        return new AutoLoaded<>(identifier, new BlockEntityType<>(factory, blocks)).on(
-            CommonLoaded.class,
-            self -> Registry.register(Registries.BLOCK_ENTITY_TYPE, self.getLoaderId(), self.getValue())
-        );
+        return BlueToolsBlockEntityTypes.create(identifier, new BlockEntityType<>(factory, blocks));
+    }
+
+    private static <T extends BlockEntity> AutoLoaded<BlockEntityType<T>> create(
+        final Identifier identifier,
+        final BlockEntityType<T> type
+    )
+    {
+        return new AutoLoaded<>(identifier, type).on(CommonLoaded.class, self -> {
+            Registry.register(Registries.BLOCK_ENTITY_TYPE, self.getLoaderId(), self.getValue());
+        });
     }
 
     @Override
-    public @NotNull Identifier getLoaderId() {
+    public Identifier getLoaderId() {
         return BlueTools.id("block_entity_types");
     }
 

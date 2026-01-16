@@ -7,12 +7,11 @@ import net.architecturaldog.bluetools.content.item.tint.BlueToolsTintSources;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import org.jetbrains.annotations.NotNull;
 
 @Environment(EnvType.CLIENT)
 public final class BlueToolsClient implements ClientModInitializer {
 
-    public static final @NotNull BlueToolsTintSources TINT_SOURCES = new BlueToolsTintSources();
+    public static final BlueToolsTintSources TINT_SOURCES = new BlueToolsTintSources();
 
     @Override
     public void onInitializeClient() {

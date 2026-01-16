@@ -1,26 +1,21 @@
 package net.architecturaldog.bluetools.content.tool.property;
 
 import com.mojang.serialization.MapCodec;
-import org.jetbrains.annotations.NotNull;
 
 public interface DefaultedToolPropertyType<P extends ToolProperty> extends ToolPropertyType<P> {
 
-    @NotNull P getDefault();
+    P getDefault();
 
-    static <P extends ToolProperty> @NotNull DefaultedToolPropertyType<P> of(
-        final @NotNull MapCodec<P> codec,
-        final @NotNull P defaultProperty
-    )
-    {
+    static <P extends ToolProperty> DefaultedToolPropertyType<P> of(final MapCodec<P> codec, final P defaultProperty) {
         return new DefaultedToolPropertyType<P>() {
 
             @Override
-            public @NotNull MapCodec<P> getCodec() {
+            public MapCodec<P> getCodec() {
                 return codec;
             }
 
             @Override
-            public @NotNull P getDefault() {
+            public P getDefault() {
                 return defaultProperty;
             }
 

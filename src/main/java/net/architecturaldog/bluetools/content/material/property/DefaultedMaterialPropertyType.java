@@ -1,28 +1,27 @@
 package net.architecturaldog.bluetools.content.material.property;
 
-import com.mojang.serialization.MapCodec;
-import org.jetbrains.annotations.NotNull;
-
 import java.util.function.Supplier;
+
+import com.mojang.serialization.MapCodec;
 
 public interface DefaultedMaterialPropertyType<P extends MaterialProperty> extends MaterialPropertyType<P> {
 
-    @NotNull P getDefault();
+    P getDefault();
 
-    static <P extends MaterialProperty> @NotNull DefaultedMaterialPropertyType<P> of(
-        final @NotNull MapCodec<P> codec,
-        final @NotNull Supplier<P> defaultProperty
+    static <P extends MaterialProperty> DefaultedMaterialPropertyType<P> of(
+        final MapCodec<P> codec,
+        final Supplier<P> defaultProperty
     )
     {
         return new DefaultedMaterialPropertyType<>() {
 
             @Override
-            public @NotNull MapCodec<P> getCodec() {
+            public MapCodec<P> getCodec() {
                 return codec;
             }
 
             @Override
-            public @NotNull P getDefault() {
+            public P getDefault() {
                 return defaultProperty.get();
             }
 

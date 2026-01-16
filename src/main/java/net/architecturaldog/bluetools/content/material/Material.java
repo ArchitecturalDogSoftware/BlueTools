@@ -1,47 +1,43 @@
 package net.architecturaldog.bluetools.content.material;
 
-import com.mojang.serialization.Codec;
-import net.architecturaldog.bluetools.content.BlueToolsRegistries;
-import net.architecturaldog.bluetools.content.material.property.DefaultedMaterialPropertyType;
-import net.architecturaldog.bluetools.content.material.property.MaterialProperty;
-import net.architecturaldog.bluetools.content.material.property.MaterialPropertyType;
-import org.jetbrains.annotations.NotNull;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
 
+import com.mojang.serialization.Codec;
+
+import net.architecturaldog.bluetools.content.BlueToolsRegistries;
+import net.architecturaldog.bluetools.content.material.property.DefaultedMaterialPropertyType;
+import net.architecturaldog.bluetools.content.material.property.MaterialProperty;
+import net.architecturaldog.bluetools.content.material.property.MaterialPropertyType;
+
 public interface Material {
 
-    @NotNull Codec<Material> CODEC = BlueToolsRegistries.MATERIAL_TYPE
+    Codec<Material> CODEC = BlueToolsRegistries.MATERIAL_TYPE
         .getCodec()
         .dispatch(Material::getType, MaterialType::getCodec);
 
-    @NotNull MaterialType<? extends Material> getType();
+    MaterialType<? extends Material> getType();
 
-    boolean hasProperty(final @NotNull MaterialPropertyType<?> type);
+    boolean hasProperty(final MaterialPropertyType<?> type);
 
-    <P extends MaterialProperty> @NotNull Optional<P> getProperty(final @NotNull MaterialPropertyType<P> type);
+    <P extends MaterialProperty> Optional<P> getProperty(final MaterialPropertyType<P> type);
 
-    @NotNull List<MaterialProperty> getProperties();
+    List<MaterialProperty> getProperties();
 
-    default <P extends MaterialProperty> @NotNull P getPropertyOr(
-        final @NotNull MaterialPropertyType<P> type,
-        final @NotNull P property
-    )
-    {
+    default <P extends MaterialProperty> P getPropertyOr(final MaterialPropertyType<P> type, final P property) {
         return this.getProperty(type).orElse(property);
     }
 
-    default <P extends MaterialProperty> @NotNull P getPropertyOrElse(
-        final @NotNull MaterialPropertyType<P> type,
-        final @NotNull Supplier<P> supplier
+    default <P extends MaterialProperty> P getPropertyOrElse(
+        final MaterialPropertyType<P> type,
+        final Supplier<P> supplier
     )
     {
         return this.getProperty(type).orElseGet(supplier);
     }
 
-    default <P extends MaterialProperty> @NotNull P getPropertyOrDefault(final @NotNull DefaultedMaterialPropertyType<P> type) {
+    default <P extends MaterialProperty> P getPropertyOrDefault(final DefaultedMaterialPropertyType<P> type) {
         return this.getPropertyOrElse(type, type::getDefault);
     }
 

@@ -1,47 +1,48 @@
 package net.architecturaldog.bluetools.content.material;
 
-import com.google.common.collect.ImmutableList;
-import com.mojang.serialization.MapCodec;
-import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.architecturaldog.bluetools.content.material.property.MaterialProperty;
-import net.architecturaldog.bluetools.content.material.property.MaterialPropertyType;
-import org.jetbrains.annotations.NotNull;
-
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-public record SimpleMaterial(@NotNull Map<MaterialPropertyType<?>, MaterialProperty> properties) implements Material {
+import com.google.common.collect.ImmutableList;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 
-    public static final @NotNull MapCodec<SimpleMaterial> CODEC = RecordCodecBuilder.mapCodec(instance -> instance
-        .group(MaterialProperty.CODEC.listOf().fieldOf("properties").forGetter(SimpleMaterial::getProperties))
-        .apply(instance, SimpleMaterial::new)
-    );
+import net.architecturaldog.bluetools.content.material.property.MaterialProperty;
+import net.architecturaldog.bluetools.content.material.property.MaterialPropertyType;
 
-    public SimpleMaterial(final @NotNull List<MaterialProperty> properties) {
+public record SimpleMaterial(Map<MaterialPropertyType<?>, MaterialProperty> properties) implements Material {
+
+    public static final MapCodec<SimpleMaterial> CODEC = RecordCodecBuilder.mapCodec(instance -> {
+        return instance
+            .group(MaterialProperty.CODEC.listOf().fieldOf("properties").forGetter(SimpleMaterial::getProperties))
+            .apply(instance, SimpleMaterial::new);
+    });
+
+    public SimpleMaterial(final List<MaterialProperty> properties) {
         this(properties.stream().collect(Collectors.toMap(MaterialProperty::getType, Function.identity())));
     }
 
     @Override
-    public @NotNull MaterialType<SimpleMaterial> getType() {
+    public MaterialType<SimpleMaterial> getType() {
         return BlueToolsMaterialTypes.SIMPLE.getValue();
     }
 
     @Override
-    public boolean hasProperty(final @NotNull MaterialPropertyType<?> type) {
+    public boolean hasProperty(final MaterialPropertyType<?> type) {
         return this.properties.containsKey(type);
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public <P extends MaterialProperty> @NotNull Optional<P> getProperty(final @NotNull MaterialPropertyType<P> type) {
+    public <P extends MaterialProperty> Optional<P> getProperty(final MaterialPropertyType<P> type) {
         return Optional.ofNullable((P) this.properties.get(type));
     }
 
     @Override
-    public @NotNull List<MaterialProperty> getProperties() {
+    public List<MaterialProperty> getProperties() {
         return ImmutableList.copyOf(this.properties.values());
     }
 

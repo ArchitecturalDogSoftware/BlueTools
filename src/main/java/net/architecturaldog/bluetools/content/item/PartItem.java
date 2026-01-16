@@ -1,5 +1,14 @@
 package net.architecturaldog.bluetools.content.item;
 
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.function.BiFunction;
+import java.util.function.Predicate;
+import java.util.stream.Stream;
+
+import org.jetbrains.annotations.Nullable;
+
 import net.architecturaldog.bluetools.content.component.BlueToolsComponentTypes;
 import net.architecturaldog.bluetools.content.component.MaterialComponent;
 import net.architecturaldog.bluetools.content.component.PartComponent;
@@ -9,28 +18,20 @@ import net.architecturaldog.bluetools.content.material.UpgradeMaterial;
 import net.architecturaldog.bluetools.content.part.Part;
 import net.architecturaldog.bluetools.content.part.property.BlueToolsPartPropertyTypes;
 import net.architecturaldog.bluetools.content.resource.BlueToolsResources;
-import net.architecturaldog.bluetools.content.resource.JsonResourceManager;
+import net.architecturaldog.bluetools.content.resource.JsonResourceManager.Entry;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.function.BiFunction;
-import java.util.function.Predicate;
-import java.util.stream.Stream;
 
 public class PartItem extends Item {
 
-    public PartItem(final @NotNull Settings settings) {
+    public PartItem(final Settings settings) {
         super(settings);
     }
 
-    protected static @NotNull Optional<Text> getTooltipForStack(final @NotNull ItemStack stack) {
+    protected static Optional<Text> getTooltipForStack(final ItemStack stack) {
         if (!(stack.getItem() instanceof final PartItem item)) return Optional.empty();
 
         final @Nullable MaterialComponent material = stack.get(BlueToolsComponentTypes.MATERIAL.getValue());
@@ -38,74 +39,76 @@ public class PartItem extends Item {
 
         if (Objects.isNull(material) || Objects.isNull(part)) return Optional.empty();
 
-        return Optional.of(Text.translatable(
-            "item.partMaterialValue",
-            Text.translatable(material.materialEntry().key().getValue().toTranslationKey("material")),
-            item.getMaterialValue(stack).orElseGet(() -> new MaterialValue.Ingots(1L)).getText()
-        ).formatted(Formatting.GRAY));
+        final Text materialText = Text
+            .translatable(material.materialEntry().key().getValue().toTranslationKey("material"));
+        final Text valueText = item.getMaterialValue(stack).orElseGet(() -> new MaterialValue.Ingots(1L)).getText();
+        final MutableText tooltipText = Text.translatable("item.partMaterialValue", materialText, valueText);
+
+        return Optional.of(tooltipText.formatted(Formatting.GRAY));
     }
 
-    protected static @NotNull Stream<ItemStack> getValidDefaultStackStream(
-        final @NotNull Predicate<JsonResourceManager.Entry<Part>> partPredicate,
-        final @NotNull Predicate<JsonResourceManager.Entry<Material>> materialPredicate,
-        final @NotNull BiFunction<JsonResourceManager.Entry<Part>, JsonResourceManager.Entry<Material>, ItemStack> defaultStack
+    protected static Stream<ItemStack> getValidDefaultStackStream(
+        final Predicate<Entry<Part>> partPredicate,
+        final Predicate<Entry<Material>> materialPredicate,
+        final BiFunction<Entry<Part>, Entry<Material>, ItemStack> defaultStack
     )
     {
-        return BlueToolsResources.MATERIAL.getSortedEntries().stream().filter(materialPredicate).flatMap(
-            material -> BlueToolsResources.PART.getSortedEntries().stream().filter(
-                part -> part.value().getPropertyOrDefault(
-                    BlueToolsPartPropertyTypes.MATERIALS.getValue()
-                ).permitsMaterial(material)
-            ).filter(partPredicate).sorted(BlueToolsResources.PART.getEntryComparator()).map(
-                part -> defaultStack.apply(part, material)
-            )
-        );
+        return BlueToolsResources.MATERIAL.getSortedEntries().stream().filter(materialPredicate).flatMap(material -> {
+            final Predicate<Entry<Part>> permitsMaterialPredicate = part -> part
+                .value()
+                .getPropertyOrDefault(BlueToolsPartPropertyTypes.MATERIALS.getValue())
+                .permitsMaterial(material);
+
+            return BlueToolsResources.PART
+                .getSortedEntries()
+                .stream()
+                .filter(permitsMaterialPredicate)
+                .filter(partPredicate)
+                .sorted(BlueToolsResources.PART.getEntryComparator())
+                .map(part -> defaultStack.apply(part, material));
+        });
     }
 
-    public @NotNull Optional<Part> getPart(final @NotNull ItemStack stack) {
+    public Optional<Part> getPart(final ItemStack stack) {
         return Optional
             .ofNullable(stack.get(BlueToolsComponentTypes.PART.getValue()))
             .map(component -> component.partEntry().value());
     }
 
-    public @NotNull Optional<Material> getMaterial(final @NotNull ItemStack stack) {
+    public Optional<Material> getMaterial(final ItemStack stack) {
         return Optional
             .ofNullable(stack.get(BlueToolsComponentTypes.MATERIAL.getValue()))
             .map(component -> component.materialEntry().value());
     }
 
-    public @NotNull Optional<MaterialValue> getMaterialValue(final @NotNull ItemStack stack) {
-        return this.getPart(stack).map(
-            part -> part.getPropertyOrDefault(BlueToolsPartPropertyTypes.MATERIAL_VALUE.getValue()).value()
-        );
+    public Optional<MaterialValue> getMaterialValue(final ItemStack stack) {
+        return this
+            .getPart(stack)
+            .map(part -> part.getPropertyOrDefault(BlueToolsPartPropertyTypes.MATERIAL_VALUE.getValue()).value());
     }
 
     @Override
-    public @NotNull Text getName(final @NotNull ItemStack stack) {
-        return Text.translatable(
-            Optional
-                .ofNullable(stack.get(BlueToolsComponentTypes.PART.getValue()))
-                .map(component -> component.partEntry().key().getValue().toTranslationKey("part"))
-                .orElse("part.missing"),
-            Text.translatable(Optional
-                .ofNullable(stack.get(BlueToolsComponentTypes.MATERIAL.getValue()))
-                .map(component -> component.materialEntry().key().getValue().toTranslationKey("material"))
-                .orElse("material.missing"))
-        );
+    public Text getName(final ItemStack stack) {
+        final String partTranslationKey = Optional
+            .ofNullable(stack.get(BlueToolsComponentTypes.PART.getValue()))
+            .map(component -> component.partEntry().key().getValue().toTranslationKey("part"))
+            .orElse("part.missing");
+        final String materialTranslationKey = Optional
+            .ofNullable(stack.get(BlueToolsComponentTypes.MATERIAL.getValue()))
+            .map(component -> component.materialEntry().key().getValue().toTranslationKey("material"))
+            .orElse("material.missing");
+
+        return Text.translatable(partTranslationKey, Text.translatable(materialTranslationKey));
     }
 
-    public @NotNull Optional<Text> getTooltip(final @NotNull ItemStack stack) {
+    public Optional<Text> getTooltip(final ItemStack stack) {
         if (!stack.isOf(BlueToolsItems.PART.getValue())) return Optional.empty();
 
         return PartItem.getTooltipForStack(stack);
     }
 
-    public @NotNull ItemStack getDefaultStack(
-        final @NotNull JsonResourceManager.Entry<Part> partEntry,
-        final @NotNull JsonResourceManager.Entry<Material> materialEntry
-    )
-    {
-        final @NotNull ItemStack stack = this.getDefaultStack();
+    public ItemStack getDefaultStack(final Entry<Part> partEntry, final Entry<Material> materialEntry) {
+        final ItemStack stack = this.getDefaultStack();
 
         stack.set(BlueToolsComponentTypes.PART.getValue(), new PartComponent(partEntry));
         stack.set(BlueToolsComponentTypes.MATERIAL.getValue(), new MaterialComponent(materialEntry));
@@ -113,12 +116,15 @@ public class PartItem extends Item {
         return stack;
     }
 
-    public @NotNull List<ItemStack> getValidDefaultStacks() {
-        return PartItem.getValidDefaultStackStream(
-            part -> true,
-            material -> !(material.value() instanceof UpgradeMaterial),
-            this::getDefaultStack
-        ).toList();
+    public List<ItemStack> getValidDefaultStacks() {
+        final Stream<ItemStack> stackStream = PartItem
+            .getValidDefaultStackStream(
+                part -> true,
+                material -> !(material.value() instanceof UpgradeMaterial),
+                this::getDefaultStack
+            );
+
+        return stackStream.toList();
     }
 
 }

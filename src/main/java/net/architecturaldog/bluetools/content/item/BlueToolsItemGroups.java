@@ -1,5 +1,7 @@
 package net.architecturaldog.bluetools.content.item;
 
+import java.util.function.UnaryOperator;
+
 import dev.jaxydog.lodestone.api.AutoLoaded;
 import dev.jaxydog.lodestone.api.AutoLoader;
 import dev.jaxydog.lodestone.api.CommonLoaded;
@@ -12,56 +14,58 @@ import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
-import org.jetbrains.annotations.NotNull;
 
 public final class BlueToolsItemGroups extends AutoLoader {
 
-    public static final @NotNull AutoLoaded<ItemGroup> DEFAULT = BlueToolsItemGroups.create(
-        "default",
-        FabricItemGroup
-            .builder()
-            .displayName(Text.translatable(BlueTools.id("default").toTranslationKey("itemGroup")))
-            .icon(BlueToolsItems.FORGE_INTERFACE.getValue()::getDefaultStack)
-            .build()
-    );
-    public static final @NotNull AutoLoaded<ItemGroup> PARTS = BlueToolsItemGroups.create(
-        "parts",
-        FabricItemGroup
-            .builder()
-            .displayName(Text.translatable(BlueTools.id("parts").toTranslationKey("itemGroup")))
-            .icon(() -> BlueToolsItems.PART.getValue().getDefaultStack())
-            .build()
-    );
-    public static final @NotNull AutoLoaded<ItemGroup> TOOLS = BlueToolsItemGroups.create(
-        "tools",
-        FabricItemGroup
-            .builder()
-            .displayName(Text.translatable(BlueTools.id("tools").toTranslationKey("itemGroup")))
-            .icon(() -> BlueToolsItems.PART.getValue().getDefaultStack())
-            .build()
-    );
+    public static final AutoLoaded<ItemGroup> DEFAULT = BlueToolsItemGroups.createVanilla("default", builder -> {
+        return builder.icon(BlueToolsItems.FORGE_INTERFACE.getValue()::getDefaultStack);
+    });
+    public static final AutoLoaded<ItemGroup> PARTS = BlueToolsItemGroups.createVanilla("parts", builder -> {
+        return builder.icon(() -> BlueToolsItems.PART.getValue().getDefaultStack());
+    });
+    public static final AutoLoaded<ItemGroup> TOOLS = BlueToolsItemGroups.createVanilla("tools", builder -> {
+        return builder.icon(() -> BlueToolsItems.PART.getValue().getDefaultStack());
+    });
 
-    public static @NotNull RegistryKey<ItemGroup> registryKey(final @NotNull AutoLoaded<? extends ItemGroup> loaded) {
+    public static RegistryKey<ItemGroup> registryKey(final AutoLoaded<? extends ItemGroup> loaded) {
         return RegistryKey.of(RegistryKeys.ITEM_GROUP, loaded.getLoaderId());
     }
 
-    private static <G extends ItemGroup> @NotNull AutoLoaded<G> create(
-        final @NotNull String path,
-        final @NotNull G itemGroup
+    private static AutoLoaded<ItemGroup> createVanilla(
+        final String path,
+        final UnaryOperator<ItemGroup.Builder> builder
+    )
+    {
+        return BlueToolsItemGroups.createVanilla(BlueTools.id(path), builder);
+    }
+
+    private static AutoLoaded<ItemGroup> createVanilla(
+        final Identifier identifier,
+        final UnaryOperator<ItemGroup.Builder> builder
+    )
+    {
+        final Text displayName = Text.translatable(identifier.toTranslationKey("itemGroup"));
+        final ItemGroup.Builder itemGroup = FabricItemGroup.builder().displayName(displayName);
+
+        return BlueToolsItemGroups.create(identifier, builder.apply(itemGroup).build());
+    }
+
+    private static <G extends ItemGroup> AutoLoaded<G> create(
+        final String path,
+        final G itemGroup
     )
     {
         return BlueToolsItemGroups.create(BlueTools.id(path), itemGroup);
     }
 
-    private static <G extends ItemGroup> @NotNull AutoLoaded<G> create(
-        final @NotNull Identifier identifier,
-        final @NotNull G itemGroup
+    private static <G extends ItemGroup> AutoLoaded<G> create(
+        final Identifier identifier,
+        final G itemGroup
     )
     {
-        return new AutoLoaded<>(identifier, itemGroup).on(
-            CommonLoaded.class,
-            self -> Registry.register(Registries.ITEM_GROUP, self.getLoaderId(), self.getValue())
-        );
+        return new AutoLoaded<>(identifier, itemGroup).on(CommonLoaded.class, self -> {
+            Registry.register(Registries.ITEM_GROUP, self.getLoaderId(), self.getValue());
+        });
     }
 
     @Override

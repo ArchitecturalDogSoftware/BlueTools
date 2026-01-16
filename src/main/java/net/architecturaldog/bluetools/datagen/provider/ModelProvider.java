@@ -1,21 +1,20 @@
 package net.architecturaldog.bluetools.datagen.provider;
 
+import java.util.List;
+import java.util.function.Consumer;
+
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.fabricmc.fabric.api.client.datagen.v1.provider.FabricModelProvider;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.minecraft.client.data.BlockStateModelGenerator;
 import net.minecraft.client.data.ItemModelGenerator;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.List;
-import java.util.function.Consumer;
 
 public final class ModelProvider extends FabricModelProvider {
 
-    private final @NotNull List<Consumer<BlockStateModelGenerator>> blockConsumers = new ObjectArrayList<>();
-    private final @NotNull List<Consumer<ItemModelGenerator>> itemConsumers = new ObjectArrayList<>();
+    private final List<Consumer<BlockStateModelGenerator>> blockConsumers = new ObjectArrayList<>();
+    private final List<Consumer<ItemModelGenerator>> itemConsumers = new ObjectArrayList<>();
 
-    public ModelProvider(final @NotNull FabricDataOutput output) {
+    public ModelProvider(final FabricDataOutput output) {
         super(output);
     }
 
@@ -30,12 +29,12 @@ public final class ModelProvider extends FabricModelProvider {
     }
 
     @Override
-    public void generateBlockStateModels(final @NotNull BlockStateModelGenerator blockStateModelGenerator) {
+    public void generateBlockStateModels(final BlockStateModelGenerator blockStateModelGenerator) {
         this.blockConsumers.forEach(consumer -> consumer.accept(blockStateModelGenerator));
     }
 
     @Override
-    public void generateItemModels(final @NotNull ItemModelGenerator itemModelGenerator) {
+    public void generateItemModels(final ItemModelGenerator itemModelGenerator) {
         this.itemConsumers.forEach(consumer -> consumer.accept(itemModelGenerator));
     }
 

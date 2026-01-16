@@ -1,26 +1,21 @@
 package net.architecturaldog.bluetools.content.part.property;
 
 import com.mojang.serialization.MapCodec;
-import org.jetbrains.annotations.NotNull;
 
 public interface DefaultedPartPropertyType<P extends PartProperty> extends PartPropertyType<P> {
 
-    @NotNull P getDefault();
+    P getDefault();
 
-    static <P extends PartProperty> @NotNull DefaultedPartPropertyType<P> of(
-        final @NotNull MapCodec<P> codec,
-        final @NotNull P defaultProperty
-    )
-    {
+    static <P extends PartProperty> DefaultedPartPropertyType<P> of(final MapCodec<P> codec, final P defaultProperty) {
         return new DefaultedPartPropertyType<>() {
 
             @Override
-            public @NotNull MapCodec<P> getCodec() {
+            public MapCodec<P> getCodec() {
                 return codec;
             }
 
             @Override
-            public @NotNull P getDefault() {
+            public P getDefault() {
                 return defaultProperty;
             }
 

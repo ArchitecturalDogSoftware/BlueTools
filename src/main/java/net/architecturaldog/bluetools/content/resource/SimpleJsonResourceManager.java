@@ -1,22 +1,22 @@
 package net.architecturaldog.bluetools.content.resource;
 
+import java.util.List;
+
 import com.mojang.serialization.Codec;
+
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.util.Identifier;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.List;
 
 public class SimpleJsonResourceManager<T> extends JsonResourceManager<T> {
 
-    private final @NotNull String name;
+    private final String name;
 
     public SimpleJsonResourceManager(
-        final @NotNull String name,
-        final @NotNull RegistryKey<Registry<T>> registryKey,
-        final @NotNull Codec<T> codec,
-        final @NotNull List<Identifier> fabricDependencies
+        final String name,
+        final RegistryKey<Registry<T>> registryKey,
+        final Codec<T> codec,
+        final List<Identifier> fabricDependencies
     )
     {
         super(registryKey, codec, fabricDependencies);
@@ -25,16 +25,16 @@ public class SimpleJsonResourceManager<T> extends JsonResourceManager<T> {
     }
 
     public SimpleJsonResourceManager(
-        final @NotNull String name,
-        final @NotNull RegistryKey<Registry<T>> registryKey,
-        final @NotNull Codec<T> codec
+        final String name,
+        final RegistryKey<Registry<T>> registryKey,
+        final Codec<T> codec
     )
     {
         this(name, registryKey, codec, List.of());
     }
 
     @Override
-    public @NotNull String getName() {
+    public String getName() {
         return this.name;
     }
 

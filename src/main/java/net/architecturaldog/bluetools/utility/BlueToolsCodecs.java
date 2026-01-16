@@ -1,52 +1,49 @@
 package net.architecturaldog.bluetools.utility;
 
-import com.mojang.serialization.*;
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
-import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.BinaryOperator;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
+import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.Nullable;
+
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.DataResult;
+import com.mojang.serialization.DynamicOps;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.MapLike;
+import com.mojang.serialization.RecordBuilder;
+
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+
 @ApiStatus.NonExtendable
 public interface BlueToolsCodecs {
 
-    @NotNull
     Codec<Byte> NON_NEGATIVE_BYTE = BlueToolsCodecs.range(Codec.BYTE, (byte) 0, Byte.MAX_VALUE);
-    @NotNull
     Codec<Byte> POSITIVE_BYTE = BlueToolsCodecs.range(Codec.BYTE, (byte) 1, Byte.MAX_VALUE);
-
-    @NotNull
     Codec<Short> NON_NEGATIVE_SHORT = BlueToolsCodecs.range(Codec.SHORT, (short) 0, Short.MAX_VALUE);
-    @NotNull
     Codec<Short> POSITIVE_SHORT = BlueToolsCodecs.range(Codec.SHORT, (short) 1, Short.MAX_VALUE);
-
-    @NotNull
     Codec<Long> NON_NEGATIVE_LONG = BlueToolsCodecs.range(Codec.LONG, 0L, Long.MAX_VALUE);
-    @NotNull
     Codec<Long> POSITIVE_LONG = BlueToolsCodecs.range(Codec.LONG, 1L, Long.MAX_VALUE);
-
-    @NotNull
     Codec<Double> NON_NEGATIVE_DOUBLE = BlueToolsCodecs.range(Codec.DOUBLE, 0.0D, Double.MAX_VALUE);
-    @NotNull
     Codec<Double> POSITIVE_DOUBLE = BlueToolsCodecs.range(Codec.DOUBLE, 1.0D, Double.MAX_VALUE);
 
-    static <N extends Number & Comparable<N>> @NotNull Codec<N> range(
-        final @NotNull Codec<N> codec,
-        final @NotNull N minInclusive,
-        final @NotNull N maxInclusive
+    static <N extends Number & Comparable<N>> Codec<N> range(
+        final Codec<N> codec,
+        final N minInclusive,
+        final N maxInclusive
     )
     {
-        final @NotNull Function<N, DataResult<N>> checker = Codec.checkRange(minInclusive, maxInclusive);
+        final Function<N, DataResult<N>> checker = Codec.checkRange(minInclusive, maxInclusive);
 
         return codec.flatXmap(checker, checker);
     }
 
-    static @NotNull Codec<Byte> scale(final @NotNull Codec<Byte> codec, final byte amount) {
+    static Codec<Byte> scale(final Codec<Byte> codec, final byte amount) {
         return BlueToolsCodecs
             .scale(
                 codec,
@@ -59,7 +56,7 @@ public interface BlueToolsCodecs {
             );
     }
 
-    static @NotNull Codec<Short> scale(final @NotNull Codec<Short> codec, final short amount) {
+    static Codec<Short> scale(final Codec<Short> codec, final short amount) {
         return BlueToolsCodecs
             .scale(
                 codec,
@@ -72,7 +69,7 @@ public interface BlueToolsCodecs {
             );
     }
 
-    static @NotNull Codec<Integer> scale(final @NotNull Codec<Integer> codec, final int amount) {
+    static Codec<Integer> scale(final Codec<Integer> codec, final int amount) {
         return BlueToolsCodecs
             .scale(
                 codec,
@@ -85,7 +82,7 @@ public interface BlueToolsCodecs {
             );
     }
 
-    static @NotNull Codec<Long> scale(final @NotNull Codec<Long> codec, final long amount) {
+    static Codec<Long> scale(final Codec<Long> codec, final long amount) {
         return BlueToolsCodecs
             .scale(
                 codec,
@@ -98,7 +95,7 @@ public interface BlueToolsCodecs {
             );
     }
 
-    static @NotNull Codec<Float> scale(final @NotNull Codec<Float> codec, final float amount) {
+    static Codec<Float> scale(final Codec<Float> codec, final float amount) {
         return BlueToolsCodecs
             .scale(
                 codec,
@@ -111,7 +108,7 @@ public interface BlueToolsCodecs {
             );
     }
 
-    static @NotNull Codec<Double> scale(final @NotNull Codec<Double> codec, final double amount) {
+    static Codec<Double> scale(final Codec<Double> codec, final double amount) {
         return BlueToolsCodecs
             .scale(
                 codec,
@@ -124,14 +121,14 @@ public interface BlueToolsCodecs {
             );
     }
 
-    static <N extends Number> @NotNull Codec<N> scale(
-        final @NotNull Codec<N> codec,
-        final @NotNull N amount,
-        final @NotNull N minimumValue,
-        final @NotNull N maximumValue,
-        final @NotNull BinaryOperator<N> multiply,
-        final @NotNull BinaryOperator<N> divide,
-        final @NotNull BinaryOperator<N> modulo
+    static <N extends Number> Codec<N> scale(
+        final Codec<N> codec,
+        final N amount,
+        final N minimumValue,
+        final N maximumValue,
+        final BinaryOperator<N> multiply,
+        final BinaryOperator<N> divide,
+        final BinaryOperator<N> modulo
     )
     {
         return codec
@@ -163,11 +160,7 @@ public interface BlueToolsCodecs {
             );
     }
 
-    static <T> @NotNull MapCodec<T> oneOf(
-        final @NotNull Map<String, Codec<T>> codecs,
-        final @NotNull String defaultField
-    )
-    {
+    static <T> MapCodec<T> oneOf(final Map<String, Codec<T>> codecs, final String defaultField) {
         if (!codecs.containsKey(defaultField)) {
             throw new IllegalArgumentException("Missing field " + defaultField + "in codec");
         }
@@ -175,19 +168,19 @@ public interface BlueToolsCodecs {
         return new MapCodec<>() {
 
             @Override
-            public <U> @NotNull Stream<U> keys(final @NotNull DynamicOps<U> ops) {
+            public <U> Stream<U> keys(final DynamicOps<U> ops) {
                 return codecs.keySet().stream().map(ops::createString);
             }
 
             @Override
-            public <U> @NotNull DataResult<T> decode(
-                final @NotNull DynamicOps<U> ops,
-                final @NotNull MapLike<U> input
+            public <U> DataResult<T> decode(
+                final DynamicOps<U> ops,
+                final MapLike<U> input
             )
             {
-                final @NotNull Map<String, U> valueMap = new Object2ObjectOpenHashMap<>();
+                final Map<String, U> valueMap = new Object2ObjectOpenHashMap<>();
 
-                for (final @NotNull Map.Entry<String, Codec<T>> entry : codecs.entrySet()) {
+                for (final Map.Entry<String, Codec<T>> entry : codecs.entrySet()) {
                     final String key = entry.getKey();
                     final @Nullable U value = input.get(key);
 
@@ -199,23 +192,70 @@ public interface BlueToolsCodecs {
                 } else if (valueMap.size() > 1) {
                     return DataResult.error(() -> "More than one valid key in " + input);
                 } else {
-                    final @NotNull Map.Entry<String, U> entry = valueMap.entrySet().stream().findAny().get();
+                    final Map.Entry<String, U> entry = valueMap.entrySet().stream().findAny().get();
 
                     return codecs.get(entry.getKey()).parse(ops, entry.getValue());
                 }
             }
 
             @Override
-            public <U> @NotNull RecordBuilder<U> encode(
-                final @NotNull T input,
-                final @NotNull DynamicOps<U> ops,
-                final @NotNull RecordBuilder<U> prefix
+            public <U> RecordBuilder<U> encode(
+                final T input,
+                final DynamicOps<U> ops,
+                final RecordBuilder<U> prefix
             )
             {
                 return prefix.add(defaultField, codecs.get(defaultField).encodeStart(ops, input));
             }
 
         };
+    }
+
+    static <T> AlternativeCodecBuilder<T> chain(final Codec<? extends T> codec) {
+        return new AlternativeCodecBuilder<>(codec);
+    }
+
+    static <T> AlternativeCodecBuilder<T> chain(final MapCodec<? extends T> codec) {
+        return new AlternativeCodecBuilder<>(codec);
+    }
+
+    class AlternativeCodecBuilder<T> {
+
+        private final List<Codec<? extends T>> codecs = new ObjectArrayList<>();
+
+        public AlternativeCodecBuilder(final Codec<? extends T> codec) {
+            this.codecs.add(codec);
+        }
+
+        public AlternativeCodecBuilder(final MapCodec<? extends T> mapCodec) {
+            this(mapCodec.codec());
+        }
+
+        public AlternativeCodecBuilder<T> chain(final Codec<? extends T> codec) {
+            this.codecs.add(codec);
+
+            return this;
+        }
+
+        public AlternativeCodecBuilder<T> chain(final MapCodec<? extends T> mapCodec) {
+            return this.chain(mapCodec.codec());
+        }
+
+        @SuppressWarnings("unchecked")
+        public @Nullable Codec<T> build() {
+            Codec<T> finalCodec = null;
+
+            for (final Codec<? extends T> codec : this.codecs) {
+                if (Objects.isNull(finalCodec)) {
+                    finalCodec = (Codec<T>) codec;
+                } else {
+                    finalCodec = Codec.withAlternative(finalCodec, codec);
+                }
+            }
+
+            return finalCodec;
+        }
+
     }
 
 }
