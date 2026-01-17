@@ -1,9 +1,8 @@
 {
     "itemGroup.bluetools.default": "BlueTools",
     "itemGroup.bluetools.parts": "BlueTools: Parts",
-
+    "itemGroup.bluetools.tools": "BlueTools: Tools",
     "item.partMaterialValue": "Material value: %2$s of %1$s",
-
     "materialValue.bluetools.blocks": "%d Blocks",
     "materialValue.bluetools.bottles": "%d Bottles",
     "materialValue.bluetools.bowls": "%d Bowls",
@@ -11,7 +10,6 @@
     "materialValue.bluetools.droplets": "%d Droplets",
     "materialValue.bluetools.ingots": "%d Ingots",
     "materialValue.bluetools.nuggets": "%d Nuggets",
-
     "material.bluetools.amethyst": "Amethyst",
     "material.bluetools.copper": "Copper",
     "material.bluetools.diamond": "Diamond",
@@ -22,7 +20,6 @@
     "material.bluetools.slime": "Slime",
     "material.bluetools.string": "String",
     "material.missing": "Unknown",
-
     "part.bluetools.axe_head": "%s Axe Head",
     "part.bluetools.heavy_binding": "Heavy %s Binding",
     "part.bluetools.hoe_head": "%s Hoe Head",
@@ -34,5 +31,7 @@
     "part.bluetools.shovel_head": "%s Shovel Head",
     "part.bluetools.small_blade": "Small %s Blade",
     "part.bluetools.small_handle": "Small %s Tool Handle",
-    "part.missing": "%s Part"
+    "part.missing": "%s Part",
+    "tool.bluetools.pickaxe": "%s Pickaxe",
+    "tool.missing": "%s Tool"
 }

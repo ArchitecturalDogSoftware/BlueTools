@@ -5,9 +5,10 @@
             "type": "bluetools:parts",
             "parts": {
                 "head": "bluetools:pickaxe_head",
-                "handle": "bluetools:medium_handle",
-                "binding": "bluetools:light_binding"
-            }
+                "binding": "bluetools:light_binding",
+                "handle": "bluetools:medium_handle"
+            },
+            "head_key": "head"
         }
     ]
 }

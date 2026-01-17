@@ -85,7 +85,21 @@ public final class BlueToolsItems extends AutoLoader {
         final UnaryOperator<Item.Settings> settingsBuilder
     )
     {
-        return BlueToolsItems.create(identifier, factory, settingsBuilder);
+        return BlueToolsItems
+            .create(identifier, factory, settingsBuilder)
+            .on(
+                ClientLoaded.class,
+                self -> ItemTooltipCallback.EVENT.register((stack, context, type, list) ->
+                {
+                    self.getValue().getTooltips(stack).ifPresent(text -> list.addAll(1, text));
+                })
+            )
+            .on(
+                CommonLoaded.class,
+                self -> ItemGroupEvents
+                    .modifyEntriesEvent(BlueToolsItemGroups.registryKey(BlueToolsItemGroups.TOOLS))
+                    .register(entries -> entries.addAll(self.getValue().getValidDefaultStacks()))
+            );
     }
 
     private static <T extends PartItem> AutoLoaded<T> createPart(
