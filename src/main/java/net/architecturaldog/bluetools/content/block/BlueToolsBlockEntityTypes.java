@@ -5,8 +5,8 @@ import java.util.Set;
 import dev.jaxydog.lodestone.api.AutoLoaded;
 import dev.jaxydog.lodestone.api.AutoLoader;
 import dev.jaxydog.lodestone.api.CommonLoaded;
-import net.architecturaldog.bluetools.BlueTools;
 import net.architecturaldog.bluetools.content.block.custom.ForgeInterfaceBlockEntity;
+import net.architecturaldog.bluetools.utility.BlueToolsHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
@@ -25,7 +25,7 @@ public final class BlueToolsBlockEntityTypes extends AutoLoader {
         final Set<Block> blocks
     )
     {
-        return BlueToolsBlockEntityTypes.create(BlueTools.id(path), factory, blocks);
+        return BlueToolsBlockEntityTypes.create(BlueToolsHelper.createIdentifier(path), factory, blocks);
     }
 
     private static <T extends BlockEntity> AutoLoaded<BlockEntityType<T>> create(
@@ -49,7 +49,7 @@ public final class BlueToolsBlockEntityTypes extends AutoLoader {
 
     @Override
     public Identifier getLoaderId() {
-        return BlueTools.id("block_entity_types");
+        return BlueToolsHelper.createIdentifier("block_entity_types");
     }
 
 }

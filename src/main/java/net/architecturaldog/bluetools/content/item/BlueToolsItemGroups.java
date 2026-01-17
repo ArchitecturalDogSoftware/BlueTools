@@ -5,7 +5,7 @@ import java.util.function.UnaryOperator;
 import dev.jaxydog.lodestone.api.AutoLoaded;
 import dev.jaxydog.lodestone.api.AutoLoader;
 import dev.jaxydog.lodestone.api.CommonLoaded;
-import net.architecturaldog.bluetools.BlueTools;
+import net.architecturaldog.bluetools.utility.BlueToolsHelper;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.registry.Registries;
@@ -36,7 +36,7 @@ public final class BlueToolsItemGroups extends AutoLoader {
         final UnaryOperator<ItemGroup.Builder> builder
     )
     {
-        return BlueToolsItemGroups.createVanilla(BlueTools.id(path), builder);
+        return BlueToolsItemGroups.createVanilla(BlueToolsHelper.createIdentifier(path), builder);
     }
 
     private static AutoLoaded<ItemGroup> createVanilla(
@@ -55,7 +55,7 @@ public final class BlueToolsItemGroups extends AutoLoader {
         final G itemGroup
     )
     {
-        return BlueToolsItemGroups.create(BlueTools.id(path), itemGroup);
+        return BlueToolsItemGroups.create(BlueToolsHelper.createIdentifier(path), itemGroup);
     }
 
     private static <G extends ItemGroup> AutoLoaded<G> create(
@@ -70,7 +70,7 @@ public final class BlueToolsItemGroups extends AutoLoader {
 
     @Override
     public Identifier getLoaderId() {
-        return BlueTools.id("item_groups");
+        return BlueToolsHelper.createIdentifier("item_groups");
     }
 
 }

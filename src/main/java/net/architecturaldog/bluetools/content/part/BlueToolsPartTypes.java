@@ -5,8 +5,8 @@ import com.mojang.serialization.MapCodec;
 import dev.jaxydog.lodestone.api.AutoLoaded;
 import dev.jaxydog.lodestone.api.AutoLoader;
 import dev.jaxydog.lodestone.api.CommonLoaded;
-import net.architecturaldog.bluetools.BlueTools;
 import net.architecturaldog.bluetools.content.BlueToolsRegistries;
+import net.architecturaldog.bluetools.utility.BlueToolsHelper;
 import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
 
@@ -15,7 +15,7 @@ public final class BlueToolsPartTypes extends AutoLoader {
     public static final AutoLoaded<PartType<SimplePart>> SIMPLE = BlueToolsPartTypes.create("simple", SimplePart.CODEC);
 
     private static <P extends Part> AutoLoaded<PartType<P>> create(final String path, final MapCodec<P> codec) {
-        return BlueToolsPartTypes.create(BlueTools.id(path), codec);
+        return BlueToolsPartTypes.create(BlueToolsHelper.createIdentifier(path), codec);
     }
 
     private static <P extends Part> AutoLoaded<PartType<P>> create(
@@ -30,7 +30,7 @@ public final class BlueToolsPartTypes extends AutoLoader {
 
     @Override
     public Identifier getLoaderId() {
-        return BlueTools.id("part_types");
+        return BlueToolsHelper.createIdentifier("part_types");
     }
 
 }

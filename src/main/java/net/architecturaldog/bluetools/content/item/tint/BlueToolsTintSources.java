@@ -4,7 +4,7 @@ import com.mojang.serialization.MapCodec;
 
 import dev.jaxydog.lodestone.api.AutoLoader;
 import dev.jaxydog.lodestone.api.ClientLoaded;
-import net.architecturaldog.bluetools.BlueTools;
+import net.architecturaldog.bluetools.utility.BlueToolsHelper;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.render.item.tint.TintSource;
@@ -25,7 +25,7 @@ public final class BlueToolsTintSources extends AutoLoader {
 
     @Override
     public Identifier getLoaderId() {
-        return BlueTools.id("tint_sources");
+        return BlueToolsHelper.createIdentifier("tint_sources");
     }
 
     @Environment(EnvType.CLIENT)
@@ -41,7 +41,7 @@ public final class BlueToolsTintSources extends AutoLoader {
 
         @Override
         public Identifier getLoaderId() {
-            return BlueTools.id(this.path);
+            return BlueToolsHelper.createIdentifier(this.path);
         }
 
         @Override

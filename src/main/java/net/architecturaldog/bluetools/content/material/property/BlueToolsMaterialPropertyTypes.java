@@ -7,8 +7,8 @@ import com.mojang.serialization.MapCodec;
 import dev.jaxydog.lodestone.api.AutoLoaded;
 import dev.jaxydog.lodestone.api.AutoLoader;
 import dev.jaxydog.lodestone.api.CommonLoaded;
-import net.architecturaldog.bluetools.BlueTools;
 import net.architecturaldog.bluetools.content.BlueToolsRegistries;
+import net.architecturaldog.bluetools.utility.BlueToolsHelper;
 import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
 
@@ -45,7 +45,7 @@ public final class BlueToolsMaterialPropertyTypes extends AutoLoader {
         final Supplier<P> defaultProperty
     )
     {
-        return BlueToolsMaterialPropertyTypes.create(BlueTools.id(path), codec, defaultProperty);
+        return BlueToolsMaterialPropertyTypes.create(BlueToolsHelper.createIdentifier(path), codec, defaultProperty);
     }
 
     private static <P extends MaterialProperty> AutoLoaded<DefaultedMaterialPropertyType<P>> create(
@@ -63,7 +63,7 @@ public final class BlueToolsMaterialPropertyTypes extends AutoLoader {
         final MapCodec<P> codec
     )
     {
-        return BlueToolsMaterialPropertyTypes.create(BlueTools.id(path), codec);
+        return BlueToolsMaterialPropertyTypes.create(BlueToolsHelper.createIdentifier(path), codec);
     }
 
     private static <P extends MaterialProperty> AutoLoaded<MaterialPropertyType<P>> create(
@@ -96,7 +96,7 @@ public final class BlueToolsMaterialPropertyTypes extends AutoLoader {
 
     @Override
     public Identifier getLoaderId() {
-        return BlueTools.id("material_property_types");
+        return BlueToolsHelper.createIdentifier("material_property_types");
     }
 
 }

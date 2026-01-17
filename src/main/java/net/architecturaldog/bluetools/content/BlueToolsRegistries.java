@@ -1,13 +1,13 @@
 package net.architecturaldog.bluetools.content;
 
 import dev.jaxydog.lodestone.api.AutoLoader;
-import net.architecturaldog.bluetools.BlueTools;
 import net.architecturaldog.bluetools.content.material.MaterialType;
 import net.architecturaldog.bluetools.content.material.property.MaterialPropertyType;
 import net.architecturaldog.bluetools.content.part.PartType;
 import net.architecturaldog.bluetools.content.part.property.PartPropertyType;
 import net.architecturaldog.bluetools.content.tool.ToolType;
 import net.architecturaldog.bluetools.content.tool.property.ToolPropertyType;
+import net.architecturaldog.bluetools.utility.BlueToolsHelper;
 import net.fabricmc.fabric.api.event.registry.FabricRegistryBuilder;
 import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
@@ -35,7 +35,7 @@ public final class BlueToolsRegistries extends AutoLoader {
 
     @Override
     public Identifier getLoaderId() {
-        return BlueTools.id("registries");
+        return BlueToolsHelper.createIdentifier("registries");
     }
 
 }

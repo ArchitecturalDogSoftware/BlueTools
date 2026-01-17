@@ -2,11 +2,11 @@ package net.architecturaldog.bluetools.datagen;
 
 import dev.jaxydog.lodestone.Lodestone;
 import dev.jaxydog.lodestone.api.DataGenerating;
-import net.architecturaldog.bluetools.BlueTools;
 import net.architecturaldog.bluetools.content.BlueToolsContent;
 import net.architecturaldog.bluetools.datagen.provider.AdvancementProvider;
 import net.architecturaldog.bluetools.datagen.provider.ModelProvider;
 import net.architecturaldog.bluetools.datagen.utility.LazyInitializingProvider;
+import net.architecturaldog.bluetools.utility.BlueToolsHelper;
 import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 
@@ -24,7 +24,7 @@ public final class BlueToolsDataGenerator implements DataGeneratorEntrypoint {
 
         BlueToolsContent.INSTANCE.register(DataGenerating.class);
 
-        Lodestone.load(DataGenerating.class, BlueTools.MOD_ID);
+        Lodestone.load(DataGenerating.class, BlueToolsHelper.NAMESPACE);
     }
 
 }

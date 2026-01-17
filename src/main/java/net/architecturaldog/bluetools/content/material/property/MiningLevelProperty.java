@@ -3,16 +3,16 @@ package net.architecturaldog.bluetools.content.material.property;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
-import net.architecturaldog.bluetools.BlueTools;
 import net.architecturaldog.bluetools.content.BlueToolsRegistryKeys;
 import net.architecturaldog.bluetools.content.material.MiningLevel;
 import net.architecturaldog.bluetools.content.resource.BlueToolsResources;
+import net.architecturaldog.bluetools.utility.BlueToolsHelper;
 import net.minecraft.registry.RegistryKey;
 
 public record MiningLevelProperty(MiningLevel level) implements MaterialProperty {
 
     private static final RegistryKey<MiningLevel> DEFAULT_LEVEL = RegistryKey
-        .of(BlueToolsRegistryKeys.MINING_LEVEL, BlueTools.id("none"));
+        .of(BlueToolsRegistryKeys.MINING_LEVEL, BlueToolsHelper.createIdentifier("none"));
 
     public static final MapCodec<MiningLevelProperty> CODEC = RecordCodecBuilder.mapCodec(instance -> {
         return instance

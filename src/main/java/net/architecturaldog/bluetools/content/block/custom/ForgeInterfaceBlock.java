@@ -4,6 +4,7 @@ import com.mojang.serialization.MapCodec;
 import net.architecturaldog.bluetools.BlueTools;
 import net.architecturaldog.bluetools.content.block.BlueToolsBlockEntityTypes;
 import net.architecturaldog.bluetools.content.block.utility.CustomBlock;
+import net.architecturaldog.bluetools.utility.BlueToolsHelper;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.BlockWithEntity;
@@ -50,8 +51,8 @@ public class ForgeInterfaceBlock extends BlockWithEntity implements CustomBlock 
     ));
 
     public ForgeInterfaceBlock(String path, Settings settings) {
-        super(settings.registryKey(RegistryKey.of(RegistryKeys.BLOCK, BlueTools.id(path)))
-            .lootTable(Optional.of(RegistryKey.of(RegistryKeys.LOOT_TABLE, BlueTools.id(path)))));
+        super(settings.registryKey(RegistryKey.of(RegistryKeys.BLOCK, BlueToolsHelper.createIdentifier(path)))
+            .lootTable(Optional.of(RegistryKey.of(RegistryKeys.LOOT_TABLE, BlueToolsHelper.createIdentifier(path)))));
 
         this.path = path;
 
@@ -112,7 +113,7 @@ public class ForgeInterfaceBlock extends BlockWithEntity implements CustomBlock 
 
     @Override
     public Identifier getLoaderId() {
-        return BlueTools.id(this.path);
+        return BlueToolsHelper.createIdentifier(this.path);
     }
 
     @Override

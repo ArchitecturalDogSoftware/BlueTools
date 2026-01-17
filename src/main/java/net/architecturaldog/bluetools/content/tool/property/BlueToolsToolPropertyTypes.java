@@ -5,8 +5,8 @@ import com.mojang.serialization.MapCodec;
 import dev.jaxydog.lodestone.api.AutoLoaded;
 import dev.jaxydog.lodestone.api.AutoLoader;
 import dev.jaxydog.lodestone.api.CommonLoaded;
-import net.architecturaldog.bluetools.BlueTools;
 import net.architecturaldog.bluetools.content.BlueToolsRegistries;
+import net.architecturaldog.bluetools.utility.BlueToolsHelper;
 import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
 
@@ -21,7 +21,7 @@ public final class BlueToolsToolPropertyTypes extends AutoLoader {
         final P defaultProperty
     )
     {
-        return BlueToolsToolPropertyTypes.create(BlueTools.id(path), codec, defaultProperty);
+        return BlueToolsToolPropertyTypes.create(BlueToolsHelper.createIdentifier(path), codec, defaultProperty);
     }
 
     private static <P extends ToolProperty> AutoLoaded<DefaultedToolPropertyType<P>> create(
@@ -30,11 +30,11 @@ public final class BlueToolsToolPropertyTypes extends AutoLoader {
         final P defaultProperty
     )
     {
-        return new AutoLoaded<>(identifier, DefaultedToolPropertyType.of(codec, defaultProperty))
-            .on(
-                CommonLoaded.class,
-                self -> Registry.register(BlueToolsRegistries.TOOL_PROPERTY_TYPE, self.getLoaderId(), self.getValue())
-            );
+        final DefaultedToolPropertyType<P> type = DefaultedToolPropertyType.of(codec, defaultProperty);
+
+        return new AutoLoaded<>(identifier, type).on(CommonLoaded.class, self -> {
+            Registry.register(BlueToolsRegistries.TOOL_PROPERTY_TYPE, self.getLoaderId(), self.getValue());
+        });
     }
 
     private static <P extends ToolProperty> AutoLoaded<ToolPropertyType<P>> create(
@@ -42,7 +42,7 @@ public final class BlueToolsToolPropertyTypes extends AutoLoader {
         final MapCodec<P> codec
     )
     {
-        return BlueToolsToolPropertyTypes.create(BlueTools.id(path), codec);
+        return BlueToolsToolPropertyTypes.create(BlueToolsHelper.createIdentifier(path), codec);
     }
 
     private static <P extends ToolProperty> AutoLoaded<ToolPropertyType<P>> create(
@@ -57,7 +57,7 @@ public final class BlueToolsToolPropertyTypes extends AutoLoader {
 
     @Override
     public Identifier getLoaderId() {
-        return BlueTools.id("tool_property_types");
+        return BlueToolsHelper.createIdentifier("tool_property_types");
     }
 
 }

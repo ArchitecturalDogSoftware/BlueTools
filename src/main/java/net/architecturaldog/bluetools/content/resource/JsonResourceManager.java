@@ -9,6 +9,8 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+import org.slf4j.Logger;
+
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
 import com.mojang.serialization.Codec;
@@ -18,7 +20,7 @@ import com.mojang.serialization.JsonOps;
 import dev.jaxydog.lodestone.api.CommonLoaded;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
-import net.architecturaldog.bluetools.BlueTools;
+import net.architecturaldog.bluetools.utility.BlueToolsHelper;
 import net.fabricmc.fabric.api.resource.v1.ResourceLoader;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
@@ -33,6 +35,8 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.profiler.Profiler;
 
 public abstract class JsonResourceManager<T> extends SinglePreparationResourceReloader<Map<Identifier, Resource>> implements CommonLoaded {
+
+    protected static final Logger LOGGER = BlueToolsHelper.createLogger("Resource");
 
     private final RegistryKey<Registry<T>> registryKey;
     private final Codec<T> codec;
@@ -189,7 +193,7 @@ public abstract class JsonResourceManager<T> extends SinglePreparationResourceRe
             try {
                 reader = resourceEntry.getValue().getReader();
             } catch (final IOException exception) {
-                BlueTools.LOGGER.error("Couldn't open file '{}' from '{}'", resourceEntry, entryId);
+                JsonResourceManager.LOGGER.error("Couldn't open file '{}' from '{}'", resourceEntry, entryId);
 
                 continue;
             }
@@ -204,7 +208,8 @@ public abstract class JsonResourceManager<T> extends SinglePreparationResourceRe
                         throw new IllegalStateException("Duplicate file ignored with ID " + resourceId);
                     }
                 }).ifError(error -> {
-                    BlueTools.LOGGER.error("Couldn't parse file '{}' from '{}': {}", resourceId, entryId, error);
+                    JsonResourceManager.LOGGER
+                        .error("Couldn't parse file '{}' from '{}': {}", resourceId, entryId, error);
                 });
             } catch (final IllegalArgumentException | JsonParseException exception) {
                 try {
@@ -213,7 +218,8 @@ public abstract class JsonResourceManager<T> extends SinglePreparationResourceRe
                     exception.addSuppressed(closeException);
                 }
 
-                BlueTools.LOGGER.error("Couldn't parse file '{}' from '{}': {}", resourceId, entryId, exception);
+                JsonResourceManager.LOGGER
+                    .error("Couldn't parse file '{}' from '{}': {}", resourceId, entryId, exception);
             }
         }
 
@@ -233,7 +239,8 @@ public abstract class JsonResourceManager<T> extends SinglePreparationResourceRe
 
         this.cleanupVerification();
 
-        BlueTools.LOGGER.info("Loaded {} entries for JSON manager '{}'", this.loadedEntries.size(), this.getName());
+        JsonResourceManager.LOGGER
+            .info("Loaded {} entries for JSON manager '{}'", this.loadedEntries.size(), this.getName());
     }
 
     public record Entry<T>(RegistryKey<T> key, T value) {}

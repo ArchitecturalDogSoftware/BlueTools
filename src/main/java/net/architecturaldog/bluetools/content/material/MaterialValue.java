@@ -7,8 +7,8 @@ import com.mojang.serialization.DataResult;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
-import net.architecturaldog.bluetools.BlueTools;
 import net.architecturaldog.bluetools.utility.BlueToolsCodecs;
+import net.architecturaldog.bluetools.utility.BlueToolsHelper;
 import net.fabricmc.fabric.api.transfer.v1.fluid.FluidConstants;
 import net.minecraft.text.Text;
 
@@ -81,7 +81,7 @@ public interface MaterialValue {
 
         @Override
         public String getTranslationKey() {
-            return BlueTools.id("droplets").toTranslationKey("materialValue");
+            return BlueToolsHelper.createIdentifier("droplets").toTranslationKey("materialValue");
         }
 
         @Override
@@ -104,7 +104,7 @@ public interface MaterialValue {
 
         @Override
         public String getTranslationKey() {
-            return BlueTools.id("nuggets").toTranslationKey("materialValue");
+            return BlueToolsHelper.createIdentifier("nuggets").toTranslationKey("materialValue");
         }
 
         @Override
@@ -127,7 +127,7 @@ public interface MaterialValue {
 
         @Override
         public String getTranslationKey() {
-            return BlueTools.id("ingots").toTranslationKey("materialValue");
+            return BlueToolsHelper.createIdentifier("ingots").toTranslationKey("materialValue");
         }
 
         @Override
@@ -150,7 +150,7 @@ public interface MaterialValue {
 
         @Override
         public String getTranslationKey() {
-            return BlueTools.id("blocks").toTranslationKey("materialValue");
+            return BlueToolsHelper.createIdentifier("blocks").toTranslationKey("materialValue");
         }
 
         @Override
@@ -173,7 +173,7 @@ public interface MaterialValue {
 
         @Override
         public String getTranslationKey() {
-            return BlueTools.id("bowls").toTranslationKey("materialValue");
+            return BlueToolsHelper.createIdentifier("bowls").toTranslationKey("materialValue");
         }
 
         @Override
@@ -196,7 +196,7 @@ public interface MaterialValue {
 
         @Override
         public String getTranslationKey() {
-            return BlueTools.id("bottles").toTranslationKey("materialValue");
+            return BlueToolsHelper.createIdentifier("bottles").toTranslationKey("materialValue");
         }
 
         @Override
@@ -219,7 +219,7 @@ public interface MaterialValue {
 
         @Override
         public String getTranslationKey() {
-            return BlueTools.id("buckets").toTranslationKey("materialValue");
+            return BlueToolsHelper.createIdentifier("buckets").toTranslationKey("materialValue");
         }
 
         @Override
@@ -267,7 +267,7 @@ public interface MaterialValue {
 
         @Override
         public String getTranslationKey() {
-            return BlueTools.id("droplets").toTranslationKey("materialValue");
+            return BlueToolsHelper.createIdentifier("droplets").toTranslationKey("materialValue");
         }
 
         @Override

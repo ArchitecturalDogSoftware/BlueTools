@@ -7,8 +7,8 @@ import java.util.function.UnaryOperator;
 import dev.jaxydog.lodestone.api.AutoLoaded;
 import dev.jaxydog.lodestone.api.AutoLoader;
 import dev.jaxydog.lodestone.api.CommonLoaded;
-import net.architecturaldog.bluetools.BlueTools;
 import net.architecturaldog.bluetools.content.block.custom.ForgeInterfaceBlock;
+import net.architecturaldog.bluetools.utility.BlueToolsHelper;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.FluidBlock;
@@ -33,7 +33,7 @@ public final class BlueToolsBlocks extends AutoLoader {
         final FlowableFluid fluid
     )
     {
-        return BlueToolsBlocks.create(BlueTools.id(path), factory, fluid);
+        return BlueToolsBlocks.create(BlueToolsHelper.createIdentifier(path), factory, fluid);
     }
 
     private static <T extends FluidBlock> AutoLoaded<T> create(
@@ -52,7 +52,7 @@ public final class BlueToolsBlocks extends AutoLoader {
         final UnaryOperator<AbstractBlock.Settings> settingsBuilder
     )
     {
-        return BlueToolsBlocks.create(BlueTools.id(path), factory, fluid, settingsBuilder);
+        return BlueToolsBlocks.create(BlueToolsHelper.createIdentifier(path), factory, fluid, settingsBuilder);
     }
 
     private static <T extends FluidBlock> AutoLoaded<T> create(
@@ -73,7 +73,7 @@ public final class BlueToolsBlocks extends AutoLoader {
         final Function<AbstractBlock.Settings, T> factory
     )
     {
-        return BlueToolsBlocks.create(BlueTools.id(path), factory);
+        return BlueToolsBlocks.create(BlueToolsHelper.createIdentifier(path), factory);
     }
 
     private static <T extends Block> AutoLoaded<T> create(
@@ -90,7 +90,7 @@ public final class BlueToolsBlocks extends AutoLoader {
         final UnaryOperator<AbstractBlock.Settings> settingsBuilder
     )
     {
-        return BlueToolsBlocks.create(BlueTools.id(path), factory, settingsBuilder);
+        return BlueToolsBlocks.create(BlueToolsHelper.createIdentifier(path), factory, settingsBuilder);
     }
 
     private static <T extends Block> AutoLoaded<T> create(
@@ -106,7 +106,7 @@ public final class BlueToolsBlocks extends AutoLoader {
     }
 
     private static <T extends Block> AutoLoaded<T> create(final String path, final T block) {
-        return BlueToolsBlocks.create(BlueTools.id(path), block);
+        return BlueToolsBlocks.create(BlueToolsHelper.createIdentifier(path), block);
     }
 
     private static <T extends Block> AutoLoaded<T> create(final Identifier identifier, final T block) {
@@ -117,7 +117,7 @@ public final class BlueToolsBlocks extends AutoLoader {
 
     @Override
     public Identifier getLoaderId() {
-        return BlueTools.id("blocks");
+        return BlueToolsHelper.createIdentifier("blocks");
     }
 
 }

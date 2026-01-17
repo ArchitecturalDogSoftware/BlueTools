@@ -5,7 +5,7 @@ import java.util.function.UnaryOperator;
 import dev.jaxydog.lodestone.api.AutoLoaded;
 import dev.jaxydog.lodestone.api.AutoLoader;
 import dev.jaxydog.lodestone.api.CommonLoaded;
-import net.architecturaldog.bluetools.BlueTools;
+import net.architecturaldog.bluetools.utility.BlueToolsHelper;
 import net.minecraft.component.ComponentType;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
@@ -27,7 +27,7 @@ public final class BlueToolsComponentTypes extends AutoLoader {
         final UnaryOperator<ComponentType.Builder<T>> function
     )
     {
-        return BlueToolsComponentTypes.create(BlueTools.id(path), function);
+        return BlueToolsComponentTypes.create(BlueToolsHelper.createIdentifier(path), function);
     }
 
     private static <T> AutoLoaded<ComponentType<T>> create(
@@ -46,7 +46,7 @@ public final class BlueToolsComponentTypes extends AutoLoader {
 
     @Override
     public Identifier getLoaderId() {
-        return BlueTools.id("component_types");
+        return BlueToolsHelper.createIdentifier("component_types");
     }
 
 }

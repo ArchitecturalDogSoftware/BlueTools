@@ -4,6 +4,7 @@ import dev.jaxydog.lodestone.Lodestone;
 import dev.jaxydog.lodestone.api.ClientLoaded;
 import net.architecturaldog.bluetools.content.BlueToolsContent;
 import net.architecturaldog.bluetools.content.item.tint.BlueToolsTintSources;
+import net.architecturaldog.bluetools.utility.BlueToolsHelper;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -18,7 +19,7 @@ public final class BlueToolsClient implements ClientModInitializer {
         BlueToolsContent.INSTANCE.register(ClientLoaded.class);
         BlueToolsClient.TINT_SOURCES.register(ClientLoaded.class);
 
-        Lodestone.load(ClientLoaded.class, BlueTools.MOD_ID);
+        Lodestone.load(ClientLoaded.class, BlueToolsHelper.NAMESPACE);
     }
 
 }

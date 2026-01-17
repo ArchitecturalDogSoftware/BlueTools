@@ -5,8 +5,8 @@ import com.mojang.serialization.MapCodec;
 import dev.jaxydog.lodestone.api.AutoLoaded;
 import dev.jaxydog.lodestone.api.AutoLoader;
 import dev.jaxydog.lodestone.api.CommonLoaded;
-import net.architecturaldog.bluetools.BlueTools;
 import net.architecturaldog.bluetools.content.BlueToolsRegistries;
+import net.architecturaldog.bluetools.utility.BlueToolsHelper;
 import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
 
@@ -22,7 +22,7 @@ public final class BlueToolsMaterialTypes extends AutoLoader {
         final MapCodec<M> codec
     )
     {
-        return BlueToolsMaterialTypes.create(BlueTools.id(path), codec);
+        return BlueToolsMaterialTypes.create(BlueToolsHelper.createIdentifier(path), codec);
     }
 
     private static <M extends Material> AutoLoaded<MaterialType<M>> create(
@@ -37,7 +37,7 @@ public final class BlueToolsMaterialTypes extends AutoLoader {
 
     @Override
     public Identifier getLoaderId() {
-        return BlueTools.id("material_types");
+        return BlueToolsHelper.createIdentifier("material_types");
     }
 
 }

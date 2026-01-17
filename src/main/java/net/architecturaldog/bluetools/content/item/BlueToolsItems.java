@@ -8,8 +8,8 @@ import dev.jaxydog.lodestone.api.AutoLoaded;
 import dev.jaxydog.lodestone.api.AutoLoader;
 import dev.jaxydog.lodestone.api.ClientLoaded;
 import dev.jaxydog.lodestone.api.CommonLoaded;
-import net.architecturaldog.bluetools.BlueTools;
 import net.architecturaldog.bluetools.content.block.BlueToolsBlocks;
+import net.architecturaldog.bluetools.utility.BlueToolsHelper;
 import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.minecraft.block.Block;
@@ -59,7 +59,7 @@ public final class BlueToolsItems extends AutoLoader {
         final Function<Item.Settings, T> factory
     )
     {
-        return BlueToolsItems.createTool(BlueTools.id(path), factory);
+        return BlueToolsItems.createTool(BlueToolsHelper.createIdentifier(path), factory);
     }
 
     private static <T extends ToolItem> AutoLoaded<T> createTool(
@@ -76,7 +76,7 @@ public final class BlueToolsItems extends AutoLoader {
         final UnaryOperator<Item.Settings> settingsBuilder
     )
     {
-        return BlueToolsItems.createTool(BlueTools.id(path), factory, settingsBuilder);
+        return BlueToolsItems.createTool(BlueToolsHelper.createIdentifier(path), factory, settingsBuilder);
     }
 
     private static <T extends ToolItem> AutoLoaded<T> createTool(
@@ -107,7 +107,7 @@ public final class BlueToolsItems extends AutoLoader {
         final Function<Item.Settings, T> factory
     )
     {
-        return BlueToolsItems.createPart(BlueTools.id(path), factory);
+        return BlueToolsItems.createPart(BlueToolsHelper.createIdentifier(path), factory);
     }
 
     private static <T extends PartItem> AutoLoaded<T> createPart(
@@ -124,7 +124,7 @@ public final class BlueToolsItems extends AutoLoader {
         final UnaryOperator<Item.Settings> settingsBuilder
     )
     {
-        return BlueToolsItems.createPart(BlueTools.id(path), factory, settingsBuilder);
+        return BlueToolsItems.createPart(BlueToolsHelper.createIdentifier(path), factory, settingsBuilder);
     }
 
     private static <T extends PartItem> AutoLoaded<T> createPart(
@@ -156,7 +156,7 @@ public final class BlueToolsItems extends AutoLoader {
         final Block block
     )
     {
-        return BlueToolsItems.create(BlueTools.id(path), factory, block);
+        return BlueToolsItems.create(BlueToolsHelper.createIdentifier(path), factory, block);
     }
 
     private static <T extends BlockItem> AutoLoaded<T> create(
@@ -175,7 +175,7 @@ public final class BlueToolsItems extends AutoLoader {
         final UnaryOperator<Item.Settings> settingsBuilder
     )
     {
-        return BlueToolsItems.create(BlueTools.id(path), factory, block, settingsBuilder);
+        return BlueToolsItems.create(BlueToolsHelper.createIdentifier(path), factory, block, settingsBuilder);
     }
 
     private static <T extends BlockItem> AutoLoaded<T> create(
@@ -192,7 +192,7 @@ public final class BlueToolsItems extends AutoLoader {
     }
 
     private static <T extends Item> AutoLoaded<T> create(final String path, final Function<Item.Settings, T> factory) {
-        return BlueToolsItems.create(BlueTools.id(path), factory);
+        return BlueToolsItems.create(BlueToolsHelper.createIdentifier(path), factory);
     }
 
     private static <T extends Item> AutoLoaded<T> create(
@@ -209,7 +209,7 @@ public final class BlueToolsItems extends AutoLoader {
         final UnaryOperator<Item.Settings> settingsBuilder
     )
     {
-        return BlueToolsItems.create(BlueTools.id(path), factory, settingsBuilder);
+        return BlueToolsItems.create(BlueToolsHelper.createIdentifier(path), factory, settingsBuilder);
     }
 
     private static <T extends Item> AutoLoaded<T> create(
@@ -225,7 +225,7 @@ public final class BlueToolsItems extends AutoLoader {
     }
 
     private static <T extends Item> AutoLoaded<T> create(final String path, final T item) {
-        return BlueToolsItems.create(BlueTools.id(path), item);
+        return BlueToolsItems.create(BlueToolsHelper.createIdentifier(path), item);
     }
 
     private static <T extends Item> AutoLoaded<T> create(final Identifier identifier, final T item) {
@@ -236,7 +236,7 @@ public final class BlueToolsItems extends AutoLoader {
 
     @Override
     public Identifier getLoaderId() {
-        return BlueTools.id("items");
+        return BlueToolsHelper.createIdentifier("items");
     }
 
 }

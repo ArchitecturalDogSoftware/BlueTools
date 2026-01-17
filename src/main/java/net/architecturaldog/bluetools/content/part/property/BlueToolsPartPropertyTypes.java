@@ -5,8 +5,8 @@ import com.mojang.serialization.MapCodec;
 import dev.jaxydog.lodestone.api.AutoLoaded;
 import dev.jaxydog.lodestone.api.AutoLoader;
 import dev.jaxydog.lodestone.api.CommonLoaded;
-import net.architecturaldog.bluetools.BlueTools;
 import net.architecturaldog.bluetools.content.BlueToolsRegistries;
+import net.architecturaldog.bluetools.utility.BlueToolsHelper;
 import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
 
@@ -25,7 +25,7 @@ public final class BlueToolsPartPropertyTypes extends AutoLoader {
         final P defaultProperty
     )
     {
-        return BlueToolsPartPropertyTypes.create(BlueTools.id(path), codec, defaultProperty);
+        return BlueToolsPartPropertyTypes.create(BlueToolsHelper.createIdentifier(path), codec, defaultProperty);
     }
 
     private static <P extends PartProperty> AutoLoaded<DefaultedPartPropertyType<P>> create(
@@ -34,11 +34,11 @@ public final class BlueToolsPartPropertyTypes extends AutoLoader {
         final P defaultProperty
     )
     {
-        return new AutoLoaded<>(identifier, DefaultedPartPropertyType.of(codec, defaultProperty))
-            .on(
-                CommonLoaded.class,
-                self -> Registry.register(BlueToolsRegistries.PART_PROPERTY_TYPE, self.getLoaderId(), self.getValue())
-            );
+        final DefaultedPartPropertyType<P> type = DefaultedPartPropertyType.of(codec, defaultProperty);
+
+        return new AutoLoaded<>(identifier, type).on(CommonLoaded.class, self -> {
+            Registry.register(BlueToolsRegistries.PART_PROPERTY_TYPE, self.getLoaderId(), self.getValue());
+        });
     }
 
     private static <P extends PartProperty> AutoLoaded<PartPropertyType<P>> create(
@@ -46,7 +46,7 @@ public final class BlueToolsPartPropertyTypes extends AutoLoader {
         final MapCodec<P> codec
     )
     {
-        return BlueToolsPartPropertyTypes.create(BlueTools.id(path), codec);
+        return BlueToolsPartPropertyTypes.create(BlueToolsHelper.createIdentifier(path), codec);
     }
 
     private static <P extends PartProperty> AutoLoaded<PartPropertyType<P>> create(
@@ -61,7 +61,7 @@ public final class BlueToolsPartPropertyTypes extends AutoLoader {
 
     @Override
     public Identifier getLoaderId() {
-        return BlueTools.id("part_property_types");
+        return BlueToolsHelper.createIdentifier("part_property_types");
     }
 
 }

@@ -3,7 +3,6 @@ package net.architecturaldog.bluetools.content;
 import dev.jaxydog.lodestone.api.AutoLoader;
 import dev.jaxydog.lodestone.api.IgnoreLoading;
 import dev.jaxydog.lodestone.api.LoadingPriority;
-import net.architecturaldog.bluetools.BlueTools;
 import net.architecturaldog.bluetools.content.block.BlueToolsBlockEntityTypes;
 import net.architecturaldog.bluetools.content.block.BlueToolsBlocks;
 import net.architecturaldog.bluetools.content.component.BlueToolsComponentTypes;
@@ -17,6 +16,7 @@ import net.architecturaldog.bluetools.content.resource.BlueToolsResources;
 import net.architecturaldog.bluetools.content.screen.BlueToolsScreenHandlerTypes;
 import net.architecturaldog.bluetools.content.tool.BlueToolsToolTypes;
 import net.architecturaldog.bluetools.content.tool.property.BlueToolsToolPropertyTypes;
+import net.architecturaldog.bluetools.utility.BlueToolsHelper;
 import net.minecraft.util.Identifier;
 
 public final class BlueToolsContent extends AutoLoader {
@@ -44,7 +44,7 @@ public final class BlueToolsContent extends AutoLoader {
 
     @Override
     public Identifier getLoaderId() {
-        return BlueTools.id("root");
+        return BlueToolsHelper.createIdentifier("root");
     }
 
 }

@@ -7,7 +7,6 @@ import java.util.Objects;
 import org.jetbrains.annotations.Nullable;
 
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
-import net.architecturaldog.bluetools.BlueTools;
 import net.architecturaldog.bluetools.content.material.MaterialIngredient;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKey;
@@ -58,7 +57,7 @@ public class MaterialIngredientResourceManager extends SimpleJsonResourceManager
         }
 
         if (this.ingredientCache.containsKey(entry.value().ingredient())) {
-            BlueTools.LOGGER
+            JsonResourceManager.LOGGER
                 .error(
                     "Duplicate ingredients for JSON manager '{}': {}, {}",
                     this.getName(),

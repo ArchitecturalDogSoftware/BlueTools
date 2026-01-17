@@ -3,12 +3,12 @@ package net.architecturaldog.bluetools.content.resource;
 import java.util.List;
 
 import dev.jaxydog.lodestone.api.AutoLoader;
-import net.architecturaldog.bluetools.BlueTools;
 import net.architecturaldog.bluetools.content.BlueToolsRegistryKeys;
 import net.architecturaldog.bluetools.content.material.Material;
 import net.architecturaldog.bluetools.content.material.MiningLevel;
 import net.architecturaldog.bluetools.content.part.Part;
 import net.architecturaldog.bluetools.content.tool.Tool;
+import net.architecturaldog.bluetools.utility.BlueToolsHelper;
 import net.minecraft.util.Identifier;
 
 public final class BlueToolsResources extends AutoLoader {
@@ -39,7 +39,7 @@ public final class BlueToolsResources extends AutoLoader {
 
     @Override
     public Identifier getLoaderId() {
-        return BlueTools.id("resources");
+        return BlueToolsHelper.createIdentifier("resources");
     }
 
 }

@@ -1,6 +1,6 @@
 package net.architecturaldog.bluetools.content.item.client;
 
-import net.architecturaldog.bluetools.BlueTools;
+import net.architecturaldog.bluetools.utility.BlueToolsHelper;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 
@@ -15,7 +15,10 @@ public class GeneratedToolItemModel extends AbstractGeneratedItemModel {
     public static final GeneratedToolItemModel MODEL_36_LAYERS = new GeneratedToolItemModel(36);
 
     public GeneratedToolItemModel(final int layerCount) {
-        super(layerCount, count -> BlueTools.id("builtin/generated/tool_%d_layers".formatted(count)));
+        super(
+            layerCount,
+            count -> BlueToolsHelper.createIdentifier("builtin/generated/tool_%d_layers".formatted(count))
+        );
     }
 
 }
