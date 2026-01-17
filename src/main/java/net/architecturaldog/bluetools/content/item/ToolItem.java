@@ -73,15 +73,10 @@ public class ToolItem extends Item {
         if (parts.isEmpty() || materials.isEmpty()) return Optional.of(List.of());
 
         return Optional.of(parts.get().parts().entrySet().stream().map(entry -> {
-            final String materialTranslationKey = Optional
-                .ofNullable(materials.get(entry.getKey()))
-                .map(material -> material.key().getValue().toTranslationKey("material"))
-                .orElse("material.empty");
-            final String partTranslationKey = entry.getValue().key().getValue().toTranslationKey("part");
+            final Optional<Entry<Material>> materialEntry = Optional.ofNullable(materials.get(entry.getKey()));
+            final Text materialText = BlueToolsResources.MATERIAL.getText(materialEntry);
 
-            return (Text) Text
-                .translatable(partTranslationKey, Text.translatable(materialTranslationKey))
-                .formatted(Formatting.GRAY);
+            return (Text) BlueToolsResources.PART.getText(entry.getValue(), materialText).formatted(Formatting.GRAY);
         }).toList());
     }
 
@@ -107,19 +102,18 @@ public class ToolItem extends Item {
 
     @Override
     public Text getName(final ItemStack stack) {
-        final String toolTranslationKey = Optional
-            .ofNullable(stack.get(BlueToolsComponentTypes.TOOL.getValue()))
-            .map(component -> component.toolEntry().key().getValue().toTranslationKey("tool"))
-            .orElse("tool.missing");
-
-        final String materialTranslationKey = this
+        final Optional<Entry<Material>> materialEntry = this
             .getParts(stack)
             .map(PartsProperty::headKey)
-            .flatMap(key -> this.getMaterial(stack, key))
-            .map(material -> material.key().getValue().toTranslationKey("material"))
-            .orElse("material.missing");
+            .flatMap(key -> this.getMaterial(stack, key));
 
-        return Text.translatable(toolTranslationKey, Text.translatable(materialTranslationKey));
+        return BlueToolsResources.TOOL.getText(this.getTool(stack), BlueToolsResources.MATERIAL.getText(materialEntry));
+    }
+
+    public Optional<List<Text>> getTooltips(final ItemStack stack) {
+        if (!stack.isOf(BlueToolsItems.TOOL.getValue())) return Optional.empty();
+
+        return ToolItem.getTooltipsForStack(stack);
     }
 
     public ItemStack getDefaultStack(final Entry<Tool> toolEntry, final Map<String, Entry<Material>> materialEntries) {
@@ -153,12 +147,6 @@ public class ToolItem extends Item {
         stack.set(BlueToolsComponentTypes.TOOL_MATERIALS.getValue(), new ToolMaterialsComponent(materialEntries));
 
         return stack;
-    }
-
-    public Optional<List<Text>> getTooltips(final ItemStack stack) {
-        if (!stack.isOf(BlueToolsItems.TOOL.getValue())) return Optional.empty();
-
-        return ToolItem.getTooltipsForStack(stack);
     }
 
     public List<ItemStack> getValidDefaultStacks() {

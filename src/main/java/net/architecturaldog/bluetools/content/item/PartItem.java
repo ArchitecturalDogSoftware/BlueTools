@@ -39,8 +39,7 @@ public class PartItem extends Item {
 
         if (Objects.isNull(material) || Objects.isNull(part)) return Optional.empty();
 
-        final Text materialText = Text
-            .translatable(material.materialEntry().key().getValue().toTranslationKey("material"));
+        final Text materialText = BlueToolsResources.MATERIAL.getText(material.materialEntry());
         final Text valueText = item.getMaterialValue(stack).orElseGet(() -> new MaterialValue.Ingots(1L)).getText();
         final MutableText tooltipText = Text.translatable("item.partMaterialValue", materialText, valueText);
 
@@ -69,36 +68,28 @@ public class PartItem extends Item {
         });
     }
 
-    public Optional<Part> getPart(final ItemStack stack) {
+    public Optional<Entry<Part>> getPart(final ItemStack stack) {
         return Optional
             .ofNullable(stack.get(BlueToolsComponentTypes.PART.getValue()))
-            .map(component -> component.partEntry().value());
+            .map(PartComponent::partEntry);
     }
 
-    public Optional<Material> getMaterial(final ItemStack stack) {
+    public Optional<Entry<Material>> getMaterial(final ItemStack stack) {
         return Optional
             .ofNullable(stack.get(BlueToolsComponentTypes.MATERIAL.getValue()))
-            .map(component -> component.materialEntry().value());
+            .map(MaterialComponent::materialEntry);
     }
 
     public Optional<MaterialValue> getMaterialValue(final ItemStack stack) {
-        return this
-            .getPart(stack)
-            .map(part -> part.getPropertyOrDefault(BlueToolsPartPropertyTypes.MATERIAL_VALUE.getValue()).value());
+        return this.getPart(stack).map(part -> {
+            return part.value().getPropertyOrDefault(BlueToolsPartPropertyTypes.MATERIAL_VALUE.getValue()).value();
+        });
     }
 
     @Override
     public Text getName(final ItemStack stack) {
-        final String partTranslationKey = Optional
-            .ofNullable(stack.get(BlueToolsComponentTypes.PART.getValue()))
-            .map(component -> component.partEntry().key().getValue().toTranslationKey("part"))
-            .orElse("part.missing");
-        final String materialTranslationKey = Optional
-            .ofNullable(stack.get(BlueToolsComponentTypes.MATERIAL.getValue()))
-            .map(component -> component.materialEntry().key().getValue().toTranslationKey("material"))
-            .orElse("material.missing");
-
-        return Text.translatable(partTranslationKey, Text.translatable(materialTranslationKey));
+        return BlueToolsResources.PART
+            .getText(this.getPart(stack), BlueToolsResources.MATERIAL.getText(this.getMaterial(stack)));
     }
 
     public Optional<Text> getTooltip(final ItemStack stack) {

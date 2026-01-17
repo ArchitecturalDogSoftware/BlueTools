@@ -27,6 +27,8 @@ import net.minecraft.resource.ResourceFinder;
 import net.minecraft.resource.ResourceManager;
 import net.minecraft.resource.ResourceType;
 import net.minecraft.resource.SinglePreparationResourceReloader;
+import net.minecraft.text.MutableText;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.profiler.Profiler;
 
@@ -36,6 +38,7 @@ public abstract class JsonResourceManager<T> extends SinglePreparationResourceRe
     private final Codec<T> codec;
     private final List<Identifier> loaderDependencies;
     private final ResourceFinder resourceFinder;
+    private final String translationPrefix;
 
     private Map<RegistryKey<T>, Entry<T>> loadedEntries = Map.of();
 
@@ -53,6 +56,17 @@ public abstract class JsonResourceManager<T> extends SinglePreparationResourceRe
         if (this.loaderDependencies.stream().anyMatch(identifier -> identifier.equals(this.getLoaderId()))) {
             throw new IllegalArgumentException("Managers must not depend on themselves");
         }
+
+        String translationPrefix = this.registryKey.getValue().getPath();
+
+        while (translationPrefix.matches("_[a-z]")) {
+            final int replacementIndex = translationPrefix.indexOf('_') + 1;
+            final char replacement = Character.toUpperCase(translationPrefix.charAt(replacementIndex));
+
+            translationPrefix.replaceFirst("_[a-z]", String.valueOf(replacement));
+        }
+
+        this.translationPrefix = translationPrefix;
     }
 
     public abstract String getName();
@@ -115,6 +129,22 @@ public abstract class JsonResourceManager<T> extends SinglePreparationResourceRe
                 return DataResult.error(() -> "Unknown registry key in %s: %s".formatted(this.registryKey, identifier));
             });
         }, entry -> entry.key().getValue());
+    }
+
+    public String getTranslationKey(final Entry<T> entry) {
+        return entry.key().getValue().toTranslationKey(this.translationPrefix);
+    }
+
+    public String getTranslationKey(final Optional<Entry<T>> entry) {
+        return entry.map(this::getTranslationKey).orElseGet(() -> "%s.missing".formatted(this.translationPrefix));
+    }
+
+    public MutableText getText(final Entry<T> entry, Object... arguments) {
+        return Text.translatable(this.getTranslationKey(entry), arguments);
+    }
+
+    public MutableText getText(final Optional<Entry<T>> entry, Object... arguments) {
+        return Text.translatable(this.getTranslationKey(entry), arguments);
     }
 
     @Override
