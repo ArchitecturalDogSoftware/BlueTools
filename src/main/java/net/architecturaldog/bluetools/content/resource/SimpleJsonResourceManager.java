@@ -16,10 +16,10 @@ public class SimpleJsonResourceManager<T> extends JsonResourceManager<T> {
         final String name,
         final RegistryKey<Registry<T>> registryKey,
         final Codec<T> codec,
-        final List<Identifier> fabricDependencies
+        final List<Identifier> loaderDependencies
     )
     {
-        super(registryKey, codec, fabricDependencies);
+        super(registryKey, codec, loaderDependencies);
 
         this.name = name;
     }
@@ -31,6 +31,19 @@ public class SimpleJsonResourceManager<T> extends JsonResourceManager<T> {
     )
     {
         this(name, registryKey, codec, List.of());
+    }
+
+    public SimpleJsonResourceManager(
+        final RegistryKey<Registry<T>> registryKey,
+        final Codec<T> codec,
+        final List<Identifier> loaderDependencies
+    )
+    {
+        this(registryKey.getValue().getPath(), registryKey, codec, loaderDependencies);
+    }
+
+    public SimpleJsonResourceManager(final RegistryKey<Registry<T>> registryKey, final Codec<T> codec) {
+        this(registryKey.getValue().getPath(), registryKey, codec);
     }
 
     @Override

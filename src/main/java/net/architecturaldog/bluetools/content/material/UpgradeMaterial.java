@@ -10,7 +10,7 @@ import com.google.common.collect.ImmutableList;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
-import net.architecturaldog.bluetools.content.BlueToolsRegistries;
+import net.architecturaldog.bluetools.content.BlueToolsRegistryKeys;
 import net.architecturaldog.bluetools.content.material.property.MaterialProperty;
 import net.architecturaldog.bluetools.content.material.property.MaterialPropertyType;
 import net.architecturaldog.bluetools.content.resource.BlueToolsResources;
@@ -27,7 +27,7 @@ public record UpgradeMaterial(
         return instance
             .group(
                 RegistryKey
-                    .createCodec(BlueToolsRegistries.Keys.MATERIAL)
+                    .createCodec(BlueToolsRegistryKeys.MATERIAL)
                     .fieldOf("parent")
                     .forGetter(UpgradeMaterial::parent),
                 MaterialProperty.CODEC.listOf().fieldOf("properties").forGetter(UpgradeMaterial::getProperties)

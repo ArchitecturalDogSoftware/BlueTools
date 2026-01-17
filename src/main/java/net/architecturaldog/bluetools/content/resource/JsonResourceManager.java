@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
@@ -33,27 +34,23 @@ public abstract class JsonResourceManager<T> extends SinglePreparationResourceRe
 
     private final RegistryKey<Registry<T>> registryKey;
     private final Codec<T> codec;
-    private final List<Identifier> fabricDependencies;
+    private final List<Identifier> loaderDependencies;
     private final ResourceFinder resourceFinder;
 
     private Map<RegistryKey<T>, Entry<T>> loadedEntries = Map.of();
 
-    public JsonResourceManager(final RegistryKey<Registry<T>> registryKey, final Codec<T> codec) {
-        this(registryKey, codec, List.of());
-    }
-
     public JsonResourceManager(
         final RegistryKey<Registry<T>> registryKey,
         final Codec<T> codec,
-        final List<Identifier> fabricDependencies
+        final List<Identifier> loaderDependencies
     )
     {
         this.registryKey = registryKey;
         this.codec = codec;
-        this.fabricDependencies = fabricDependencies;
+        this.loaderDependencies = loaderDependencies;
         this.resourceFinder = new ResourceFinder(this.registryKey.getValue().getPath(), ".json");
 
-        if (this.fabricDependencies.stream().anyMatch(identifier -> identifier.equals(this.getLoaderId()))) {
+        if (this.loaderDependencies.stream().anyMatch(identifier -> identifier.equals(this.getLoaderId()))) {
             throw new IllegalArgumentException("Managers must not depend on themselves");
         }
     }
@@ -76,12 +73,20 @@ public abstract class JsonResourceManager<T> extends SinglePreparationResourceRe
         return Comparator.comparing(entry -> entry.key().getValue().toString(), String::compareTo);
     }
 
+    public Stream<Entry<T>> streamEntries() {
+        return this.loadedEntries.values().stream();
+    }
+
+    public Stream<Entry<T>> streamSortedEntries() {
+        return this.loadedEntries.values().stream().sorted(this.getEntryComparator());
+    }
+
     public List<Entry<T>> getEntries() {
-        return List.copyOf(this.loadedEntries.values());
+        return this.streamEntries().toList();
     }
 
     public List<Entry<T>> getSortedEntries() {
-        return this.loadedEntries.values().stream().sorted(this.getEntryComparator()).toList();
+        return this.streamSortedEntries().toList();
     }
 
     public Optional<Entry<T>> getEntry(final Identifier identifier) {
@@ -118,7 +123,7 @@ public abstract class JsonResourceManager<T> extends SinglePreparationResourceRe
     }
 
     public List<Identifier> getLoaderDependencies() {
-        return List.copyOf(this.fabricDependencies);
+        return this.loaderDependencies.stream().distinct().toList();
     }
 
     @Override
@@ -160,8 +165,7 @@ public abstract class JsonResourceManager<T> extends SinglePreparationResourceRe
             }
 
             try {
-                final DataResult<T> dataResult = this.codec
-                    .parse(JsonOps.INSTANCE, JsonParser.parseReader(reader));
+                final DataResult<T> dataResult = this.codec.parse(JsonOps.INSTANCE, JsonParser.parseReader(reader));
 
                 dataResult.ifSuccess(value -> {
                     final RegistryKey<T> registryKey = RegistryKey.of(this.registryKey, resourceId);

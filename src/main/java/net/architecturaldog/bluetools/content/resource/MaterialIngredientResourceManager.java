@@ -19,6 +19,15 @@ public class MaterialIngredientResourceManager extends SimpleJsonResourceManager
 
     public MaterialIngredientResourceManager(
         final String name,
+        final RegistryKey<Registry<MaterialIngredient>> registryKey,
+        final List<Identifier> loaderDependencies
+    )
+    {
+        super(name, registryKey, MaterialIngredient.CODEC.codec(), loaderDependencies);
+    }
+
+    public MaterialIngredientResourceManager(
+        final String name,
         final RegistryKey<Registry<MaterialIngredient>> registryKey
     )
     {
@@ -26,12 +35,15 @@ public class MaterialIngredientResourceManager extends SimpleJsonResourceManager
     }
 
     public MaterialIngredientResourceManager(
-        final String name,
         final RegistryKey<Registry<MaterialIngredient>> registryKey,
-        final List<Identifier> fabricDependencies
+        final List<Identifier> loaderDependencies
     )
     {
-        super(name, registryKey, MaterialIngredient.CODEC.codec(), fabricDependencies);
+        super(registryKey, MaterialIngredient.CODEC.codec(), loaderDependencies);
+    }
+
+    public MaterialIngredientResourceManager(final RegistryKey<Registry<MaterialIngredient>> registryKey) {
+        super(registryKey, MaterialIngredient.CODEC.codec());
     }
 
     @Override
